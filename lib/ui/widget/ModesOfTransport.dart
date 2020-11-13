@@ -25,6 +25,7 @@ class _ModesOfTransportState extends State<ModesOfTransport> {
   bool w = false, b = false, s = false, bc = false; //bc: bicycle, s: subway, b: bus, w: walk
   List<Widget> listElements;
   ProcessData info;
+  InfoRouteServer info3;
 
   Future<List<Widget>> getTheWidget() async {
     listElements = null;
@@ -228,18 +229,25 @@ class _ModesOfTransportState extends State<ModesOfTransport> {
                       bus = false;
                       walk = true;
                       bicycle = false;
-                      // info.listOfTransport[1] = ListTile(
-                      //   title: Text("Bienvenido"),
-                      // );
-                      info.listOfTransport.add(
-                        ListTile(
-                          title: Container(
-                            height: 150.0,
-                            width: 300.0,
-                            child: Text("Bienvenido")
-                          ),
-                        )
+                      info.listCard[1] = ListTile(
+                        title: Container(
+                          height: 150.0,
+                          width: 300.0,
+                          child: Text("Bienvenido")
+                        ),
                       );
+
+                      //info3.infoWalkList.removeAt(1);
+                      
+                      // info.listCard.add(
+                      //   ListTile(
+                      //     title: Container(
+                      //       height: 150.0,
+                      //       width: 300.0,
+                      //       child: Text("Bienvenido")
+                      //     ),
+                      //   ),
+                      // );
 
                     });
 
@@ -303,7 +311,7 @@ class _ModesOfTransportState extends State<ModesOfTransport> {
   @override
   Widget build(BuildContext context) {
     info = Provider.of<ProcessData>(context);
-    var info3 = Provider.of<InfoRouteServer>(context);
+    info3 = Provider.of<InfoRouteServer>(context);
 
     //tomar informacion de la lista
     for(int i = 0; i < info3.infoWalkList.length; i++){

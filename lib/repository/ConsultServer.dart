@@ -16,7 +16,7 @@ class ConsultServer{
   String urlUbication = "country=colombia;city=";
   String apiKey = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
   List<DataOfPlace> place;
-  List<InfoRouteServer> place2;
+  //List<InfoRouteServer> place2;
   List<LegsInfo> legs;
   bool enter = true;
   List<Widget> wid;
@@ -167,9 +167,9 @@ class ConsultServer{
 
   Future<void> getInfoFromServer(String urlComplete, InfoRouteServer info3) async {
     try{
-      place2 = null;
       legs = null;
-      place2 = [];
+      info3.infoWalkList = null;
+      info3.infoWalkList = [];
       legs = [];
       
       dynamic duration = null, startTime = null, endTime = null, walkTime = null, waitingTime = null, walkDistance = null, mode = null, route = null, routeColor = null, routeTextColor = null;
@@ -239,7 +239,7 @@ class ConsultServer{
               );
             }
 
-            place2.add(
+            info3.infoWalkList.add(
               InfoRouteServer(
                 duration: duration,
                 startTime: startTime,
@@ -251,7 +251,6 @@ class ConsultServer{
               ),
             );
           }
-          info3.infoWalkList = place2;
 
           // for(int x = 0; x < info3.infoWalkList.length; x++){
           //   for(int y = 0; y < info3.infoWalkList[x].legs.length; y++){

@@ -30,7 +30,6 @@ class DurationListState extends State<DurationList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //insertData();
   }
 
   Color hexColor(String hexString) {
@@ -42,15 +41,15 @@ class DurationListState extends State<DurationList> {
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 
-  Widget getTransport2() {
-    return Expanded(
-      flex: 1, 
-      child: Icon(
-        Icons.directions_ferry,
-        size: sizeIcon,
-      )
-    );
-  }
+  // Widget getTransport2() {
+  //   return Expanded(
+  //     flex: 1, 
+  //     child: Icon(
+  //       Icons.directions_ferry,
+  //       size: sizeIcon,
+  //     )
+  //   );
+  // }
 
   Widget getTransport(String mode, int i, int y) {
     Widget dataBus, dataSubway;
@@ -119,7 +118,7 @@ class DurationListState extends State<DurationList> {
         }
         return dataSubway;
       }
-      else{ //if(mode == "BUS"){
+      else{ // en BUS
         if(info3.infoWalkList[i].legs[y].route != null || info3.infoWalkList[i].legs[y].route != ""){
           dataBus = Container(
             height: 50.0,
@@ -171,48 +170,48 @@ class DurationListState extends State<DurationList> {
     }
   }
 
-  List<Widget> elementsRow2(int i){
-    linesOf = null;
-    placesForLine = null;
-    linesOf = [];
-    placesForLine = [];
-    try{
-      for(int y = 0; y < info3.infoWalkList[i].legs.length; y++){
-        placesForLine.add(
-          getTransport2(),
-        );
-        placesForLine.add(
-          Expanded(
-            flex: 1, 
-            child: Icon(Icons.chevron_right, color: Color.fromRGBO(105, 190, 50, 1.0)),
-          ),
-        );
-      }
+  // List<Widget> elementsRow2(int i){
+  //   linesOf = null;
+  //   placesForLine = null;
+  //   linesOf = [];
+  //   placesForLine = [];
+  //   try{
+  //     for(int y = 0; y < info3.infoWalkList[i].legs.length; y++){
+  //       placesForLine.add(
+  //         getTransport2(),
+  //       );
+  //       placesForLine.add(
+  //         Expanded(
+  //           flex: 1, 
+  //           child: Icon(Icons.chevron_right, color: Color.fromRGBO(105, 190, 50, 1.0)),
+  //         ),
+  //       );
+  //     }
 
-      placesForLine.removeLast();
+  //     placesForLine.removeLast();
 
-      linesOf.add(
-        Container(
-          width: 400.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: placesForLine,
-          ),
-        ),
-      );
-    }
-    catch(e){
-      print("Error $e");
-    }
-    return linesOf;
-  }
+  //     linesOf.add(
+  //       Container(
+  //         width: 400.0,
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: placesForLine,
+  //         ),
+  //       ),
+  //     );
+  //   }
+  //   catch(e){
+  //     print("Error $e");
+  //   }
+  //   return linesOf;
+  // }
 
   List<Widget> elementsRow(int i) {
     linesOf = null;
     placesForLine = null;
     linesOf = [];
     placesForLine = [];
-    //CONTINUA ACA: SE TIENE QUE REVISAR TODO ESTE METODO QUE GENERA LA LISTA
+    
     try{
       for(int y = 0; y < info3.infoWalkList[i].legs.length; y++){
         placesForLine.add(
@@ -244,11 +243,13 @@ class DurationListState extends State<DurationList> {
     return linesOf;    
   }
 
-  Future<List<Widget>> insertData() async {
-    listCard = null;
+  Future<List<ListTile>> insertData() async {
+
+    //listCard = null;
     listCard2 = null;
-    listCard = [];
+    //listCard = [];
     listCard2 = [];
+    info.listCard.clear();
 
     timeArrived = null;
     timeArrived2 = null;
@@ -364,7 +365,7 @@ class DurationListState extends State<DurationList> {
         )
       );
 
-      listCard.add(
+      info.listCard.add(
         ListTile(
           onTap: (){ 
             Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenMap(index: i)));
@@ -461,213 +462,8 @@ class DurationListState extends State<DurationList> {
       );
     }
       
-    // }
-    // else if(info.changeOfTransport== 1){
-      
-    // }
-    // else if(info.changeOfTransport == 2){
-
-    // }
-    // else if(info.changeOfTransport == 3){
-
-    // }
-    // else if(info.changeOfTransport == 4){
-
-    //   for(int i = 0; i < 3; i++){
-    //     listCard2.add(
-    //       ListTile(
-    //         onTap: null,
-    //         title: Container(
-    //           padding: EdgeInsets.all(10.0),
-    //           decoration: BoxDecoration(
-    //             borderRadius: BorderRadius.circular(10.0),
-    //             color: Colors.white,
-    //           ),
-    //           child: Column(
-    //             mainAxisAlignment: MainAxisAlignment.start,
-    //             children: [
-    //               Row(
-    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                 children: [
-    //                   Text(
-    //                     timeArrived[i],
-    //                     style: TextStyle(
-    //                       fontFamily: "AurulentSans-Bold",
-    //                       color: Color.fromRGBO(105, 190, 50, 1.0),
-    //                       fontSize: 20.0,
-    //                     ),
-    //                   ),
-    //                   Text(
-    //                     "Duration",
-    //                     style: TextStyle(
-    //                       fontFamily: "AurulentSans-Bold",
-    //                       color: Color.fromRGBO(105, 190, 50, 1.0),
-    //                       fontSize: 20.0,
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-                  
-    //               Row(
-    //                 mainAxisAlignment: MainAxisAlignment.start,
-    //                 children: [
-    //                   Expanded(
-    //                     flex: 4,
-    //                     child: Container(
-    //                       width: 100,
-    //                       height: 100,
-    //                       child: ListView.builder(
-    //                         scrollDirection: Axis.horizontal,
-    //                         itemCount: elementsRow2(i).length,
-    //                         itemBuilder: (context, index){
-    //                           return elementsRow2(i)[index];
-    //                         }
-    //                       )
-    //                     ),
-    //                   ),
-    //                   Expanded(
-    //                     flex: 3,
-    //                     child: Padding(
-    //                       padding: EdgeInsets.only(left: 10.0),
-    //                     ),
-    //                   ),
-    //                   Expanded(
-    //                     flex: 3,
-    //                     child: Row(
-    //                       mainAxisAlignment: MainAxisAlignment.center,
-    //                       children: [
-    //                         Text(
-    //                           timeArrived2[i],
-    //                           style: TextStyle(
-    //                             fontFamily: "AurulentSans-Bold",
-    //                             color: Color.fromRGBO(105, 190, 50, 1.0),
-    //                             fontSize: 35.0,
-    //                           ),
-    //                         ),
-    //                         Column(
-    //                           mainAxisAlignment: MainAxisAlignment.center,
-    //                           children: [
-    //                             Text(""),
-    //                             Text(
-    //                               "min",
-    //                               style: TextStyle(
-    //                                 fontFamily: "AurulentSans-Bold",
-    //                                 color: Color.fromRGBO(105, 190, 50, 1.0),
-    //                               ),
-    //                             )
-    //                           ],
-    //                         )
-    //                       ],
-    //                     ),
-    //                   )
-    //                 ],
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       )
-    //     );
-    //     listCard.add(
-    //       ListTile(
-    //         onTap: (){ 
-    //           Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenMap(index: i)));
-    //         },
-    //         title: Container(
-    //           padding: EdgeInsets.all(10.0),
-    //           decoration: BoxDecoration(
-    //             borderRadius: BorderRadius.circular(10.0),
-    //             color: Colors.white,
-    //           ),
-    //           child: Column(
-    //             mainAxisAlignment: MainAxisAlignment.start,
-    //             children: [
-    //               Row(
-    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                 children: [
-    //                   Text(
-    //                     timeArrived[i],
-    //                     style: TextStyle(
-    //                       fontFamily: "AurulentSans-Bold",
-    //                       color: Color.fromRGBO(105, 190, 50, 1.0),
-    //                       fontSize: 20.0,
-    //                     ),
-    //                   ),
-    //                   Text(
-    //                     "Duration",
-    //                     style: TextStyle(
-    //                       fontFamily: "AurulentSans-Bold",
-    //                       color: Color.fromRGBO(105, 190, 50, 1.0),
-    //                       fontSize: 20.0,
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-
-    //               Row(
-    //                 mainAxisAlignment: MainAxisAlignment.start,
-    //                 children: [
-    //                   Expanded(
-    //                     flex: 4,
-    //                     child: Container(
-    //                       width: 100,
-    //                       height: 100,
-    //                       child: ListView.builder(
-    //                         scrollDirection: Axis.horizontal,
-    //                         itemCount: elementsRow(i).length,
-    //                         itemBuilder: (context, index){
-    //                           return elementsRow(i)[index];
-    //                         }
-    //                       )
-    //                     ),
-    //                   ),
-    //                   Expanded(
-    //                     flex: 3,
-    //                     child: Padding(
-    //                       padding: EdgeInsets.only(left: 10.0),
-    //                     ),
-    //                   ),
-    //                   Expanded(
-    //                     flex: 3,
-    //                     child: Row(
-    //                       mainAxisAlignment: MainAxisAlignment.center,
-    //                       children: [
-    //                         Text(
-    //                           timeArrived2[i],
-    //                           style: TextStyle(
-    //                             fontFamily: "AurulentSans-Bold",
-    //                             color: Color.fromRGBO(105, 190, 50, 1.0),
-    //                             fontSize: 35.0,
-    //                           ),
-    //                         ),
-    //                         Column(
-    //                           mainAxisAlignment: MainAxisAlignment.center,
-    //                           children: [
-    //                             Text(""),
-    //                             Text(
-    //                               "min",
-    //                               style: TextStyle(
-    //                                 fontFamily: "AurulentSans-Bold",
-    //                                 color: Color.fromRGBO(105, 190, 50, 1.0),
-    //                               ),
-    //                             )
-    //                           ],
-    //                         )
-    //                       ],
-    //                     ),
-    //                   )
-    //                 ],
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //     );
-    //   }
-
-    // }
-
     info3.listCanceled = listCard2;
-    return listCard;
+    return info.listCard;
   }
 
   //int state = 2; //0: bus, 1: cicla, 2: a pie
@@ -682,16 +478,13 @@ class DurationListState extends State<DurationList> {
       width: MediaQuery.of(context).size.width - 30.0,
       child: FutureBuilder(
         future: insertData(),
-        builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot){
+        builder: (BuildContext context, AsyncSnapshot<List<ListTile>> snapshot){
           if(snapshot.hasData){
-            info.widgetList = null;
-            info.widgetList = [];
-            info.widgetList = snapshot.data;
             return ListView.separated(
               separatorBuilder: (_,__) => Divider(height: 10.0, color: Colors.transparent,),
-              itemCount: timeArrived.length,
+              itemCount: info.listCard.length,//snapshot.data.length, //timeArrived.length,
               itemBuilder: (BuildContext context, int index){
-                return snapshot.data[index];
+                return info.listCard[index];
               }, 
             );
           }

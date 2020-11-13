@@ -196,17 +196,31 @@ class ProcessData with ChangeNotifier{
   //   notifyListeners();
   // }
 
-  get listOfTransport => listTransport;
-  set listOfTransport(List<ListTile> val){
+  // get listOfTransport => listTransport;
+  // set listOfTransport(List<ListTile> val){
+  //   listTransport = val;
+  //   notifyListeners();
+  // }
+
+  // get listOfTransport2 => listTransport2;
+  // set listOfTransport2(List<ListTile> val){
+  //   listTransport2 = val;
+  //   notifyListeners();
+  // }
+
+  get listCard => listTransport;
+  set listCard(List<ListTile> val){
     listTransport = val;
     notifyListeners();
   }
 
-  get listOfTransport2 => listTransport2;
-  set listOfTransport2(List<ListTile> val){
-    listTransport2 = val;
-    notifyListeners();
-  }
+  // get listCard2 => listTransport2;
+  // set listCard2(List<ListTile> val){
+  //   listTransport2 = val;
+  //   notifyListeners();
+  // }
+
+  //ValueNotifier<List<ListTile>> listCard = ValueNotifier([z]);
 
 
 
