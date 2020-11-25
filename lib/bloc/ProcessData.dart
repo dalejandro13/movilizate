@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:movilizate/repository/ConsultServer.dart';
+import 'package:movilizate/repository/GetIcon.dart';
 
 class ProcessData with ChangeNotifier{
 
@@ -136,20 +138,20 @@ class ProcessData with ChangeNotifier{
   }
 
 
-  get focusOrigin2{
-    return focusOri2;
-  }
-  set focusOrigin2(FocusNode val){
-    focusOri2 = val;
-    notifyListeners();
-  }
-  get focusDestiny2{
-    return focusDes2;
-  }
-  set focusDestiny2(FocusNode val){
-    focusDes2 = val;
-    notifyListeners();
-  }
+  // get focusOrigin2{
+  //   return focusOri2;
+  // }
+  // set focusOrigin2(FocusNode val){
+  //   focusOri2 = val;
+  //   notifyListeners();
+  // }
+  // get focusDestiny2{
+  //   return focusDes2;
+  // }
+  // set focusDestiny2(FocusNode val){
+  //   focusDes2 = val;
+  //   notifyListeners();
+  // }
 
 
   get getLatitudeOrigin{
@@ -288,6 +290,7 @@ class InfoRouteServer with ChangeNotifier{
   get onTapCanceledList => listCanceled;
   set onTapCanceledList(List<Widget> val){
     listCanceled = val;
+    notifyListeners();
   }
 
 }
@@ -330,4 +333,20 @@ class CardInfoRoutes {
     this.infoOfDistance,
     this.time,
   });
+}
+
+class GetDataLegs with ChangeNotifier{
+  GetIcon ic;
+  GetDataLegs(BuildContext context){
+    ic = GetIcon(context);
+  }
+}
+
+class GetDataOfRoutes with ChangeNotifier{
+
+  GetIconsInfoCard infoCard;
+
+  GetDataOfRoutes(BuildContext context){
+    infoCard = GetIconsInfoCard(context);
+  }
 }

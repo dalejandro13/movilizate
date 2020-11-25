@@ -8,7 +8,6 @@ import 'package:movilizate/RoutingExample.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
 import 'package:movilizate/repository/ConsultServer.dart';
 import 'package:provider/provider.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 //import 'package:ext_storage/ext_storage.dart';

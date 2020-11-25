@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:movilizate/bloc/ProcessData.dart';
+import 'package:movilizate/model/iconList.dart';
 import 'package:provider/provider.dart';
 
 class ConsultServer{
@@ -273,30 +274,109 @@ class ConsultServer{
       print("Error $e");
     }
   }
+}
 
-  // Future<List<Widget>> obtainAndShowInfo(InfoRouteServer info3) async {
-  //   wid = null;
-  //   wid = [];
-  //   if(info3.infoWalkList.length > 0){
-  //     for(var tt in info3.infoWalkList){
-  //       // print(tt.duration);
-  //       // print(tt.startTime);
-  //       // print(tt.endTime);
-  //       for(var gg in tt.legs){
+class GetIconsInfoCard{
 
-  //         // print(gg.mode);
-  //         // print(gg.route);
-  //         // print(gg.routeColor);
-  //         // print(gg.lonOrig);
-  //         // print(gg.latOrig);
-  //       }
-  //     }
-  //   }
-  //   else{
-  //     wid = null;
-  //   }
-  //   return wid;
-  // }
+  ValueNotifier<List<IconList>> listOfInfo = null;
+  InfoRouteServer info3;
+  List<LegsList> legs;
 
+  GetIconsInfoCard(BuildContext context){
+    info3 = Provider.of<InfoRouteServer>(context);
+    
+    getIconsInfo(context);
+  }
 
+  getIconsInfo(BuildContext context){
+    listOfInfo = null;
+    legs = null;
+    listOfInfo = ValueNotifier([]);
+    legs = [];
+    String timeArrived = null, timeDuration = null, subway = null, bus = null, bike = null, walk = null;
+    String route = null, routeColor = null, routeTextColor = null;
+    for(int i = 0; i < info3.infoWalkList.length; i++){
+      try{
+        int minutes = (info3.infoWalkList[i].waitingTime / 60).truncate(); //convertir de segundos a minutos
+        timeArrived = "Arrived: ${minutes.toString()} min";
+
+        int minutesDuration = (info3.infoWalkList[i].duration / 60).truncate(); //convertir de segundos a minutos
+        timeDuration = "${minutesDuration.toString()}";
+
+        legs = null;
+        legs = [];
+
+        for(int y = 0; y < info3.infoWalkList[i].legs.length; y++){
+          
+          if(info3.infoWalkList[i].legs[y].mode == "SUBWAY"){
+            subway = "SUBWAY";
+            bus = "";
+            bike = "";
+            walk = "";
+            route = info3.infoWalkList[i].legs[y].route;
+            routeColor = info3.infoWalkList[i].legs[y].routeColor;
+            routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+          }
+          else{
+            if(info3.infoWalkList[i].legs[y].mode == "BUS"){
+              subway = "";
+              bus = "BUS";
+              bike = "";
+              walk = "";
+              route = info3.infoWalkList[i].legs[y].route;
+              routeColor = info3.infoWalkList[i].legs[y].routeColor;
+              routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+            }
+            else{
+              if(info3.infoWalkList[i].legs[y].mode == "BIKE"){
+                subway = "";
+                bus = "";
+                bike = "BIKE";
+                walk = "";
+                route = info3.infoWalkList[i].legs[y].route;
+                routeColor = info3.infoWalkList[i].legs[y].routeColor;
+                routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+              }
+              else{
+                if(info3.infoWalkList[i].legs[y].mode == "WALK"){
+                  subway = "";
+                  bus = "";
+                  bike = "";
+                  walk = "WALK";
+                  route = info3.infoWalkList[i].legs[y].route;
+                  routeColor = info3.infoWalkList[i].legs[y].routeColor;
+                  routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+                }
+              }
+            }
+          }
+          
+          legs.add(
+            LegsList(
+              subway: subway,
+              bus: bus,
+              bike: bike,
+              walk: walk,
+              route: route,
+              routeColor: routeColor,
+              routeTextColor: routeTextColor,
+            )
+          );
+
+        }
+        listOfInfo.value.add(
+          IconList(
+            timeArrived: timeArrived,
+            timeDuration: timeDuration,
+            legs: legs,
+          )
+        );
+
+      }
+      catch(e){
+        print("Error $e");
+      }
+    }
+    listOfInfo.notifyListeners();
+  }
 }

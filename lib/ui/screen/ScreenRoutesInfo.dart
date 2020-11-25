@@ -2,15 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:here_sdk/mapview.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
+import 'package:movilizate/model/iconList.dart';
+import 'package:movilizate/ui/widget/ListOfLegs.dart';
 import 'package:provider/provider.dart';
 import 'package:movilizate/ShowTheRoute.dart';
 import 'package:here_sdk/core.dart';
 
+
+
+// class ScreenMap extends StatefulWidget {
+
+//   int index;
+
+//   ScreenMap(int index){
+//     this.index = index;
+//   }
+
+//   @override
+//   _ScreenMapState createState() => _ScreenMapState();
+// }
+
+// class _ScreenMapState extends State<ScreenMap> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+      
+//     );
+//   }
+// }
+
+
+
 class ScreenMap extends StatefulWidget {
+
   int index;
-  ScreenMap({
-    this.index,
-  });
+  GetDataOfRoutes routes;
+  
+  ScreenMap(int index, BuildContext context){    
+    this.index = index;
+    routes = GetDataOfRoutes(context);
+  }
 
   @override
   _ScreenMapState createState() => _ScreenMapState();
@@ -28,10 +59,121 @@ class _ScreenMapState extends State<ScreenMap> {
   List<CardInfoRoutes> cardInfo = null;
   //HereMapController mapCtrl;
 
+
+  // Widget cardInfoRoute(int index, IconList icon, BuildContext context, bool enable){
+  //   return ListTile(
+  //       title: Padding(
+  //       padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+  //       child: Container(
+  //         height: 140.0,
+  //         width: 70.0,
+  //         decoration: BoxDecoration(
+  //           borderRadius: BorderRadius.circular(8.0),
+  //           color: Colors.white,
+  //         ),
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+
+  //                 Padding(
+  //                   padding: EdgeInsets.all(8.0),
+  //                   child: Text(
+  //                     icon.timeArrived,
+  //                     style: TextStyle(
+  //                       fontFamily: "AurulentSans-Bold",
+  //                       color: material.Color.fromRGBO(105, 190, 50, 1.0),
+  //                       fontSize: 20.0,
+  //                     ),
+  //                   ),
+  //                 ),
+
+  //                 Padding(
+  //                   padding: EdgeInsets.only(right: 8.0),
+  //                   child: Text(
+  //                     "Duration",
+  //                     style: TextStyle(
+  //                       fontFamily: "AurulentSans-Bold",
+  //                       color: material.Color.fromRGBO(105, 190, 50, 1.0),
+  //                       fontSize: 20.0,
+  //                     ),
+  //                   ),
+  //                 ),
+
+  //               ],
+  //             ),
+
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+
+  //                 Padding(
+  //                   padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
+  //                   child: Container(
+  //                     height: 50.0,
+  //                     width: 160.0,
+  //                     decoration: BoxDecoration(
+  //                       color: Colors.red,
+  //                     ),
+  //                   ),
+  //                 ),
+
+  //                 Padding(
+  //                   padding: EdgeInsets.only(right: 8.0, bottom: 10.0),
+  //                   child: Row(
+  //                     children: [
+  //                       Text(
+  //                         icon.timeDuration,
+  //                         style: TextStyle(
+  //                           fontFamily: "AurulentSans-Bold",
+  //                           color: material.Color.fromRGBO(105, 190, 50, 1.0),
+  //                           fontSize: 35.0,
+  //                         ),
+  //                       ),
+
+  //                       Column(
+  //                         mainAxisAlignment: MainAxisAlignment.center,
+  //                         children: [
+  //                           Text(""),
+
+  //                           Text(
+  //                             "min",
+  //                             style: TextStyle(
+  //                               fontFamily: "AurulentSans-Bold",
+  //                               color: material.Color.fromRGBO(105, 190, 50, 1.0),
+  //                             ),
+  //                           )
+  //                         ],
+  //                       )
+
+  //                     ],
+  //                   ),
+  //                 ),
+
+  //               ],
+  //             ),
+
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //     onTap: enable ? (){
+  //       Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenMap(index, context)));
+  //     }:
+  //     null,
+  //   );
+  // }
+
+
+
+
+
   void getDataToShow() async {
     cardInfo = null;
     cardInfo = [];
-
     print("El indice es: ${widget.index}");
 
     cardInfo.add(
@@ -135,7 +277,7 @@ class _ScreenMapState extends State<ScreenMap> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 150.0,
-                child: info3.onTapCanceledList[widget.index], //info.listW[widget.index],
+                child: CardInfoRoute(widget.index, widget.routes.infoCard.listOfInfo.value[widget.index], context, true), //cardInfoRoute(widget.index, widget.routes.infoCard.listOfInfo.value[widget.index], context, false)  //info3.onTapCanceledList[widget.index],--- //info.listW[widget.index],
               ),
               // Container(
               //   width: MediaQuery.of(context).size.width,
@@ -161,7 +303,7 @@ class _ScreenMapState extends State<ScreenMap> {
             ),
           ),
 
-          Expanded( //mas informacion de rutas
+          Expanded(
             flex: 5,
             child: Container(
               decoration: BoxDecoration(

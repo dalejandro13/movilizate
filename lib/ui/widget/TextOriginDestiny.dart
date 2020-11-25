@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:movilizate/bloc/ProcessData.dart';
 import 'package:movilizate/repository/ConsultServer.dart';
 import 'package:provider/provider.dart';
-import 'package:movilizate/bloc/ProcessData.dart';
 
-class AutoCompleteOrigin2 extends StatefulWidget {
+class TextOriginDestiny extends StatelessWidget {
 
+  String text;
   ConsultServer consult;
+  Color color;
+  TextEditingController control;
+  FocusNode focusText;
+  bool activate;
 
-  AutoCompleteOrigin2(ConsultServer consult){
+  TextOriginDestiny(String text, ConsultServer consult, Color color, TextEditingController control, FocusNode focusText, bool activate){
+    this.text = text;
     this.consult = consult;
+    this.color = color;
+    this.control = control;
+    this.focusText = focusText;
+    this.activate = activate;
   }
-
-  @override
-  _AutoCompleteOrigin2State createState() => _AutoCompleteOrigin2State();
-}
-
-class _AutoCompleteOrigin2State extends State<AutoCompleteOrigin2> {
-
-  //FocusNode _focusOrigin = FocusNode();
-  //TextEditingController controller = TextEditingController(); 
-  //ConsultServer consult = ConsultServer();
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +33,18 @@ class _AutoCompleteOrigin2State extends State<AutoCompleteOrigin2> {
         color: Colors.white
       ),
       child: TextFormField(
-        controller: info.dataOrigin,
-        focusNode: info.focusOrigin2,
+        controller: control,
+        focusNode: focusText, //_focusOrigin, //info.focusOrigin,
         style: TextStyle(
           fontFamily: "AurulentSans-Bold",
-          color: Color.fromRGBO(81, 81, 81, 1.0),
+          color: color, //Color.fromRGBO(81, 81, 81, 1.0),
           fontSize: 20.0,
         ),
         decoration: InputDecoration(
-          hintText: "Origen",
+          hintText: text,
           hintStyle: TextStyle(
             fontFamily: "AurulentSans-Bold",
-            color: Color.fromRGBO(81, 81, 81, 1.0),
+            color: color, //Color.fromRGBO(81, 81, 81, 1.0),
             fontSize: 20.0,
           ),
           border: InputBorder.none,
@@ -53,30 +53,33 @@ class _AutoCompleteOrigin2State extends State<AutoCompleteOrigin2> {
             icon: Icon(Icons.location_on),
             onPressed: (){},
             iconSize: 20.0,
-            color: Color.fromRGBO(81, 81, 81, 1.0),
+            color: color, //Color.fromRGBO(81, 81, 81, 1.0),
           ),
           suffixIcon: IconButton(
             icon: Icon(Icons.close),
             onPressed: (){
               //controller.text = "";
-              info.dataOrigin.text = "";
+              //info.dataOrigin.text = "";
+              control.text = "";
               info2.infoPlace = [];
             },
             iconSize: 20.0,
-            color: Color.fromRGBO(81, 81, 81, 1.0),
+            color: color, //Color.fromRGBO(81, 81, 81, 1.0),
           ),
         ),
-        onChanged: (val) async {
-          // if(val.length >= 3){
-          //   info.dataText.text = val;
-          //   await widget.consult.getInfoInMaps(info, info2);
-          // }
-          // else if(val.length >= 0 && val.length <= 2 ){
-          //   widget.consult.place = null;
-          //   widget.consult.place = [];
-          //   info2.infoPlace = [];
-          // }
-        },
+        onChanged: activate ? (val) async {
+          if(val.length >= 3){
+            info.dataText.text = val;
+            await consult.getInfoInMaps(info, info2);
+          }
+          else if(val.length >= 0 && val.length <= 2 ){
+            consult.place = null;
+            consult.place = [];
+            info2.infoPlace = [];
+          }
+          //setState(() { });
+        }:
+        null,
       ),
     );
   }

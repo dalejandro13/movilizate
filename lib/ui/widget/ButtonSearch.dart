@@ -109,6 +109,8 @@ class _ButtonSearchState extends State<ButtonSearch> {
                           msg: "Informacion incompleta, intentalo nuevamente",
                           toastLength: Toast.LENGTH_LONG,
                           gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
                           fontSize: 30.0,
                         );
                         info3.infoWalkList.clear();
@@ -119,6 +121,8 @@ class _ButtonSearchState extends State<ButtonSearch> {
                         msg: "Ingresa el destino apropiado",
                         toastLength: Toast.LENGTH_LONG,
                         gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.grey,
+                        textColor: Colors.white,
                         fontSize: 30.0,
                       );
                     }
@@ -164,6 +168,8 @@ class _ButtonSearchState extends State<ButtonSearch> {
                     msg: "Falta ingresar el destino",
                     toastLength: Toast.LENGTH_LONG,
                     gravity: ToastGravity.BOTTOM,
+                    backgroundColor: Colors.grey,
+                    textColor: Colors.white,
                     fontSize: 30.0,
                   );
                 }
@@ -173,6 +179,8 @@ class _ButtonSearchState extends State<ButtonSearch> {
                   msg: "Falta ingresar el origen",
                   toastLength: Toast.LENGTH_LONG,
                   gravity: ToastGravity.BOTTOM,
+                  backgroundColor: Colors.grey,
+                  textColor: Colors.white,
                   fontSize: 30.0,
                 );
               }
@@ -183,6 +191,8 @@ class _ButtonSearchState extends State<ButtonSearch> {
               msg: "No estas conectado a internet",
               toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.grey,
+              textColor: Colors.white,
               fontSize: 30.0,
             );
           }
