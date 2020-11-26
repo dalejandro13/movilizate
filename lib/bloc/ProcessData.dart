@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:movilizate/model/iconList.dart';
 import 'package:movilizate/repository/ConsultServer.dart';
 import 'package:movilizate/repository/GetIcon.dart';
 
@@ -224,8 +225,6 @@ class ProcessData with ChangeNotifier{
 
   //ValueNotifier<List<ListTile>> listCard = ValueNotifier([z]);
 
-
-
 }
 
 class DataOfPlace with ChangeNotifier{
@@ -335,18 +334,25 @@ class CardInfoRoutes {
   });
 }
 
-class GetDataLegs with ChangeNotifier{
+class GetDataLegs extends ChangeNotifier{
   GetIcon ic;
   GetDataLegs(BuildContext context){
     ic = GetIcon(context);
   }
 }
 
-class GetDataOfRoutes with ChangeNotifier{
-
+class GetDataOfRoutes extends ChangeNotifier{
   GetIconsInfoCard infoCard;
 
   GetDataOfRoutes(BuildContext context){
     infoCard = GetIconsInfoCard(context);
+  }
+}
+
+class GetInnerIconsInfo extends ChangeNotifier{
+  InnerIconsInfo infoInner;
+
+  GetInnerIconsInfo(BuildContext context){
+    infoInner = InnerIconsInfo(context);
   }
 }

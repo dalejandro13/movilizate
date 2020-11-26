@@ -59,7 +59,6 @@ class _ScreenMapState extends State<ScreenMap> {
   List<CardInfoRoutes> cardInfo = null;
   //HereMapController mapCtrl;
 
-
   // Widget cardInfoRoute(int index, IconList icon, BuildContext context, bool enable){
   //   return ListTile(
   //       title: Padding(
@@ -167,10 +166,6 @@ class _ScreenMapState extends State<ScreenMap> {
   //   );
   // }
 
-
-
-
-
   void getDataToShow() async {
     cardInfo = null;
     cardInfo = [];
@@ -277,7 +272,7 @@ class _ScreenMapState extends State<ScreenMap> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 150.0,
-                child: CardInfoRoute(widget.index, widget.routes.infoCard.listOfInfo.value[widget.index], context, true), //cardInfoRoute(widget.index, widget.routes.infoCard.listOfInfo.value[widget.index], context, false)  //info3.onTapCanceledList[widget.index],--- //info.listW[widget.index],
+                child: CardInfoRoute(widget.index, /*widget.routes.infoCard.listOfInfo.value[widget.index],*/ context, false), //cardInfoRoute(widget.index, widget.routes.infoCard.listOfInfo.value[widget.index], context, false)  //info3.onTapCanceledList[widget.index],--- //info.listW[widget.index],
               ),
               // Container(
               //   width: MediaQuery.of(context).size.width,
@@ -303,7 +298,7 @@ class _ScreenMapState extends State<ScreenMap> {
             ),
           ),
 
-          Expanded(
+          Expanded( //tarjetas con informacion
             flex: 5,
             child: Container(
               decoration: BoxDecoration(

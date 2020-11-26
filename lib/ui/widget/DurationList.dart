@@ -5,6 +5,8 @@ import 'package:movilizate/ui/screen/ScreenRoutesInfo.dart';
 import 'package:movilizate/ui/widget/ListOfLegs.dart';
 import 'package:provider/provider.dart';
 
+
+
 class DurationList extends StatefulWidget {
 
   GetDataOfRoutes routes;
@@ -19,7 +21,7 @@ class DurationList extends StatefulWidget {
 
 class _DurationListState extends State<DurationList> {
 
-  // double sizeIcon = 35.0;
+  double sizeIcon = 35.0;
 
   // ListTile cardInfoRoute(int index, IconList icon, BuildContext context, bool enable){
   //   return ListTile(
@@ -228,6 +230,7 @@ class _DurationListState extends State<DurationList> {
 
   @override
   Widget build(BuildContext context) {
+    //final routes = Provider.of<GetDataOfRoutes>(context); //GetDataOfRoutes(context);
     return ValueListenableBuilder(
       valueListenable: widget.routes.infoCard.listOfInfo, //widget.dataLegs.ic.listOfTransport,
       builder: (BuildContext context, dynamic value, Widget child){
@@ -241,7 +244,7 @@ class _DurationListState extends State<DurationList> {
               decoration: BoxDecoration(
                 color: Colors.transparent,
               ),
-              child: CardInfoRoute(index, widget.routes.infoCard.listOfInfo.value[index], context, true), //cardInfoRoute(index, widget.routes.infoCard.listOfInfo.value[index], context, true),
+              child: CardInfoRoute(index, /*widget.routes.infoCard.listOfInfo.value[index],*/ context, true), //cardInfoRoute(index, widget.routes.infoCard.listOfInfo.value[index], context, true),
             );
           }
         );

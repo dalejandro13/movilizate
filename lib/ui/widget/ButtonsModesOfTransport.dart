@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 class ButtonsModesOfTransport extends StatefulWidget {
   GetDataLegs dataLegs;
   bool subway = false, bus = false, bike = false, walk = false;
+  GetInnerIconsInfo gii;
 
   ButtonsModesOfTransport(BuildContext context) {
     this.subway = subway;
@@ -20,6 +21,7 @@ class ButtonsModesOfTransport extends StatefulWidget {
 }
 
 class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
+
   Widget cardButton(int index, bool value, bool transport) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,6 +64,7 @@ class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
                     widget.bus = false;
                     widget.bike = false;
                     widget.walk = true;
+                    gii.infoInner.tile.value[0].clear();
                   });
                 },
 
@@ -118,9 +121,12 @@ class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
 
   @override
   Widget build(BuildContext context){
+    gii = Provider.of<GetInnerIconsInfo>(context); //CONTINUA ACA: REVISAR ESTA LINEA
     return ValueListenableBuilder(
       valueListenable: widget.dataLegs.ic.listOfTransport,
       builder: (BuildContext context, dynamic value, Widget child){
+
+        //gii.infoInner.tile.value[index]
         return ListView.separated(
           scrollDirection: Axis.horizontal,
           separatorBuilder: (_,__) => Divider(height: 10.0, color: Colors.transparent,),

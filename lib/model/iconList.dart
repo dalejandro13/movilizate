@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class IconList{
   String timeArrived, timeDuration;
   List<LegsList> legs;
@@ -11,6 +13,7 @@ class IconList{
 
 class LegsList{
   String subway, bus, bike, walk, route, routeColor, routeTextColor;
+
   LegsList({
     this.subway, 
     this.bus, 
