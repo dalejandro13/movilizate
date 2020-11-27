@@ -255,83 +255,22 @@ class DataOfPlace with ChangeNotifier{
 
 class InfoRouteServer with ChangeNotifier{
 
-  List<InfoRouteServer> infoWalk = [];
-  List<Widget> listCanceled = [];
+  List<InfoRouteServ> infoWalk = [];
+  //List<Widget> listCanceled = [];
 
-  int duration;
-  int startTime;
-  int endTime;
-  int walkTime;
-  int waitingTime;
-  double walkDistance;
-  List<LegsInfo> legs;
-  // List<double> latOrigin;
-  // List<double> lonOrigin;
-  // List<double> latDestiny;
-  // List<double> lonDestiny;
-
-  InfoRouteServer({
-    this.duration,
-    this.startTime,
-    this.endTime,
-    this.walkTime,
-    this.waitingTime,
-    this.walkDistance,
-    this.legs,
-  });
 
   get infoWalkList => infoWalk;
-  set infoWalkList(List<InfoRouteServer> val){
+  set infoWalkList(List<InfoRouteServ> val){
     infoWalk = val;
     notifyListeners();
   }
 
-  get onTapCanceledList => listCanceled;
-  set onTapCanceledList(List<Widget> val){
-    listCanceled = val;
-    notifyListeners();
-  }
+  // get onTapCanceledList => listCanceled;
+  // set onTapCanceledList(List<Widget> val){
+  //   listCanceled = val;
+  //   notifyListeners();
+  // }
 
-}
-
-class LegsInfo{
-  String mode;
-  String route;
-  String routeColor;
-  String routeTextColor;
-  double lonOrig, latOrig, lonDest, latDest; //List<double> lonOrig, latOrig, lonDest, latDest;
-
-  LegsInfo({
-    this.mode,
-    this.lonOrig, 
-    this.latOrig, 
-    this.lonDest, 
-    this.latDest,
-    this.route,
-    this.routeColor,
-    this.routeTextColor,
-  });
-}
-
-class CardInfoRoutes {
-  String hourStart;
-  Widget iconTransportMedium;
-  String hourEnds;
-  String nameTrasportMedium;
-  String placeStartIn;
-  String placeEndsIn;
-  Widget infoOfDistance;
-  String time;
-  CardInfoRoutes({
-    this.hourStart,
-    this.iconTransportMedium,
-    this.hourEnds,
-    this.nameTrasportMedium,
-    this.placeStartIn,
-    this.placeEndsIn,
-    this.infoOfDistance,
-    this.time,
-  });
 }
 
 class GetDataLegs extends ChangeNotifier{

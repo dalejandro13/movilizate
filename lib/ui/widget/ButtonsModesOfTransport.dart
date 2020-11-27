@@ -13,6 +13,7 @@ class ButtonsModesOfTransport extends StatefulWidget {
     this.bike = bike;
     this.walk = walk;
     dataLegs = GetDataLegs(context);
+    gii = GetInnerIconsInfo(context);
   }
 
   @override
@@ -64,7 +65,9 @@ class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
                     widget.bus = false;
                     widget.bike = false;
                     widget.walk = true;
-                    gii.infoInner.tile.value[0].clear();
+                    widget.gii.infoInner.tile.value[0] = null;
+                    widget.gii.infoInner.tile.value[1] = null;
+                    widget.gii.infoInner.tile.value[2].clear();
                   });
                 },
 
@@ -121,7 +124,8 @@ class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
 
   @override
   Widget build(BuildContext context){
-    gii = Provider.of<GetInnerIconsInfo>(context); //CONTINUA ACA: REVISAR ESTA LINEA
+    //widget.gii = Provider.of<GetInnerIconsInfo>(context);
+
     return ValueListenableBuilder(
       valueListenable: widget.dataLegs.ic.listOfTransport,
       builder: (BuildContext context, dynamic value, Widget child){

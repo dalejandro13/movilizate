@@ -36,11 +36,11 @@ import 'package:here_sdk/core.dart';
 class ScreenMap extends StatefulWidget {
 
   int index;
-  GetDataOfRoutes routes;
+  //GetDataOfRoutes routes;
   
   ScreenMap(int index, BuildContext context){    
     this.index = index;
-    routes = GetDataOfRoutes(context);
+    //routes = GetDataOfRoutes(context);
   }
 
   @override
@@ -58,6 +58,8 @@ class _ScreenMapState extends State<ScreenMap> {
   // ignore: avoid_init_to_null
   List<CardInfoRoutes> cardInfo = null;
   //HereMapController mapCtrl;
+  // ignore: avoid_init_to_null
+  GetInnerIconsInfo gii = null; 
 
   // Widget cardInfoRoute(int index, IconList icon, BuildContext context, bool enable){
   //   return ListTile(
@@ -228,14 +230,25 @@ class _ScreenMapState extends State<ScreenMap> {
     
   }
 
+  // testList(){
+  //   var max = gii.infoInner.tile.value.length;
+  //   for(int j = 0; j < max; j++){
+  //     print(gii.infoInner.tile.value[j]);
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     info = Provider.of<ProcessData>(context);
     info3 = Provider.of<InfoRouteServer>(context);
+    //var nn = Provider.of<GetInnerIconsInfo>(context, listen: false).infoInner.tile;
 
     info.infoRoutes = null;
     info.infoRoutes = [];
     info.infoRoutes = cardInfo;
+    //testList();
+
+    
     return Scaffold(
       body: Container(
       height: MediaQuery.of(context).size.height,

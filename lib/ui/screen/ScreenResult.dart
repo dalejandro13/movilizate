@@ -38,11 +38,11 @@ class _ScreenResultState extends State<ScreenResult> {
       child: Scaffold(
         body: GestureDetector(
           onTap:(){
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
         child: Stack(
           children: [
               //Text(info2.title), //pendiente de borrar
