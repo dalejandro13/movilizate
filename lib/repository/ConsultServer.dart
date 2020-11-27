@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:movilizate/bloc/ProcessData.dart';
+import 'package:movilizate/model/iconList.dart';
 import 'package:provider/provider.dart';
 
 class ConsultServer{
@@ -16,7 +18,7 @@ class ConsultServer{
   String urlUbication = "country=colombia;city=";
   String apiKey = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
   List<DataOfPlace> place;
-  List<InfoRouteServer> place2;
+  //List<InfoRouteServer> place2;
   List<LegsInfo> legs;
   bool enter = true;
   List<Widget> wid;
@@ -167,16 +169,16 @@ class ConsultServer{
 
   Future<void> getInfoFromServer(String urlComplete, InfoRouteServer info3) async {
     try{
-      place2 = null;
       legs = null;
-      place2 = [];
+      info3.infoWalkList = null;
+      info3.infoWalkList = [];
       legs = [];
       
       dynamic duration = null, startTime = null, endTime = null, walkTime = null, waitingTime = null, walkDistance = null, mode = null, route = null, routeColor = null, routeTextColor = null;
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
 
-      var resp = await http.get(urlComplete, headers: {'Content-Type': 'application/json'});
+      var resp = await http.get(urlComplete, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 15));
       if(resp.statusCode == 200){
         var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
         if(jsonResp["error"] == null){
@@ -239,7 +241,7 @@ class ConsultServer{
               );
             }
 
-            place2.add(
+            info3.infoWalkList.add(
               InfoRouteServer(
                 duration: duration,
                 startTime: startTime,
@@ -251,7 +253,6 @@ class ConsultServer{
               ),
             );
           }
-          info3.infoWalkList = place2;
 
           // for(int x = 0; x < info3.infoWalkList.length; x++){
           //   for(int y = 0; y < info3.infoWalkList[x].legs.length; y++){
@@ -274,30 +275,611 @@ class ConsultServer{
       print("Error $e");
     }
   }
+}
 
-  // Future<List<Widget>> obtainAndShowInfo(InfoRouteServer info3) async {
-  //   wid = null;
-  //   wid = [];
-  //   if(info3.infoWalkList.length > 0){
-  //     for(var tt in info3.infoWalkList){
-  //       // print(tt.duration);
-  //       // print(tt.startTime);
-  //       // print(tt.endTime);
-  //       for(var gg in tt.legs){
+class GetIconsInfoCard{
 
-  //         // print(gg.mode);
-  //         // print(gg.route);
-  //         // print(gg.routeColor);
-  //         // print(gg.lonOrig);
-  //         // print(gg.latOrig);
-  //       }
-  //     }
-  //   }
-  //   else{
-  //     wid = null;
-  //   }
-  //   return wid;
-  // }
+  ValueNotifier<List<IconList>> listOfInfo = ValueNotifier([]);
+  InfoRouteServer info3;
+  List<LegsList> legs;
+
+  GetIconsInfoCard(BuildContext context){
+    info3 = Provider.of<InfoRouteServer>(context);
+    getIconsInfo(context);
+  }
+
+  getIconsInfo(BuildContext context){
+    listOfInfo = null;
+    legs = null;
+    listOfInfo = ValueNotifier([]);
+    legs = [];
+    String timeArrived = null, timeDuration = null, subway = null, bus = null, bike = null, walk = null;
+    String route = null, routeColor = null, routeTextColor = null;
+    for(int i = 0; i < info3.infoWalkList.length; i++){
+      try{
+        int minutes = (info3.infoWalkList[i].waitingTime / 60).truncate(); //convertir de segundos a minutos para arrived
+        timeArrived = "Arrived: ${minutes.toString()} min";
+
+        int minutesDuration = (info3.infoWalkList[i].duration / 60).truncate(); //convertir de segundos a minutos para duration
+        timeDuration = "${minutesDuration.toString()}";
+
+        legs = null;
+        legs = [];
+
+        for(int y = 0; y < info3.infoWalkList[i].legs.length; y++){
+          
+          if(info3.infoWalkList[i].legs[y].mode == "SUBWAY"){
+            subway = "SUBWAY";
+            bus = "";
+            bike = "";
+            walk = "";
+            route = info3.infoWalkList[i].legs[y].route;
+            routeColor = info3.infoWalkList[i].legs[y].routeColor;
+            routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+          }
+          else{
+            if(info3.infoWalkList[i].legs[y].mode == "BUS"){
+              subway = "";
+              bus = "BUS";
+              bike = "";
+              walk = "";
+              route = info3.infoWalkList[i].legs[y].route;
+              routeColor = info3.infoWalkList[i].legs[y].routeColor;
+              routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+            }
+            else{
+              if(info3.infoWalkList[i].legs[y].mode == "BIKE"){
+                subway = "";
+                bus = "";
+                bike = "BIKE";
+                walk = "";
+                route = info3.infoWalkList[i].legs[y].route;
+                routeColor = info3.infoWalkList[i].legs[y].routeColor;
+                routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+              }
+              else{
+                if(info3.infoWalkList[i].legs[y].mode == "WALK"){
+                  subway = "";
+                  bus = "";
+                  bike = "";
+                  walk = "WALK";
+                  route = info3.infoWalkList[i].legs[y].route;
+                  routeColor = info3.infoWalkList[i].legs[y].routeColor;
+                  routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+                }
+              }
+            }
+          }
+          
+          legs.add(
+            LegsList(
+              subway: subway,
+              bus: bus,
+              bike: bike,
+              walk: walk,
+              route: route,
+              routeColor: routeColor,
+              routeTextColor: routeTextColor,
+            )
+          );
+
+        }
+        listOfInfo.value.add(
+          IconList(
+            timeArrived: timeArrived,
+            timeDuration: timeDuration,
+            legs: legs,
+          )
+        );
+
+      }
+      catch(e){
+        print("Error $e");
+      }
+    }
+    listOfInfo.notifyListeners();
+  }
+}
+
+class InnerIconsInfo{
+  ValueNotifier<List<List<Widget>>> tile = ValueNotifier([]);
+  double sizeIcon = 35.0;
+  InfoRouteServer route;
+  List<Widget> element = List<Widget>();
+  //GetDataOfRoutes ii;
+
+  InnerIconsInfo(BuildContext context/*, int index*/){
+    //ii = Provider.of<GetDataOfRoutes>(context);
+    route = Provider.of<InfoRouteServer>(context);
+    tile.value = null;
+    tile.value = [];
+    getIcon(/*index*/);
+  }
+
+  Color hexColor(String hexString){
+    var buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7){
+      buffer.write('ff');
+    } 
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  getIcon(/*int index*/){
+
+    for(int i = 0; i < route.infoWalkList.length; i++){
+      element = null;
+      element = [];
+      for(int j = 0; j < route.infoWalkList[i].legs.length; j++){
+        if(route.infoWalkList[i].legs[j].mode == "SUBWAY"){
+          element.add(
+            Icon(
+              Icons.directions_subway,
+              size: sizeIcon,
+              color: Colors.black,
+            )
+          );
+
+          if(route.infoWalkList[i].legs[j].routeColor != null && route.infoWalkList[i].legs[j].routeTextColor != null){
+            element.add(
+              Container(
+                height: 27.0,
+                width: 27.0,
+                decoration: BoxDecoration(
+                  color: hexColor(route.infoWalkList[i].legs[j].routeColor),
+                ),
+                child: Center(
+                  child: Text(
+                    route.infoWalkList[i].legs[j].route,
+                    style: TextStyle(
+                      fontFamily: "AurulentSans-Bold",
+                      color: hexColor(route.infoWalkList[i].legs[j].routeTextColor),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+
+          element.add(
+            Icon(
+              Icons.chevron_right,
+              size: sizeIcon,
+              color: Color.fromRGBO(105, 190, 50, 1.0),
+            )
+          );
+          
+        }
+        else{
+          if(route.infoWalkList[i].legs[j].mode == "BUS"){
+            element.add(
+              Icon(
+                Icons.directions_bus,
+                size: sizeIcon,
+                color: Colors.black,
+              ),
+            );
+            if(route.infoWalkList[i].legs[j].routeColor != null && route.infoWalkList[i].legs[j].routeTextColor != null){
+              element.add(
+                Container(
+                  height: 27.0,
+                  width: 27.0,
+                  decoration: BoxDecoration(
+                    color: hexColor(route.infoWalkList[i].legs[j].routeColor),
+                  ),
+                  child: Center(
+                    child: Text(
+                      route.infoWalkList[i].legs[j].route,
+                      style: TextStyle(
+                        fontFamily: "AurulentSans-Bold",
+                        color: hexColor(route.infoWalkList[i].legs[j].routeTextColor),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+
+            element.add(
+              Icon(
+                Icons.chevron_right,
+                size: sizeIcon,
+                color: Color.fromRGBO(105, 190, 50, 1.0),
+              )
+            );
+
+          }
+          else{
+            if(route.infoWalkList[i].legs[j].mode == "BIKE"){
+                element.add(
+                  Icon(
+                    Icons.directions_bike,
+                    size: sizeIcon,
+                    color: Colors.black,
+                  )
+                );
+
+                element.add(
+                  Icon(
+                    Icons.chevron_right,
+                    size: sizeIcon,
+                    color: Color.fromRGBO(105, 190, 50, 1.0),
+                  )
+                );
+                
+            }
+            else{
+              if(route.infoWalkList[i].legs[j].mode == "WALK"){
+                element.add(
+                  Icon(
+                    Icons.directions_walk,
+                    size: sizeIcon,
+                    color: Colors.black,
+                  ),
+                );
+
+                element.add(
+                  Icon(
+                    Icons.chevron_right,
+                    size: sizeIcon,
+                    color: Color.fromRGBO(105, 190, 50, 1.0),
+                  )
+                );
+              }
+            }
+          }
+        }
+      }
+      element.removeLast();
+      tile.value.add(element);
+    }
 
 
+
+    // for(int i = 0; i < icon.length; i++){
+    //   for(int j = 0; j < icon[i].legs.length; j++){
+    //     if(icon[i].legs[j].subway == "SUBWAY"){
+    //       tile.value.add(
+    //         Icon(
+    //           Icons.directions_subway,
+    //           size: sizeIcon,
+    //           color: Colors.black,
+    //         )
+    //       );
+    //       if(icon[i].legs[j].routeColor != null && icon[i].legs[j].routeTextColor != null){
+    //         tile.value.add(
+    //           Container(
+    //             height: 27.0,
+    //             width: 27.0,
+    //             decoration: BoxDecoration(
+    //               color: hexColor(icon[i].legs[j].routeColor),
+    //             ),
+    //             child: Center(
+    //               child: Text(
+    //                 icon[i].legs[j].route,
+    //                 style: TextStyle(
+    //                   fontFamily: "AurulentSans-Bold",
+    //                   color: hexColor(icon[i].legs[j].routeTextColor),
+    //                 ),
+    //               ),
+    //             ),
+    //           ),
+    //         );
+    //       }
+    //       tile.value.add(
+    //         Icon(
+    //           Icons.chevron_right,
+    //           size: sizeIcon,
+    //           color: Color.fromRGBO(105, 190, 50, 1.0),
+    //         )
+    //       );
+    //     }
+    //     else{
+    //       if(icon[i].legs[j].subway == "BUS"){
+    //         if(icon[i].legs[j].routeColor != null && icon[i].legs[j].routeTextColor != null){
+    //           tile.value.add(
+    //             Icon(
+    //               Icons.directions_bus,
+    //               size: sizeIcon,
+    //               color: Colors.black,
+    //             ),
+    //           );
+    //           tile.value.add(
+    //           Container(
+    //             height: 27.0,
+    //             width: 27.0,
+    //             decoration: BoxDecoration(
+    //               color: hexColor(icon[i].legs[j].routeColor),
+    //             ),
+    //             child: Center(
+    //               child: Text(
+    //                 icon[i].legs[j].route,
+    //                 style: TextStyle(
+    //                   fontFamily: "AurulentSans-Bold",
+    //                   color: hexColor(icon[i].legs[j].routeTextColor),
+    //                 ),
+    //               ),
+    //             ),
+    //           ),
+    //         );
+    //       }
+    //       tile.value.add(
+    //         Icon(
+    //           Icons.chevron_right,
+    //           size: sizeIcon,
+    //           color: Color.fromRGBO(105, 190, 50, 1.0),
+    //         )
+    //       );
+    //       }
+    //       else{
+    //         if(icon[i].legs[j].bike == "BIKE"){
+    //           tile.value.add(
+    //           Icon(
+    //             Icons.directions_bike,
+    //             size: sizeIcon,
+    //             color: Colors.black,
+    //           )
+    //           );
+    //           tile.value.add(
+    //             Icon(
+    //               Icons.chevron_right,
+    //               size: sizeIcon,
+    //               color: Color.fromRGBO(105, 190, 50, 1.0),
+    //             )
+    //           );
+    //         }
+    //         else{
+    //           if(icon[i].legs[j].walk == "WALK"){
+    //             tile.value.add(
+    //               Icon(
+    //                 Icons.directions_walk,
+    //                 size: sizeIcon,
+    //                 color: Colors.black,
+    //               ),
+    //               );
+    //               tile.value.add(
+    //                 Icon(
+    //                   Icons.chevron_right,
+    //                   size: sizeIcon,
+    //                  color: Color.fromRGBO(105, 190, 50, 1.0),
+    //               )
+    //             );
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
+    // for(int i = 0; route.infoWalkList[index].legs.length; i++){
+    //   if(route.infoWalkList[index].legs[i].mode == "SUBWAY"){
+    //     tile.value.add(
+    //       Icon(
+    //         Icons.directions_subway,
+    //         size: sizeIcon,
+    //         color: Colors.black,
+    //       )
+    //     );
+    //     if(route.infoWalkList[index].legs[i].routeColor != null && route.infoWalkList[i].legs[i].routeTextColor != null){
+    //       tile.value.add(
+    //         Container(
+    //           height: 27.0,
+    //           width: 27.0,
+    //           decoration: BoxDecoration(
+    //             color: hexColor(route.infoWalkList[index].legs[i].routeColor),
+    //           ),
+    //           child: Center(
+    //             child: Text(
+    //               route.infoWalkList[index].legs[i].route,
+    //               style: TextStyle(
+    //                 fontFamily: "AurulentSans-Bold",
+    //                 color: hexColor(route.infoWalkList[index].legs[i].routeTextColor),
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       );
+    //     }
+
+    //     tile.value.add(
+    //       Icon(
+    //         Icons.chevron_right,
+    //         size: sizeIcon,
+    //         color: Color.fromRGBO(105, 190, 50, 1.0),
+    //       )
+    //     );
+
+    //   }
+    //   else{
+    //     if(route.infoWalkList[index].legs[i].mode == "BUS"){
+    //       if(route.infoWalkList[index].legs[i].routeColor != null && route.infoWalkList[index].legs[i].routeTextColor != null){
+    //         tile.value.add(
+    //           Icon(
+    //             Icons.directions_bus,
+    //             size: sizeIcon,
+    //             color: Colors.black,
+    //           ),
+    //         );
+    //         tile.value.add(
+    //           Container(
+    //             height: 27.0,
+    //             width: 27.0,
+    //             decoration: BoxDecoration(
+    //               color: hexColor(route.infoWalkList[index].legs[i].routeColor),
+    //             ),
+    //             child: Center(
+    //               child: Text(
+    //                 route.infoWalkList[index].legs[i].route,
+    //                 style: TextStyle(
+    //                   fontFamily: "AurulentSans-Bold",
+    //                   color: hexColor(route.infoWalkList[index].legs[i].routeTextColor),
+    //                 ),
+    //               ),
+    //             ),
+    //           ),
+    //         );
+    //       }
+    //       tile.value.add(
+    //         Icon(
+    //           Icons.chevron_right,
+    //           size: sizeIcon,
+    //           color: Color.fromRGBO(105, 190, 50, 1.0),
+    //         )
+    //       );
+    //     }
+    //     else{
+    //       if(route.infoWalkList[index].legs[i].mode == "BIKE"){
+    //         tile.value.add(
+    //           Icon(
+    //             Icons.directions_bike,
+    //             size: sizeIcon,
+    //             color: Colors.black,
+    //           )
+    //         );
+    //         tile.value.add(
+    //           Icon(
+    //             Icons.chevron_right,
+    //             size: sizeIcon,
+    //             color: Color.fromRGBO(105, 190, 50, 1.0),
+    //           )
+    //         );
+    //       }
+    //       else{
+    //         if(route.infoWalkList[index].legs[i].mode == "WALK"){
+    //           tile.value.add(
+    //             Icon(
+    //               Icons.directions_walk,
+    //               size: sizeIcon,
+    //               color: Colors.black,
+    //             ),
+    //           );
+    //           tile.value.add(
+    //             Icon(
+    //               Icons.chevron_right,
+    //               size: sizeIcon,
+    //               color: Color.fromRGBO(105, 190, 50, 1.0),
+    //             )
+    //           );
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
+
+    
+    // for(int j = 0; j < icon.legs.length; j++){
+    //   if(icon.legs[j].subway == "SUBWAY"){
+    //     tile.value.add(
+    //       Icon(
+    //         Icons.directions_subway,
+    //         size: sizeIcon,
+    //         color: Colors.black,
+    //       )
+    //     );
+    //     if(icon.legs[j].routeColor != null && icon.legs[j].routeTextColor != null){
+    //       tile.value.add(
+    //         Container(
+    //           height: 27.0,
+    //           width: 27.0,
+    //           decoration: BoxDecoration(
+    //             color: hexColor(icon.legs[j].routeColor),
+    //           ),
+    //           child: Center(
+    //             child: Text(
+    //               icon.legs[j].route,
+    //               style: TextStyle(
+    //                 fontFamily: "AurulentSans-Bold",
+    //                 color: hexColor(icon.legs[j].routeTextColor),
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       );
+    //     }
+    //     tile.value.add(
+    //       Icon(
+    //         Icons.chevron_right,
+    //         size: sizeIcon,
+    //         color: Color.fromRGBO(105, 190, 50, 1.0),
+    //       )
+    //     );
+    //   }
+    //   else{
+    //     if(icon.legs[j].bus == "BUS"){
+    //       if(icon.legs[j].routeColor != null && icon.legs[j].routeTextColor != null){
+    //         tile.value.add(
+    //           Icon(
+    //             Icons.directions_bus,
+    //             size: sizeIcon,
+    //             color: Colors.black,
+    //           ),
+    //         );
+    //         tile.value.add(
+    //           Container(
+    //             height: 27.0,
+    //             width: 27.0,
+    //             decoration: BoxDecoration(
+    //               color: hexColor(icon.legs[j].routeColor),
+    //             ),
+    //             child: Center(
+    //               child: Text(
+    //                 icon.legs[j].route,
+    //                 style: TextStyle(
+    //                   fontFamily: "AurulentSans-Bold",
+    //                   color: hexColor(icon.legs[j].routeTextColor),
+    //                 ),
+    //               ),
+    //             ),
+    //           ),
+    //         );
+    //       }
+    //       tile.value.add(
+    //         Icon(
+    //           Icons.chevron_right,
+    //           size: sizeIcon,
+    //           color: Color.fromRGBO(105, 190, 50, 1.0),
+    //         )
+    //       );
+    //     }
+    //     else{
+    //       if(icon.legs[j].bike == "BIKE"){
+    //         tile.value.add(
+    //           Icon(
+    //             Icons.directions_bike,
+    //             size: sizeIcon,
+    //             color: Colors.black,
+    //           )
+    //         );
+    //         tile.value.add(
+    //           Icon(
+    //             Icons.chevron_right,
+    //             size: sizeIcon,
+    //             color: Color.fromRGBO(105, 190, 50, 1.0),
+    //           )
+    //         );
+    //       }
+    //       else{
+    //         if(icon.legs[j].walk == "WALK"){
+    //           tile.value.add(
+    //             Icon(
+    //               Icons.directions_walk,
+    //               size: sizeIcon,
+    //               color: Colors.black,
+    //             ),
+    //           );
+    //           tile.value.add(
+    //             Icon(
+    //               Icons.chevron_right,
+    //               size: sizeIcon,
+    //               color: Color.fromRGBO(105, 190, 50, 1.0),
+    //             )
+    //           );
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    tile.notifyListeners();
+  }
 }

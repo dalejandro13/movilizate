@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:movilizate/model/iconList.dart';
+import 'package:movilizate/repository/ConsultServer.dart';
+import 'package:movilizate/repository/GetIcon.dart';
 
 class ProcessData with ChangeNotifier{
 
@@ -136,20 +139,20 @@ class ProcessData with ChangeNotifier{
   }
 
 
-  get focusOrigin2{
-    return focusOri2;
-  }
-  set focusOrigin2(FocusNode val){
-    focusOri2 = val;
-    notifyListeners();
-  }
-  get focusDestiny2{
-    return focusDes2;
-  }
-  set focusDestiny2(FocusNode val){
-    focusDes2 = val;
-    notifyListeners();
-  }
+  // get focusOrigin2{
+  //   return focusOri2;
+  // }
+  // set focusOrigin2(FocusNode val){
+  //   focusOri2 = val;
+  //   notifyListeners();
+  // }
+  // get focusDestiny2{
+  //   return focusDes2;
+  // }
+  // set focusDestiny2(FocusNode val){
+  //   focusDes2 = val;
+  //   notifyListeners();
+  // }
 
 
   get getLatitudeOrigin{
@@ -196,19 +199,31 @@ class ProcessData with ChangeNotifier{
   //   notifyListeners();
   // }
 
-  get listOfTransport => listTransport;
-  set listOfTransport(List<ListTile> val){
+  // get listOfTransport => listTransport;
+  // set listOfTransport(List<ListTile> val){
+  //   listTransport = val;
+  //   notifyListeners();
+  // }
+
+  // get listOfTransport2 => listTransport2;
+  // set listOfTransport2(List<ListTile> val){
+  //   listTransport2 = val;
+  //   notifyListeners();
+  // }
+
+  get listCard => listTransport;
+  set listCard(List<ListTile> val){
     listTransport = val;
     notifyListeners();
   }
 
-  get listOfTransport2 => listTransport2;
-  set listOfTransport2(List<ListTile> val){
-    listTransport2 = val;
-    notifyListeners();
-  }
+  // get listCard2 => listTransport2;
+  // set listCard2(List<ListTile> val){
+  //   listTransport2 = val;
+  //   notifyListeners();
+  // }
 
-
+  //ValueNotifier<List<ListTile>> listCard = ValueNotifier([z]);
 
 }
 
@@ -274,6 +289,7 @@ class InfoRouteServer with ChangeNotifier{
   get onTapCanceledList => listCanceled;
   set onTapCanceledList(List<Widget> val){
     listCanceled = val;
+    notifyListeners();
   }
 
 }
@@ -316,4 +332,27 @@ class CardInfoRoutes {
     this.infoOfDistance,
     this.time,
   });
+}
+
+class GetDataLegs extends ChangeNotifier{
+  GetIcon ic;
+  GetDataLegs(BuildContext context){
+    ic = GetIcon(context);
+  }
+}
+
+class GetDataOfRoutes extends ChangeNotifier{
+  GetIconsInfoCard infoCard;
+
+  GetDataOfRoutes(BuildContext context){
+    infoCard = GetIconsInfoCard(context);
+  }
+}
+
+class GetInnerIconsInfo extends ChangeNotifier{
+  InnerIconsInfo infoInner;
+
+  GetInnerIconsInfo(BuildContext context){
+    infoInner = InnerIconsInfo(context);
+  }
 }

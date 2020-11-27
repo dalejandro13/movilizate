@@ -73,20 +73,20 @@ class _MatchListState extends State<MatchList> {
           info.getLongitudeDestiny = info2.infoPlace[index].lon;
         }
       }
-      if(info.focusOrigin2.hasFocus){
-        info.dataOrigin.text = info2.infoPlace[index].title;
-        //almacenar latitud y longitud de origen
-        info.getLatitudeOrigin = info2.infoPlace[index].lat;
-        info.getLongitudeOrigin = info2.infoPlace[index].lon;
-      }
-      else{
-        if(info.focusDestiny2.hasFocus){
-          info.dataDestiny.text = info2.infoPlace[index].title;
-          //almacenar latitud y longitud de destino
-          info.getLatitudeDestiny = info2.infoPlace[index].lat;
-          info.getLongitudeDestiny = info2.infoPlace[index].lon;
-        }
-      }
+      // if(info.focusOrigin2.hasFocus){
+      //   info.dataOrigin.text = info2.infoPlace[index].title;
+      //   //almacenar latitud y longitud de origen
+      //   info.getLatitudeOrigin = info2.infoPlace[index].lat;
+      //   info.getLongitudeOrigin = info2.infoPlace[index].lon;
+      // }
+      // else{
+      //   if(info.focusDestiny2.hasFocus){
+      //     info.dataDestiny.text = info2.infoPlace[index].title;
+      //     //almacenar latitud y longitud de destino
+      //     info.getLatitudeDestiny = info2.infoPlace[index].lat;
+      //     info.getLongitudeDestiny = info2.infoPlace[index].lon;
+      //   }
+      // }
     }
     catch(e){
       print("Error $e");

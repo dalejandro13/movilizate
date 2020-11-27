@@ -1,13 +1,13 @@
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
+//import 'package:flutter/services.dart';
+//import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
-import 'package:here_sdk/search.dart';
+//import 'package:here_sdk/search.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
-import 'package:movilizate/repository/ConsultServer.dart';
-import 'package:movilizate/ui/screen/ScreenRoutesInfo.dart';
-import 'package:movilizate/ui/screen/ScreenResult.dart';
+//import 'package:movilizate/repository/ConsultServer.dart';
+//import 'package:movilizate/ui/screen/ScreenRoutesInfo.dart';
+//import 'package:movilizate/ui/screen/ScreenResult.dart';
 import 'package:movilizate/ui/screen/ScreenSearch.dart';
 import 'package:movilizate/ui/widget/AutoComplete.dart';
 import 'package:movilizate/ui/widget/PlacesButton.dart';
@@ -16,6 +16,7 @@ import 'package:movilizate/ui/widget/SettingsButton.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  int index = 0;
   SdkContext.init(IsolateOrigin.main);
   // Making sure that BuildContext has MaterialLocalizations widget in the widget tree,
   // which is part of MaterialApp.
@@ -25,6 +26,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProcessData()),
         ChangeNotifierProvider(create: (_) => DataOfPlace()),
         ChangeNotifierProvider(create: (_) => InfoRouteServer()),
+        ChangeNotifierProvider(create: (BuildContext context) => GetInnerIconsInfo(context)),
+        ChangeNotifierProvider(create: (BuildContext context) => GetDataOfRoutes(context)),
       ],
       child: MaterialApp(
         title: "Movilizate",

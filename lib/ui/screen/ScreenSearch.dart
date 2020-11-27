@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:movilizate/repository/ConsultServer.dart';
-//import 'package:movilizate/ui/widget/AutoComplete.dart';
-import 'package:movilizate/ui/widget/AutoCompleteDestiny.dart';
-import 'package:movilizate/ui/widget/AutoCompleteOrigin.dart';
 import 'package:movilizate/ui/widget/ButtonSearch.dart';
 import 'package:movilizate/ui/widget/ButtonUseTheMap.dart';
 import 'package:movilizate/ui/widget/MatchList.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
+import 'package:movilizate/ui/widget/TextOriginDestiny.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:async/async.dart';
+//import 'package:async/async.dart';
 
 class ScreenSearch extends StatefulWidget {
   @override
@@ -26,8 +24,9 @@ class _ScreenSearchState extends State<ScreenSearch> {
   bool _serviceEnabled = true;
   PermissionStatus _permissionGranted = null;
   LocationData _locationData = null;
-  AsyncMemoizer _memoizer = AsyncMemoizer();
+  //AsyncMemoizer _memoizer = AsyncMemoizer();
   bool permission = true;
+  dynamic color1 = null, color2 = null;
 
   @override
   void initState() {
@@ -37,6 +36,9 @@ class _ScreenSearchState extends State<ScreenSearch> {
   }
 
   getPermission() async {
+    color1 = Color.fromRGBO(81, 81, 81, 1.0);
+    color2 = Color.fromRGBO(105, 190, 50, 1.0);
+
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
@@ -110,7 +112,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                       ),
                       Expanded(
                         flex: 8,
-                        child: AutoCompleteOrigin(context),
+                        child: TextOriginDestiny("Origen", consult, color1, info.dataOrigin, info.focusOrigin, true), //AutoCompleteOrigin(context),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 30.0),
@@ -120,7 +122,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top:5.0),
+                  padding: EdgeInsets.only(top:15.0),
                 ),
 
                 Expanded(
@@ -133,7 +135,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                       ),
                       Expanded(
                         flex: 8,
-                        child: AutoCompleteDestiny(context),
+                        child: TextOriginDestiny("Destino", consult, color2, info.dataDestiny, info.focusDestiny, true), //AutoCompleteDestiny(context),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 30.0),
@@ -157,7 +159,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                       ),
 
                       Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: ButtonSearch(consult),
                       ),
 
@@ -194,6 +196,8 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                         msg: "Falta ingresar datos de origen ó el destino",
                                         toastLength: Toast.LENGTH_LONG,
                                         gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey,
+                                        textColor: Colors.white,
                                         fontSize: 30.0,
                                       );
                                     }
@@ -203,6 +207,8 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                       msg: "Falta ingresar el destino",
                                       toastLength: Toast.LENGTH_LONG,
                                       gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.grey,
+                                      textColor: Colors.white,
                                       fontSize: 30.0,
                                     );
                                   }
@@ -212,6 +218,8 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                     msg: "Falta ingresar el origen",
                                     toastLength: Toast.LENGTH_LONG,
                                     gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: Colors.grey,
+                                    textColor: Colors.white,
                                     fontSize: 30.0,
                                   );
                                 }
@@ -221,6 +229,8 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                   msg: "Falta ingresar el destino",
                                   toastLength: Toast.LENGTH_LONG,
                                   gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.grey,
+                                  textColor: Colors.white,
                                   fontSize: 30.0,
                                 );
                               }
@@ -230,6 +240,8 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                 msg: "Falta ingresar el origen",
                                 toastLength: Toast.LENGTH_LONG,
                                 gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.grey,
+                                textColor: Colors.white,
                                 fontSize: 30.0,
                               );
                             }
@@ -248,7 +260,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                 ),
 
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: UseTheMap(),
                 ),
 
@@ -257,7 +269,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                 ),
 
                 Expanded(
-                  flex: 7,
+                  flex: 6,
                   child: MatchList(),
                 ),
               ],
