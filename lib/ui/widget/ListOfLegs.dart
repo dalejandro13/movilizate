@@ -1,176 +1,425 @@
 import 'package:flutter/material.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
 import 'package:movilizate/model/iconList.dart';
+import 'package:movilizate/repository/ConsultServer.dart';
 import 'package:movilizate/ui/screen/ScreenRoutesInfo.dart';
 import 'package:provider/provider.dart';
 
 class CardInfoRoute extends StatelessWidget {
-
   int index;
-  //IconList icon; 
-  BuildContext context; 
+  //IconList icon;
+  BuildContext context;
   bool enable;
-  GetInnerIconsInfo gii;
-  GetDataOfRoutes routes;
+  //InnerIconsInfo gii; //no olvidar descomentar esto
+  //GetIconInList giil;
+  double sizeIcon = 35.0;
+  //GetInnerIconsInfo gii;
+  //GetDataOfRoutes routes;
+  InfoRouteServer info3;
+  ProcessData info;
+  FillInInformation fii = FillInInformation(); //nuevo
 
-  CardInfoRoute(int index, /*IconList icon,*/ BuildContext context, bool enable){
+  CardInfoRoute(int index, BuildContext context, bool enable) {
     this.index = index;
     //this.icon = icon;
     this.enable = enable;
-    gii = GetInnerIconsInfo(context);
-    routes = GetDataOfRoutes(context);
+    //gii = InnerIconsInfo(context); //NO OLVIDAR DESCOMENTAR
+    
+    //gii = GetInnerIconsInfo(context);
+    //routes = GetDataOfRoutes(context);
+  }
+
+  Color hexColor(String hexString){
+    var buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7){
+      buffer.write('ff');
+    } 
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
   }
 
   @override
   Widget build(BuildContext context) {
+    info3 = Provider.of<InfoRouteServer>(context);
+    info = Provider.of<ProcessData>(context);
+    //giil = Provider.of<GetIconInList>(context);
+    //giil = Provider.of<GetIconInList>(context);
+    //giil = GetIconInList(context);
+
+
+    //giil = GetIconInList(context); //no olvidar descomentar esto //Provider.of<GetIconInList>(context);
+    //giil.ic.indexC.value = index; //no olvidar descomentar esto
+    //giil.ic.getInfoIcon(); //no olvidar descomentar esto
+
+
     //gii = Provider.of<GetInnerIconsInfo>(context);
     //routes = Provider.of<GetDataOfRoutes>(context);
-    return ValueListenableBuilder<List<IconList>>(
-      valueListenable: routes.infoCard.listOfInfo, //gii.infoInner.tile,
-      builder: (BuildContext context, dynamic value, Widget child){
-        return ListTile(
-          title: Padding(
-          padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-          child: Container(
-            height: 140.0,
-            width: 70.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+    //gii = Provider.of<InnerIconsInfo>(context);
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+    return ListTile(
+      title: Padding(
+        padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+        child: Container(
+          height: 140.0,
+          width: 70.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.white,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
 
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        routes.infoCard.listOfInfo.value[index].timeArrived, //icon.timeArrived,
-                        style: TextStyle(
-                          fontFamily: "AurulentSans-Bold",
-                          color: Color.fromRGBO(105, 190, 50, 1.0),
-                          fontSize: 20.0,
-                        ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      info3.listOfInfo[index].timeArrived, //routes.infoCard.listOfInfo.value[index].timeArrived, //icon.timeArrived,
+                      style: TextStyle(
+                        fontFamily: "AurulentSans-Bold",
+                        color: Color.fromRGBO(105, 190, 50, 1.0),
+                        fontSize: 20.0,
                       ),
                     ),
+                  ),
 
-                    Padding(
-                      padding: EdgeInsets.only(right: 8.0),
-                      child: Text(
-                        "Duration",
-                        style: TextStyle(
-                          fontFamily: "AurulentSans-Bold",
-                          color: Color.fromRGBO(105, 190, 50, 1.0),
-                          fontSize: 20.0,
-                        ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: Text(
+                      "Duration",
+                      style: TextStyle(
+                        fontFamily: "AurulentSans-Bold",
+                        color: Color.fromRGBO(105, 190, 50, 1.0),
+                        fontSize: 20.0,
                       ),
                     ),
+                  ),
+                ],
+              ),
 
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
-                      child: Container(
-                        height: 50.0,
-                        width: 200.0,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                        ),
-
-                        child: ValueListenableBuilder(
-                          valueListenable: gii.infoInner.tile, //routes.infoCard.listOfInfo,
-                          builder: (BuildContext context, dynamic value, Widget child){
-                            return ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: gii.infoInner.tile.value[index].length,
-                              itemBuilder: (BuildContext context, int ind){
-                                return Row(
-                                  children: [
-                                    gii.infoInner.tile.value[index][ind], /*GetInnerIconsInfo(context, index),*/ //gii.infoInner.tile.value[index], //getIcon(icon, context)[index], //obtengo los iconos internos
-                                  ],
-                                );
-                              }
-                            );
-                          }
-                        ),
-
-
-                        // child: ListView.builder(
-                        //   scrollDirection: Axis.horizontal,
-                        //   itemCount: routes.infoCard.listOfInfo.value.length,
-                        //   itemBuilder: (BuildContext context, int ind){
-                        //     return ValueListenableBuilder(
-                        //       valueListenable: gii.infoInner.tile, //routes.infoCard.listOfInfo,
-                        //       builder: (BuildContext context, dynamic value, Widget child){
-                        //         return Row(
-                        //           children: [
-                        //             gii.infoInner.tile.value[index][ind], /*GetInnerIconsInfo(context, index),*/ //gii.infoInner.tile.value[index], //getIcon(icon, context)[index], //obtengo los iconos internos
-                        //           ],
-                        //         );
-                        //       },
-                        //     );
-                        //   }
-                        // ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                    child: Container(
+                      height: 50.0,
+                      width: 200.0,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
                       ),
-                    ),
-                    
 
-                    Padding(
-                      padding: EdgeInsets.only(right: 8.0, bottom: 10.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            routes.infoCard.listOfInfo.value[index].timeDuration, //icon.timeDuration, 
-                            style: TextStyle(
-                              fontFamily: "AurulentSans-Bold",
-                              color: Color.fromRGBO(105, 190, 50, 1.0),
-                              fontSize: 35.0,
-                            ),
-                          ),
 
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: info3.tileList[index].length, //gii.tile.[index].length,
+                        itemBuilder: (BuildContext context, int ind) {
+                          return Row(
                             children: [
-                              Text(""),
-
-                              Text(
-                                "min",
-                                style: TextStyle(
-                                  fontFamily: "AurulentSans-Bold",
-                                  color: Color.fromRGBO(105, 190, 50, 1.0),
-                                ),
-                              )
+                              info3.tileList[index][ind], //gii.tile.value[index][ind], /*GetInnerIconsInfo(context, index),*/ //gii.infoInner.tile.value[index], //getIcon(icon, context)[index], //obtengo los iconos internos
                             ],
-                          )
-
-                        ],
+                          );
+                        }
                       ),
+
+
+                      //NO BORRAR ESTAS LINEAS
+                      // child: ValueListenableBuilder(
+                      //   valueListenable: giil.ic.listIcon,
+                      //   builder: (BuildContext context, dynamic val, Widget child){
+                      //     return ListView.builder(
+                      //       scrollDirection: Axis.horizontal,
+                      //       itemCount: giil.ic.listIcon.value.length,
+                      //       itemBuilder: (BuildContext context, int ind){
+                              
+                      //         //EN METRO
+                      //         return giil.ic.listIcon.value[ind][0] == "SUBWAY" ?
+                      //           Row(
+                      //             children: [
+                      //               Icon(
+                      //                 Icons.directions_subway,
+                      //                 size: sizeIcon,
+                      //                 color: Colors.black,
+                      //               ),
+                      //               Container(
+                      //                 height: 27.0,
+                      //                 width: 27.0,
+                      //                 decoration: BoxDecoration(
+                      //                   color: hexColor(giil.ic.listIcon.value[ind][2]),
+                      //                 ),
+                      //                 child: Center(
+                      //                   child: Text(
+                      //                     giil.ic.listIcon.value[ind][1],
+                      //                     style: TextStyle(
+                      //                       fontFamily: "AurulentSans-Bold",
+                      //                       color: hexColor(giil.ic.listIcon.value[ind][3]),
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               Icon(
+                      //                 Icons.chevron_right,
+                      //                 size: sizeIcon,
+                      //                 color: Color.fromRGBO(105, 190, 50, 1.0),
+                      //               ),
+                      //             ],
+                      //           ):
+
+                      //           //EN BUS
+                      //           giil.ic.listIcon.value[ind][0] == "BUS" ?
+                      //           Row(
+                      //             children: [
+                      //               Icon(
+                      //                 Icons.directions_bus,
+                      //                 size: sizeIcon,
+                      //                 color: Colors.black,
+                      //               ),
+                      //               Container(
+                      //                 height: 27.0,
+                      //                 width: 27.0,
+                      //                 decoration: BoxDecoration(
+                      //                   color: hexColor(giil.ic.listIcon.value[ind][2]),
+                      //                 ),
+                      //                 child: Center(
+                      //                   child: Text(
+                      //                     giil.ic.listIcon.value[ind][1],
+                      //                     style: TextStyle(
+                      //                       fontFamily: "AurulentSans-Bold",
+                      //                       color: hexColor(giil.ic.listIcon.value[ind][3]),
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               Icon(
+                      //                 Icons.chevron_right,
+                      //                 size: sizeIcon,
+                      //                 color: Color.fromRGBO(105, 190, 50, 1.0),
+                      //               ),
+                      //             ],
+                      //           ):
+                                
+                      //           //EN BICICLETA
+                      //           giil.ic.listIcon.value[ind][0] == "BIKE" ?
+                      //           Row(
+                      //             children: [
+                      //               Icon(
+                      //                 Icons.directions_bike,
+                      //                 size: sizeIcon,
+                      //                 color: Colors.black,
+                      //               ),
+                      //               Icon(
+                      //                 Icons.chevron_right,
+                      //                 size: sizeIcon,
+                      //                 color: Color.fromRGBO(105, 190, 50, 1.0),
+                      //               )
+                      //             ],
+                      //           ):
+
+                      //           //CAMINANDO
+                      //           Row(
+                      //             children: [
+                      //               Icon(
+                      //                 Icons.directions_walk,
+                      //                 size: sizeIcon,
+                      //                 color: Colors.black,
+                      //               ),
+                      //               Icon(
+                      //                 Icons.chevron_right,
+                      //                 size: sizeIcon,
+                      //                 color: Color.fromRGBO(105, 190, 50, 1.0),
+                      //               )
+                      //             ],
+                      //           );
+                      //       },
+                      //     );
+                      //   }
+                      // ),
+
                     ),
+                  ),
 
-                  ],
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 8.0, bottom: 10.0),
+                    child: Row(
+                      children: [
+                        
+                        Text(
+                          info3.listOfInfo[index].timeDuration, //routes.infoCard.listOfInfo.value[index].timeDuration, //icon.timeDuration,
+                          style: TextStyle(
+                            fontFamily: "AurulentSans-Bold",
+                            color: Color.fromRGBO(105, 190, 50, 1.0),
+                            fontSize: 35.0,
+                          ),
+                        ),
 
-              ],
-            ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(""),
+                            Text(
+                              "min",
+                              style: TextStyle(
+                                fontFamily: "AurulentSans-Bold",
+                                color: Color.fromRGBO(105, 190, 50, 1.0),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+
+
+                
+              
+            ],
           ),
         ),
-        onTap: enable ? (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenMap(index, context)));
-        }:
-        (){ },
-      );
-
-      },
-          
+      ),
+      onTap: enable ? () async {
+        await fii.getDataToShow(info, info3);
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenMap(index, context)));
+      }:
+      (){ },
     );
+
+
+
+
+
+
+    // return ValueListenableBuilder(
+    //   valueListenable: info3.listOfInfo, //routes.infoCard.listOfInfo, //gii.infoInner.tile,
+    //   builder: (BuildContext context, dynamic value, Widget child){
+    //     return ListTile(
+    //       title: Padding(
+    //       padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+    //       child: Container(
+    //         height: 140.0,
+    //         width: 70.0,
+    //         decoration: BoxDecoration(
+    //           borderRadius: BorderRadius.circular(8.0),
+    //           color: Colors.white,
+    //         ),
+    //         child: Column(
+    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //           children: [
+
+    //             Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: [
+
+    //                 Padding(
+    //                   padding: EdgeInsets.all(8.0),
+    //                   child: Text(
+    //                     info3.listOfInfo[index].timeArrived, //routes.infoCard.listOfInfo.value[index].timeArrived, //icon.timeArrived,
+    //                     style: TextStyle(
+    //                       fontFamily: "AurulentSans-Bold",
+    //                       color: Color.fromRGBO(105, 190, 50, 1.0),
+    //                       fontSize: 20.0,
+    //                     ),
+    //                   ),
+    //                 ),
+
+    //                 Padding(
+    //                   padding: EdgeInsets.only(right: 8.0),
+    //                   child: Text(
+    //                     "Duration",
+    //                     style: TextStyle(
+    //                       fontFamily: "AurulentSans-Bold",
+    //                       color: Color.fromRGBO(105, 190, 50, 1.0),
+    //                       fontSize: 20.0,
+    //                     ),
+    //                   ),
+    //                 ),
+
+    //               ],
+    //             ),
+
+    //             Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: [
+
+    //                 Padding(
+    //                   padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
+    //                   child: Container(
+    //                     height: 50.0,
+    //                     width: 200.0,
+    //                     decoration: BoxDecoration(
+    //                       color: Colors.transparent,
+    //                     ),
+
+    //                     child: ValueListenableBuilder(
+    //                       valueListenable: info3.tileList, //gii.tile,
+    //                       builder: (BuildContext context, dynamic value, Widget child){
+    //                         return ListView.builder(
+    //                           scrollDirection: Axis.horizontal,
+    //                           itemCount: info3.tileList, //gii.tile.[index].length,
+    //                           itemBuilder: (BuildContext context, int ind){
+    //                             return Row(
+    //                               children: [
+    //                                 info3.tileList[index][ind], //gii.tile.value[index][ind], /*GetInnerIconsInfo(context, index),*/ //gii.infoInner.tile.value[index], //getIcon(icon, context)[index], //obtengo los iconos internos
+    //                               ],
+    //                             );
+    //                           }
+    //                         );
+    //                       }
+    //                     ),
+    //                   ),
+    //                 ),
+
+    //                 Padding(
+    //                   padding: EdgeInsets.only(right: 8.0, bottom: 10.0),
+    //                   child: Row(
+    //                     children: [
+    //                       Text(
+    //                         info3.listOfInfo[index].timeDuration, //routes.infoCard.listOfInfo.value[index].timeDuration, //icon.timeDuration,
+    //                         style: TextStyle(
+    //                           fontFamily: "AurulentSans-Bold",
+    //                           color: Color.fromRGBO(105, 190, 50, 1.0),
+    //                           fontSize: 35.0,
+    //                         ),
+    //                       ),
+
+    //                       Column(
+    //                         mainAxisAlignment: MainAxisAlignment.center,
+    //                         children: [
+    //                           Text(""),
+
+    //                           Text(
+    //                             "min",
+    //                             style: TextStyle(
+    //                               fontFamily: "AurulentSans-Bold",
+    //                               color: Color.fromRGBO(105, 190, 50, 1.0),
+    //                             ),
+    //                           )
+    //                         ],
+    //                       )
+
+    //                     ],
+    //                   ),
+    //                 ),
+
+    //               ],
+    //             ),
+
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //     onTap: enable ? (){
+    //       Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenMap(index, context)));
+    //     }:
+    //     (){ },
+    //   );
+    //   },
+    // );
   }
 }

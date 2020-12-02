@@ -5,6 +5,7 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 //import 'package:here_sdk/search.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
+import 'package:movilizate/repository/ConsultServer.dart';
 //import 'package:movilizate/repository/ConsultServer.dart';
 //import 'package:movilizate/ui/screen/ScreenRoutesInfo.dart';
 //import 'package:movilizate/ui/screen/ScreenResult.dart';
@@ -14,6 +15,7 @@ import 'package:movilizate/ui/widget/PlacesButton.dart';
 import 'package:movilizate/ui/widget/RoutesButton.dart';
 import 'package:movilizate/ui/widget/SettingsButton.dart';
 import 'package:provider/provider.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 void main() {
   int index = 0;
@@ -26,15 +28,15 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProcessData()),
         ChangeNotifierProvider(create: (_) => DataOfPlace()),
         ChangeNotifierProvider(create: (_) => InfoRouteServer()),
-        ChangeNotifierProvider(create: (BuildContext context) => GetInnerIconsInfo(context)),
-        ChangeNotifierProvider(create: (BuildContext context) => GetDataOfRoutes(context)),
+        ChangeNotifierProvider(create: (BuildContext context) => InnerIconsInfo(context)),
+        //ChangeNotifierProvider(create: (BuildContext context) => GetIconInList(context)),
       ],
       child: MaterialApp(
         title: "Movilizate",
         initialRoute: "home",
         debugShowCheckedModeBanner: false,
         routes: {
-          "home": (context) => ScreenSearch(), //ScreenMap(), //ScreenResult(), //ScreenSearch(), //MyApp(),
+          "home": (context) => ScreenSearch(context), //ScreenMap(), //ScreenResult(), //ScreenSearch(), //MyApp(),
         },
       ),
     )

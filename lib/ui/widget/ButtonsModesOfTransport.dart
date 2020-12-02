@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
+import 'package:movilizate/repository/ConsultServer.dart';
 import 'package:provider/provider.dart';
 
 class ButtonsModesOfTransport extends StatefulWidget {
-  GetDataLegs dataLegs;
+  //GetDataLegs dataLegs;
   bool subway = false, bus = false, bike = false, walk = false;
-  GetInnerIconsInfo gii;
+  //InnerIconsInfo gii;
+  //GetInnerIconsInfo gii;
+  //InfoRouteServer ic;
+  InfoRouteServer info3;
+  //GetIconInList giil;
 
   ButtonsModesOfTransport(BuildContext context) {
-    this.subway = subway;
-    this.bus = bus;
-    this.bike = bike;
-    this.walk = walk;
-    dataLegs = GetDataLegs(context);
-    gii = GetInnerIconsInfo(context);
+    //giil = GetIconInList(context);
+    //this.subway = subway;
+    //this.bus = bus;
+    //this.bike = bike;
+    //this.walk = walk;
+    //dataLegs = GetDataLegs(context);
+    //this.gii = gii; //InnerIconsInfo(context); 
+    //gii = GetInnerIconsInfo(context);    
   }
 
   @override
@@ -65,9 +72,8 @@ class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
                     widget.bus = false;
                     widget.bike = false;
                     widget.walk = true;
-                    widget.gii.infoInner.tile.value[0] = null;
-                    widget.gii.infoInner.tile.value[1] = null;
-                    widget.gii.infoInner.tile.value[2].clear();
+                    //widget.giil.ic.listIcon.value[0].clear();
+                    //widget.info3.tileList[0].clear();
                   });
                 },
 
@@ -124,47 +130,95 @@ class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
 
   @override
   Widget build(BuildContext context){
+    widget.info3 = Provider.of<InfoRouteServer>(context);
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      shrinkWrap: true,
+      separatorBuilder: (_,__) => Divider(height: 10.0, color: Colors.transparent,),
+      itemCount: widget.info3.listOfTransport.length, //widget.dataLegs.ic.listOfTransport.value.length,
+      itemBuilder: (BuildContext context, int index){
+
+        if(index == 1 && widget.info3.listOfTransport[index]){
+          return cardButton(index, widget.info3.listOfTransport[index], true/*widget.bus*/);
+        }
+        else{
+          return Container();
+        }
+
+        //NO BORRAR ESTO
+        // if(index == 0 && widget.info3.listOfTransport[index]){
+        //    return cardButton(index, widget.info3.listOfTransport[index], widget.subway);
+        // }
+        // else{
+        //   if(index == 1 && widget.info3.listOfTransport[index]){
+        //     return cardButton(index, widget.info3.listOfTransport[index], widget.bus);
+        //   }
+        //   else{
+        //     if(index == 2 && widget.info3.listOfTransport[index]){
+        //       return cardButton(index, widget.info3.listOfTransport[index], widget.bike);
+        //     }
+        //     else{
+        //       if(index == 3 && widget.info3.listOfTransport[index]){
+        //         return cardButton(index, widget.info3.listOfTransport[index], widget.walk);
+        //       }
+        //       else{
+        //         return Container(
+        //           decoration: BoxDecoration(
+        //             borderRadius: BorderRadius.circular(8.0),
+        //             color: Colors.transparent,
+        //           ),
+        //         );
+        //       }
+        //     }
+        //   }
+        // }
+
+      },
+    );
+
     //widget.gii = Provider.of<GetInnerIconsInfo>(context);
+    // widget.ic = Provider.of<InfoRouteServer>(context);
+    // return ValueListenableBuilder(
+    //   valueListenable: widget.dataLegs.ic.listOfTransport,
+    //   builder: (BuildContext context, dynamic value, Widget child){
 
-    return ValueListenableBuilder(
-      valueListenable: widget.dataLegs.ic.listOfTransport,
-      builder: (BuildContext context, dynamic value, Widget child){
+    //     //gii.infoInner.tile.value[index]
+    //     return ListView.separated(
+    //       scrollDirection: Axis.horizontal,
+    //       separatorBuilder: (_,__) => Divider(height: 10.0, color: Colors.transparent,),
+    //       shrinkWrap: true,
+    //       itemCount: widget.dataLegs.ic.listOfTransport.value.length,
+    //       itemBuilder: (BuildContext context, int index) {
+    //         if(index == 0 && widget.dataLegs.ic.listOfTransport.value[index]){
+    //           return cardButton(index, widget.dataLegs.ic.listOfTransport.value[index], widget.subway);
+    //         } 
+    //         else{
+    //           if(index == 1 && widget.dataLegs.ic.listOfTransport.value[index]){
+    //             return cardButton(index, widget.dataLegs.ic.listOfTransport.value[index], widget.bus);
+    //           } 
+    //           else{
+    //             if(index == 2 && widget.dataLegs.ic.listOfTransport.value[index]){
+    //               return cardButton(index, widget.dataLegs.ic.listOfTransport.value[index], widget.bike);
+    //             } 
+    //             else{
+    //               if(index == 3 && widget.dataLegs.ic.listOfTransport.value[index]){
+    //                 return cardButton(index, widget.dataLegs.ic.listOfTransport.value[index], widget.walk);
+    //               }
+    //               else{
+    //                 return Container(
+    //                   decoration: BoxDecoration(
+    //                     borderRadius: BorderRadius.circular(8.0),
+    //                     color: Colors.transparent,
+    //                   ),
+    //                 );
+    //               }
+    //             }
+    //           }
+    //         }
+    //       },
+    //     );
+    //   });
 
-        //gii.infoInner.tile.value[index]
-        return ListView.separated(
-          scrollDirection: Axis.horizontal,
-          separatorBuilder: (_,__) => Divider(height: 10.0, color: Colors.transparent,),
-          shrinkWrap: true,
-          itemCount: widget.dataLegs.ic.listOfTransport.value.length,
-          itemBuilder: (BuildContext context, int index) {
-            if(index == 0 && widget.dataLegs.ic.listOfTransport.value[index]){
-              return cardButton(index, widget.dataLegs.ic.listOfTransport.value[index], widget.subway);
-            } 
-            else{
-              if(index == 1 && widget.dataLegs.ic.listOfTransport.value[index]){
-                return cardButton(index, widget.dataLegs.ic.listOfTransport.value[index], widget.bus);
-              } 
-              else{
-                if(index == 2 && widget.dataLegs.ic.listOfTransport.value[index]){
-                  return cardButton(index, widget.dataLegs.ic.listOfTransport.value[index], widget.bike);
-                } 
-                else{
-                  if(index == 3 && widget.dataLegs.ic.listOfTransport.value[index]){
-                    return cardButton(index, widget.dataLegs.ic.listOfTransport.value[index], widget.walk);
-                  }
-                  else{
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        color: Colors.transparent,
-                      ),
-                    );
-                  }
-                }
-              }
-            }
-          },
-        );
-      });
+
   }
 }

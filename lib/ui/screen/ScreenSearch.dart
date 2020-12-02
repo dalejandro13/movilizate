@@ -12,6 +12,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 //import 'package:async/async.dart';
 
 class ScreenSearch extends StatefulWidget {
+
+  BuildContext context;
+
+  ScreenSearch(BuildContext context){
+    this.context = context;
+  }
+
   @override
   _ScreenSearchState createState() => _ScreenSearchState();
 }
@@ -160,7 +167,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
 
                       Expanded(
                         flex: 2,
-                        child: ButtonSearch(consult),
+                        child: ButtonSearch(consult, context),
                       ),
 
                       Expanded(

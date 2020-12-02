@@ -26,18 +26,26 @@ class LegsList{
 }
 
 class LegsInfo{
+  int startTime;
+  int endTime;
   String mode;
   String route;
   String routeColor;
   String routeTextColor;
-  double lonOrig, latOrig, lonDest, latDest; //List<double> lonOrig, latOrig, lonDest, latDest;
+  double lonOrig, latOrig, lonDest, latDest, distance; //List<double> lonOrig, latOrig, lonDest, latDest;
+  String nameFrom, nameTo;
 
   LegsInfo({
+    this.distance,
+    this.startTime,
+    this.endTime,
     this.mode,
     this.lonOrig, 
-    this.latOrig, 
+    this.latOrig,
+    this.nameFrom,
     this.lonDest, 
     this.latDest,
+    this.nameTo,
     this.route,
     this.routeColor,
     this.routeTextColor,

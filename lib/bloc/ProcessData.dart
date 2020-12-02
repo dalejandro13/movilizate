@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:movilizate/model/iconList.dart';
 import 'package:movilizate/repository/ConsultServer.dart';
-import 'package:movilizate/repository/GetIcon.dart';
 
 class ProcessData with ChangeNotifier{
 
@@ -19,7 +19,7 @@ class ProcessData with ChangeNotifier{
   double latitude = 0.0, longitude = 0.0, latitudeOrigin = 0.0, longitudeOrigin = 0.0, latitudeDestiny = 0.0, longitudeDestiny = 0.0;
   HereMapController hereMapController = null;
   List<Widget> widgetList = List<Widget>();
-  List<CardInfoRoutes> infoRoutes = List<CardInfoRoutes>();
+  List<List<CardInfoRoutes>> infoRoutes = List<List<CardInfoRoutes>>();
 
   FocusNode focusOri = FocusNode();
   FocusNode focusDes = FocusNode();
@@ -110,7 +110,7 @@ class ProcessData with ChangeNotifier{
   get infoRoutList{
     return infoRoutes;
   }
-  set infoRoutList(List<CardInfoRoutes> list){
+  set infoRoutList(List<List<CardInfoRoutes>> list){
     infoRoutes = list;
     notifyListeners();
   }
@@ -258,12 +258,46 @@ class InfoRouteServer with ChangeNotifier{
   List<InfoRouteServ> infoWalk = [];
   //List<Widget> listCanceled = [];
 
+  List<List<Widget>> iconList = [];
+
+  List<List<Widget>> tile = [];
+  List<bool> listTrans = [];
+
+  List<IconList> listInfoIcon = [];
+
+  int index1 = 0;
+
 
   get infoWalkList => infoWalk;
   set infoWalkList(List<InfoRouteServ> val){
     infoWalk = val;
     notifyListeners();
   }
+
+  get iconListInner => iconList;
+  set iconListInner( List<List<Widget>> val){
+    iconList = val;
+    notifyListeners();
+  }
+
+  get tileList => tile;
+  set tileList(List<List<Widget>> val){
+    tile = val;
+    notifyListeners();
+  }
+
+  get listOfTransport => listTrans;
+  set listOfTransport(List<bool> val){
+    listTrans = val;
+    notifyListeners();
+  }
+
+  get listOfInfo => listInfoIcon;
+  set listOfInfo(List<IconList> val){
+    listInfoIcon = val;
+    notifyListeners();
+  }
+
 
   // get onTapCanceledList => listCanceled;
   // set onTapCanceledList(List<Widget> val){
@@ -273,25 +307,37 @@ class InfoRouteServer with ChangeNotifier{
 
 }
 
-class GetDataLegs extends ChangeNotifier{
-  GetIcon ic;
-  GetDataLegs(BuildContext context){
-    ic = GetIcon(context);
-  }
-}
+// class GetIconInList extends ChangeNotifier{
+//   GetIcons ic;
+//   GetIconInList(BuildContext context){
+//     ic = GetIcons(context);
+//   }
 
-class GetDataOfRoutes extends ChangeNotifier{
-  GetIconsInfoCard infoCard;
+//   @override
+//   void dispose() {
+//     // TODO: implement dispose
+//   }
+// }
 
-  GetDataOfRoutes(BuildContext context){
-    infoCard = GetIconsInfoCard(context);
-  }
-}
+// class GetDataLegs extends ChangeNotifier{
+//   GetIcon ic;
+//   GetDataLegs(BuildContext context){
+//     ic = GetIcon(context);
+//   }
+// }
 
-class GetInnerIconsInfo extends ChangeNotifier{
-  InnerIconsInfo infoInner;
+// class GetDataOfRoutes extends ChangeNotifier{
+//   GetIconsInfoCard infoCard;
 
-  GetInnerIconsInfo(BuildContext context){
-    infoInner = InnerIconsInfo(context);
-  }
-}
+//   GetDataOfRoutes(BuildContext context){
+//     infoCard = GetIconsInfoCard(context);
+//   }
+// }
+
+// class GetInnerIconsInfo{
+//   InnerIconsInfo infoInner;
+
+//   GetInnerIconsInfo(BuildContext context){
+//     infoInner = InnerIconsInfo(context);
+//   }
+// }

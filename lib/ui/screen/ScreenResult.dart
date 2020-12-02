@@ -10,9 +10,12 @@ import 'package:provider/provider.dart';
 class ScreenResult extends StatefulWidget {
 
   ConsultServer consult;
+  //GetIconsInfoCard giic;
 
-  ScreenResult(ConsultServer consult){
+  ScreenResult(ConsultServer consult, BuildContext context){
     this.consult = consult;
+    //giic = GetIconsInfoCard(context); //esta bien
+    //print(giic.listOfInfo.value); //esta bien
   }
 
   @override
@@ -27,6 +30,8 @@ class _ScreenResultState extends State<ScreenResult> {
   @override
   Widget build(BuildContext context){
     var info = Provider.of<ProcessData>(context);
+    //var gii = Provider.of<InnerIconsInfo>(context);
+    
     //var info2 = Provider.of<DataOfPlace>(context);
     //var info3 = Provider.of<InfoRouteServer>(context);
     
@@ -110,7 +115,8 @@ class _ScreenResultState extends State<ScreenResult> {
                           ),
                           Expanded(
                             flex: 8,
-                            child: ButtonsModesOfTransport(context)),
+                            child: ButtonsModesOfTransport(context)
+                          ),
                           Padding(
                             padding: EdgeInsets.only(left: 30.0),
                           ),

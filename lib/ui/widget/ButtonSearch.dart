@@ -12,9 +12,17 @@ import 'package:intl/intl.dart';
 class ButtonSearch extends StatefulWidget {
 
   ConsultServer consult; 
+  BuildContext context;
+  GetDataTrasnport gdt;
+  GetIconsInfoCard infoCard;
+  InnerIconsInfo iii;
 
-  ButtonSearch(ConsultServer consult){
+  ButtonSearch(ConsultServer consult, BuildContext context){
     this.consult = consult;
+    this.context = context;
+    gdt = GetDataTrasnport(context);
+    infoCard = GetIconsInfoCard(context);
+    iii = InnerIconsInfo(context);
   }
 
   @override
@@ -38,7 +46,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
   DateFormat dft = null;
 
   @override
-  Widget build(BuildContext ntcontext) {
+  Widget build(BuildContext context) {
     var info = Provider.of<ProcessData>(context);
     var info2 = Provider.of<DataOfPlace>(context);
     var info3 = Provider.of<InfoRouteServer>(context);
@@ -101,8 +109,11 @@ class _ButtonSearchState extends State<ButtonSearch> {
                       //info.focusDestiny.unfocus();
                       //info.focusOrigin.unfocus();
                       await getInfoOfRoutes();
-                      if(info3.infoWalkList.length > 0){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenResult(widget.consult)));  
+                      await widget.gdt.iconsOfTransport(); //obtengo la lista de iconos para los botones de trasnporte
+                      await widget.infoCard.getIconsInfo(context);
+                      await widget.iii.getIcon();
+                      if(info3.infoWalkList.length > 0 && info3.listOfTransport.length > 0 && info3.listOfInfo.length > 0 && info3.tileList.length > 0){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenResult(widget.consult, context)));  
                       }
                       else{
                         Fluttertoast.showToast(

@@ -7,6 +7,8 @@ import 'package:movilizate/ui/widget/ListOfLegs.dart';
 import 'package:provider/provider.dart';
 import 'package:movilizate/ShowTheRoute.dart';
 import 'package:here_sdk/core.dart';
+import 'package:movilizate/repository/ConsultServer.dart';
+import 'package:movilizate/ui/widget/CardWithInfo.dart';
 
 
 
@@ -56,155 +58,15 @@ class _ScreenMapState extends State<ScreenMap> {
   // ignore: avoid_init_to_null
   ShowTheRoute routing = null;
   // ignore: avoid_init_to_null
-  List<CardInfoRoutes> cardInfo = null;
-  //HereMapController mapCtrl;
-  // ignore: avoid_init_to_null
-  GetInnerIconsInfo gii = null; 
+  
 
-  // Widget cardInfoRoute(int index, IconList icon, BuildContext context, bool enable){
-  //   return ListTile(
-  //       title: Padding(
-  //       padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-  //       child: Container(
-  //         height: 140.0,
-  //         width: 70.0,
-  //         decoration: BoxDecoration(
-  //           borderRadius: BorderRadius.circular(8.0),
-  //           color: Colors.white,
-  //         ),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-
-  //                 Padding(
-  //                   padding: EdgeInsets.all(8.0),
-  //                   child: Text(
-  //                     icon.timeArrived,
-  //                     style: TextStyle(
-  //                       fontFamily: "AurulentSans-Bold",
-  //                       color: material.Color.fromRGBO(105, 190, 50, 1.0),
-  //                       fontSize: 20.0,
-  //                     ),
-  //                   ),
-  //                 ),
-
-  //                 Padding(
-  //                   padding: EdgeInsets.only(right: 8.0),
-  //                   child: Text(
-  //                     "Duration",
-  //                     style: TextStyle(
-  //                       fontFamily: "AurulentSans-Bold",
-  //                       color: material.Color.fromRGBO(105, 190, 50, 1.0),
-  //                       fontSize: 20.0,
-  //                     ),
-  //                   ),
-  //                 ),
-
-  //               ],
-  //             ),
-
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-
-  //                 Padding(
-  //                   padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
-  //                   child: Container(
-  //                     height: 50.0,
-  //                     width: 160.0,
-  //                     decoration: BoxDecoration(
-  //                       color: Colors.red,
-  //                     ),
-  //                   ),
-  //                 ),
-
-  //                 Padding(
-  //                   padding: EdgeInsets.only(right: 8.0, bottom: 10.0),
-  //                   child: Row(
-  //                     children: [
-  //                       Text(
-  //                         icon.timeDuration,
-  //                         style: TextStyle(
-  //                           fontFamily: "AurulentSans-Bold",
-  //                           color: material.Color.fromRGBO(105, 190, 50, 1.0),
-  //                           fontSize: 35.0,
-  //                         ),
-  //                       ),
-
-  //                       Column(
-  //                         mainAxisAlignment: MainAxisAlignment.center,
-  //                         children: [
-  //                           Text(""),
-
-  //                           Text(
-  //                             "min",
-  //                             style: TextStyle(
-  //                               fontFamily: "AurulentSans-Bold",
-  //                               color: material.Color.fromRGBO(105, 190, 50, 1.0),
-  //                             ),
-  //                           )
-  //                         ],
-  //                       )
-
-  //                     ],
-  //                   ),
-  //                 ),
-
-  //               ],
-  //             ),
-
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //     onTap: enable ? (){
-  //       Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenMap(index, context)));
-  //     }:
-  //     null,
-  //   );
-  // }
-
-  void getDataToShow() async {
-    cardInfo = null;
-    cardInfo = [];
-    print("El indice es: ${widget.index}");
-
-    cardInfo.add(
-      CardInfoRoutes(
-        hourStart: "10:05 am",
-        iconTransportMedium: Icon(Icons.directions_walk),
-        hourEnds: "10:09 am",
-        placeStartIn: "Ayura Motors",
-        placeEndsIn: "Paradero Jumbo Las Vegas",
-        nameTrasportMedium: "Walk",
-        infoOfDistance: Text("3000m"),
-        time: "4 min",
-      )
-    );
-
-    cardInfo.add(
-      CardInfoRoutes(
-        hourStart: "10:09 am",
-        iconTransportMedium: Icon(Icons.directions_bus),
-        hourEnds: "10:40 am",
-        placeStartIn: "Paradero Jumbo Las Vegas",
-        placeEndsIn: "Paradero Colegio Cumbres",
-        nameTrasportMedium: "Use route",
-        infoOfDistance: Text("R1 / R3 / R8"),
-        time: "31 min",
-      )
-    );
-  }
+  FillInInformation fii = null;
+  
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getDataToShow();
   }
   
   void onMapCreated(HereMapController hereMapController) async {
@@ -230,25 +92,11 @@ class _ScreenMapState extends State<ScreenMap> {
     
   }
 
-  // testList(){
-  //   var max = gii.infoInner.tile.value.length;
-  //   for(int j = 0; j < max; j++){
-  //     print(gii.infoInner.tile.value[j]);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     info = Provider.of<ProcessData>(context);
     info3 = Provider.of<InfoRouteServer>(context);
-    //var nn = Provider.of<GetInnerIconsInfo>(context, listen: false).infoInner.tile;
 
-    info.infoRoutes = null;
-    info.infoRoutes = [];
-    info.infoRoutes = cardInfo;
-    //testList();
-
-    
     return Scaffold(
       body: Container(
       height: MediaQuery.of(context).size.height,
@@ -287,12 +135,6 @@ class _ScreenMapState extends State<ScreenMap> {
                 height: 150.0,
                 child: CardInfoRoute(widget.index, /*widget.routes.infoCard.listOfInfo.value[widget.index],*/ context, false), //cardInfoRoute(widget.index, widget.routes.infoCard.listOfInfo.value[widget.index], context, false)  //info3.onTapCanceledList[widget.index],--- //info.listW[widget.index],
               ),
-              // Container(
-              //   width: MediaQuery.of(context).size.width,
-              //   decoration: BoxDecoration(
-              //     color: Colors.transparent,
-              //   ),
-              // ),
             ],
           ),
 
@@ -317,141 +159,7 @@ class _ScreenMapState extends State<ScreenMap> {
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
-              child: ListView.separated(
-                separatorBuilder: (_,__) => Container(width: 20.0, height: 20.0,child: Divider(height: 5.0, color: Colors.grey[300])),
-                itemCount: info.infoRoutList.length,
-                itemBuilder: (BuildContext context, int inx){
-                  return Container(
-                    height: 180.0,
-                    child: ListTile(
-                    onTap: (){},
-                    title: Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.white,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 10.0),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 5.0),
-                              ),
-                              Text(
-                                info.infoRoutes[inx].hourStart,
-                                style: TextStyle(
-                                  fontFamily: "AurulentSans-Bold",
-                                  fontSize: 10.0,
-                                ),
-                              ),
-                              info.infoRoutes[inx].iconTransportMedium,
-                              Text(
-                                info.infoRoutes[inx].hourEnds,
-                                style: TextStyle(
-                                  fontFamily: "AurulentSans-Bold",
-                                  fontSize: 10.0,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 5.0),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 5.0),
-                          ),
-                          //VerticalDivider(color: Colors.grey[300]),
-                          Padding(
-                            padding: EdgeInsets.only(left: 5.0),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 8.0),
-                              ),
-                              Text(
-                                "Starts in: ",
-                                style: TextStyle(
-                                  color: Colors.grey[350],
-                                  fontFamily: "AurulentSans-Bold",
-                                  fontSize: 14.0,
-                                ),
-                              ),
-                              Text(
-                                info.infoRoutes[inx].nameTrasportMedium,
-                                style: TextStyle(
-                                  fontFamily: "AurulentSans-Bold",
-                                  fontSize: 13.0,
-                                ),
-                              ),
-                              Text(
-                                "Ends in: ",
-                                style: TextStyle(
-                                  color: Colors.grey[350],
-                                  fontFamily: "AurulentSans-Bold",
-                                  fontSize: 14.0,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 10.0),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 5.0),
-                              ),
-                              Text(
-                                info.infoRoutes[inx].placeStartIn,
-                                style: TextStyle(
-                                  fontFamily: "AurulentSans-Bold",
-                                  fontSize: 10.0,
-                                ),
-                              ),
-                              info.infoRoutes[inx].infoOfDistance,
-                              Text(
-                                info.infoRoutes[inx].placeEndsIn,
-                                style: TextStyle(
-                                  fontFamily: "AurulentSans-Bold",
-                                  fontSize: 10.0,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 5.0),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                info.infoRoutes[inx].time,
-                                style: TextStyle(
-                                  fontFamily: "AurulentSans-Bold",
-                                  fontSize: 10.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 10.0),
-                          ),
-                        ],
-                      ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+              child: CardWithInfo(context, widget.index), 
             ),
           ),
 

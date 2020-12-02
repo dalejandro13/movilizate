@@ -177,7 +177,7 @@ class ConsultServer{
       info3.infoWalkList = [];
       legs = [];
       
-      dynamic duration = null, startTime = null, endTime = null, walkTime = null, waitingTime = null, walkDistance = null, mode = null, route = null, routeColor = null, routeTextColor = null;
+      dynamic duration = null, startTime = null, endTime = null, walkTime = null, waitingTime = null, walkDistance = null, startTimeInitial = null, endTimeFinal = null, mode = null, route = null, routeColor = null, routeTextColor = null, nameFrom = null, nameTo = null, distance = null;
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
 
@@ -192,23 +192,6 @@ class ConsultServer{
           // var latOrigin = from["lat"];
           // var orig1 = from["orig"];
           // var vertexType1 = from["vertexType"];
-          // var to = jsonResp["plan"]["to"];
-          // var name2 = to["name"];
-          // var lonDestiny = to["lon"];
-          // var latDestiny = to["lat"];
-          // var origin2 = to["orig"];
-          // var vertexType2 = to["vertexType"];
-          // print(date.toString());
-          // print(name1);
-          // print(lonOrigin.toString());
-          // print(latOrigin.toString());
-          // print(orig1);
-          // print(vertexType1);
-          // print(name2);
-          // print(lonDestiny.toString());
-          // print(latDestiny.toString());
-          // print(origin2);
-          // print(vertexType2);
           
           for(var vv in jsonResp["plan"]["itineraries"]){
             legs = null;
@@ -219,27 +202,36 @@ class ConsultServer{
             walkTime = vv["walkTime"];
             waitingTime = vv["waitingTime"];
             walkDistance = vv["walkDistance"];
-            for(var ss in vv["legs"]){              
+            for(var ss in vv["legs"]){ 
+              distance = ss["distance"]; 
+              startTimeInitial = ss["startTime"];
+              endTimeFinal = ss["endTime"];
               mode = ss["mode"];
               route = ss["route"];
               routeColor = ss["routeColor"];
               routeTextColor = ss["routeTextColor"];
-
               lonOrig = ss["from"]["lon"];
               latOrig = ss["from"]["lat"];
+              nameFrom = ss["from"]["name"];
               lonDest = ss["to"]["lon"];
               latDest = ss["to"]["lat"];
+              nameTo = ss["to"]["name"];
 
               legs.add(
                 LegsInfo(
+                  distance: distance,
+                  startTime: startTime,
+                  endTime: endTime,
                   mode: mode,
                   route: route,
                   routeColor: routeColor,
                   routeTextColor: routeTextColor,
                   lonOrig: lonOrig,
                   latOrig: latOrig,
+                  nameFrom: nameFrom,
                   lonDest: lonDest,
-                  latDest: latDest
+                  latDest: latDest,
+                  nameTo: nameTo,
                 ),
               );
             }
@@ -281,11 +273,6 @@ class ConsultServer{
 }
 
 
-
-
-
-
-
 class GetIconsInfoCard{
 
   ValueNotifier<List<IconList>> listOfInfo = ValueNotifier([]);
@@ -294,13 +281,15 @@ class GetIconsInfoCard{
 
   GetIconsInfoCard(BuildContext context){
     info3 = Provider.of<InfoRouteServer>(context);
-    getIconsInfo(context);
+    //getIconsInfo(context);
   }
 
-  getIconsInfo(BuildContext context){
-    listOfInfo = null;
+  Future<void> getIconsInfo(BuildContext context) async {
+    //listOfInfo = null;
+    //listOfInfo = ValueNotifier([]);
+    info3.listOfInfo = null;
+    info3.listOfInfo = [];
     legs = null;
-    listOfInfo = ValueNotifier([]);
     legs = [];
     String timeArrived = null, timeDuration = null, subway = null, bus = null, bike = null, walk = null;
     String route = null, routeColor = null, routeTextColor = null;
@@ -373,7 +362,7 @@ class GetIconsInfoCard{
           );
 
         }
-        listOfInfo.value.add(
+        info3.listOfInfo.add(
           IconList(
             timeArrived: timeArrived,
             timeDuration: timeDuration,
@@ -386,27 +375,29 @@ class GetIconsInfoCard{
         print("Error $e");
       }
     }
-    listOfInfo.notifyListeners();
+    //listOfInfo.notifyListeners();
   }
 }
 
 
-
-
-
-class InnerIconsInfo{
-  ValueNotifier<List<List<Widget>>> tile = ValueNotifier([]);
+class InnerIconsInfo extends ChangeNotifier{
+  //ValueNotifier<List<List<Widget>>> tile = ValueNotifier([]);
+  //ValueNotifier<List<List<Widget>>> listOfInfo = ValueNotifier([]);
   double sizeIcon = 35.0;
-  InfoRouteServer route;
+  InfoRouteServer route; 
   List<Widget> element = List<Widget>();
   //GetDataOfRoutes ii;
+  //InfoRouteServer ic;
 
   InnerIconsInfo(BuildContext context/*, int index*/){
     //ii = Provider.of<GetDataOfRoutes>(context);
     route = Provider.of<InfoRouteServer>(context);
-    tile.value = null;
-    tile.value = [];
-    getIcon();
+    //ic = Provider.of<InfoRouteServer>(context);
+
+    //tile.value = null;
+    //tile.value = [];
+
+    //getIcon(true);
   }
 
   Color hexColor(String hexString){
@@ -418,7 +409,9 @@ class InnerIconsInfo{
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 
-  getIcon(){
+  Future<void> getIcon() async { //obtiene los iconos
+    route.tileList = null;
+    route.tileList = [];
     for(int i = 0; i < route.infoWalkList.length; i++){
       element = null;
       element = [];
@@ -543,8 +536,239 @@ class InnerIconsInfo{
         }
       }
       element.removeLast();
-      tile.value.add(element);
+      route.tileList.add(element);
+      //listOfInfo.value.add(element);
+      //tile.value.add(element);
     }
-    tile.notifyListeners();
+    //ic.iconListInner.add(element)
+    //tile.notifyListeners();
+    //listOfInfo.notifyListeners();
   }
+}
+
+class GetDataTrasnport{
+
+  BuildContext context;
+  InfoRouteServer info3;
+  //GetDataLegs dataLegs;
+  bool subway = false, bus = false, bike = false, walk = false;
+
+  GetDataTrasnport(BuildContext context){
+    this.context = context;
+    info3 = Provider.of<InfoRouteServer>(context);
+    //dataLegs = GetDataLegs(context);
+  }
+
+  Future<void> iconsOfTransport() async {
+    info3.listOfTransport = null;
+    info3.listOfTransport = [false, false, false, false];
+    for(int i = 0; i < info3.infoWalkList.length; i++){      
+      for(int j = 0; j < info3.infoWalkList[i].legs.length; j++){
+        if(info3.infoWalkList[i].legs[j].mode == "SUBWAY"){
+          if(info3.listOfTransport[0] == false){
+            info3.listOfTransport[0] = true;
+          }
+        }
+        else if(info3.infoWalkList[i].legs[j].mode == "BUS"){
+          if(info3.listOfTransport[1] == false){
+            info3.listOfTransport[1] = true;
+          }
+        }
+        else if(info3.infoWalkList[i].legs[j].mode == "BIKE"){
+          if(info3.listOfTransport[2] == false){
+            info3.listOfTransport[2] = true;
+          }
+        }
+        else if(info3.infoWalkList[i].legs[j].mode == "WALK"){
+          if(info3.listOfTransport[3] == false){
+            info3.listOfTransport[3] = true;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+class GetIcons{
+  ValueNotifier<List<List<String>>> listIcon = ValueNotifier([]);
+  ValueNotifier<int> indexC = ValueNotifier(0);
+  List<String> data = List<String>();
+  List<List<String>> data2 = List<List<String>>();
+  InfoRouteServer info3;
+
+  GetIcons(BuildContext context){
+    info3 = Provider.of<InfoRouteServer>(context);
+    //getInfoIcon();
+  }
+
+  getInfoIcon(){
+    data2 = null;
+    //listIcon = null;
+    data2 = [];
+    //listIcon = ValueNotifier([]);
+    data2 = null;
+    data2 = [];
+    for(int y = 0; y < info3.infoWalkList[indexC.value].legs.length; y++){
+      data = null;
+      data = [];
+      if(info3.infoWalkList[indexC.value].legs[y].mode == "SUBWAY"){
+        data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
+        data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
+        data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
+        data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
+      }
+      else{
+        if(info3.infoWalkList[indexC.value].legs[y].mode == "BUS"){
+          data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
+          data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
+          data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
+          data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
+        }
+        else{
+          if(info3.infoWalkList[indexC.value].legs[y].mode == "BIKE"){
+            data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
+            data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
+            data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
+            data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
+          }
+          else{
+            if(info3.infoWalkList[indexC.value].legs[y].mode == "WALK"){
+              data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
+              data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
+              data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
+              data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
+            }
+          }
+        }
+      }
+      //data2.add(data);
+      listIcon.value.add(data);
+    }
+    //listIcon.value.add(data);
+    listIcon.notifyListeners();
+    indexC.notifyListeners();
+  }
+
+}
+
+class FillInInformation{
+
+  List<CardInfoRoutes> cardInfo;
+  //InfoRouteServer info3;
+  //ProcessData info;
+
+  FillInInformation(){
+
+  }
+
+  Future<void> getDataToShow(ProcessData info, InfoRouteServer info3) async {
+    //info3.infoWalkList
+    //cardInfo = null;
+    //cardInfo = [];
+    info.infoRoutes = null;
+    info.infoRoutes = [];
+    //print("El indice es: ${widget.index}");
+
+    for(int x = 0; x < info3.infoWalkList.length; x++){
+      dynamic iconTransport = null, distance = null;
+      int duration = info3.infoWalkList[x].duration;
+      duration = (duration / 60).truncate(); //pasar en minutos el valor de duration
+      String transport = "";
+      cardInfo = null;
+      cardInfo = [];
+
+      for(int y = 0; y < info3.infoWalkList[x].legs.length; y++){
+
+        transport = info3.infoWalkList[x].legs[y].mode.toString().toLowerCase(); //nombre del medio de transporte en minuscula
+        String transportMedium = "";
+        if(transport == "subway"){
+          //distance = ; //CONTINUA ACA, AGREGAR ICONO A DISTANCE
+          //info3.tileList[index][ind]
+          transportMedium = "Use route";
+          iconTransport = Icon(
+            Icons.directions_subway,
+            size: 35.0,
+            color: Colors.grey,
+          );
+        }
+        else{
+          if(transport == "bus"){
+            //distance = ;
+            transportMedium = "Use route";
+            iconTransport = Icon(
+              Icons.directions_bus,
+              size: 35.0,
+              color: Colors.grey,
+            );
+          }
+          else{
+            if(transport == "bike"){
+              //distance = ;
+              transportMedium = "Use route";
+              iconTransport = Icon(
+                Icons.directions_bike,
+                size: 35.0,
+                color: Colors.grey,
+              );
+            }
+            else{
+              if(transport == "walk"){
+                distance = (info3.infoWalkList[x].legs[y].distance).toInt().toString();
+                transportMedium = "Walk";
+                iconTransport = Icon(
+                  Icons.directions_walk,
+                  size: 35.0,
+                  color: Colors.grey,
+                );
+              }
+            }
+          }
+        }
+        
+        var sTime = info3.infoWalkList[x].legs[y].startTime; //falta convertirlo en hora y minuto
+        final now1 = Duration(seconds: sTime);
+        String startTime = "${now1.inHours}:${now1.inMinutes}"; //TODO: verificar por esta cantidad
+
+        var eTime = info3.infoWalkList[x].legs[y].endTime; //falta convertirlo en hora y minuto
+        final now2 = Duration(seconds: eTime);
+        String endTime = "${now2.inHours}:${now2.inMinutes}"; //TODO: verificar por esta cantidad
+
+        var startsIn = info3.infoWalkList[x].legs[y].nameFrom; //lugar de origen
+        var endsIn = info3.infoWalkList[x].legs[y].nameTo; //lugar de destino
+
+        cardInfo.add(
+          CardInfoRoutes(
+            hourStart: /*"10:03 am",*/ startTime,
+
+            iconTransportMedium: iconTransport,
+
+            hourEnds: /*"10:40 am",*/ endTime,
+
+            placeStartIn: startsIn,
+
+            placeEndsIn: endsIn,
+
+            nameTrasportMedium: transportMedium,
+
+            infoOfDistance: 
+              transport == "subway" ? 
+                Container(color: Colors.red,): //distance:
+              transport == "bus" ?
+                Container(color: Colors.green,): //distance:
+              transport == "bike" ?
+                Container(color: Colors.yellow,): //distance:
+                Text(distance),
+
+            time: "$duration min",
+          ),
+        );
+
+      }
+      //auxList = cardInfo;
+      info.infoRoutList.add(cardInfo);
+    }
+    
+  }
+    
 }
