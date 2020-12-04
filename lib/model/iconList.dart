@@ -34,6 +34,7 @@ class LegsInfo{
   String routeTextColor;
   double lonOrig, latOrig, lonDest, latDest, distance; //List<double> lonOrig, latOrig, lonDest, latDest;
   String nameFrom, nameTo;
+  double durationTransport;
 
   LegsInfo({
     this.distance,
@@ -49,6 +50,7 @@ class LegsInfo{
     this.route,
     this.routeColor,
     this.routeTextColor,
+    this.durationTransport,
   });
 }
 
@@ -56,6 +58,9 @@ class CardInfoRoutes {
   String hourStart;
   Widget iconTransportMedium;
   String hourEnds;
+  Widget startIcon;
+  VerticalDivider lineRoute;
+  Widget endIcon;
   String nameTrasportMedium;
   String placeStartIn;
   String placeEndsIn;
@@ -65,6 +70,9 @@ class CardInfoRoutes {
     this.hourStart,
     this.iconTransportMedium,
     this.hourEnds,
+    this.startIcon,
+    this.lineRoute,
+    this.endIcon,
     this.nameTrasportMedium,
     this.placeStartIn,
     this.placeEndsIn,

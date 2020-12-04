@@ -11,14 +11,16 @@ class TextOriginDestiny extends StatelessWidget {
   TextEditingController control;
   FocusNode focusText;
   bool activate;
+  bool isSecondScreen;
 
-  TextOriginDestiny(String text, ConsultServer consult, Color color, TextEditingController control, FocusNode focusText, bool activate){
+  TextOriginDestiny(String text, ConsultServer consult, Color color, TextEditingController control, FocusNode focusText, bool activate, bool isSecondScreen){
     this.text = text;
     this.consult = consult;
     this.color = color;
     this.control = control;
     this.focusText = focusText;
     this.activate = activate;
+    this.isSecondScreen = isSecondScreen;
   }
 
   @override
@@ -38,7 +40,7 @@ class TextOriginDestiny extends StatelessWidget {
         style: TextStyle(
           fontFamily: "AurulentSans-Bold",
           color: color, //Color.fromRGBO(81, 81, 81, 1.0),
-          fontSize: 20.0,
+          fontSize: 18.0,
         ),
         decoration: InputDecoration(
           hintText: text,
@@ -62,6 +64,11 @@ class TextOriginDestiny extends StatelessWidget {
               //info.dataOrigin.text = "";
               control.text = "";
               info2.infoPlace = [];
+              if(isSecondScreen){
+                //info2.infoPlace = null;
+                //info2.infoPlace = [];
+                Navigator.pop(context, text);
+              }
             },
             iconSize: 20.0,
             color: color, //Color.fromRGBO(81, 81, 81, 1.0),

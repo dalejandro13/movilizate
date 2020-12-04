@@ -11,7 +11,6 @@ import 'package:movilizate/repository/ConsultServer.dart';
 import 'package:movilizate/ui/widget/CardWithInfo.dart';
 
 
-
 // class ScreenMap extends StatefulWidget {
 
 //   int index;
@@ -33,14 +32,12 @@ import 'package:movilizate/ui/widget/CardWithInfo.dart';
 //   }
 // }
 
-
-
 class ScreenMap extends StatefulWidget {
 
   int index;
   //GetDataOfRoutes routes;
   
-  ScreenMap(int index, BuildContext context){    
+  ScreenMap(int index, BuildContext context){
     this.index = index;
     //routes = GetDataOfRoutes(context);
   }
@@ -58,11 +55,9 @@ class _ScreenMapState extends State<ScreenMap> {
   // ignore: avoid_init_to_null
   ShowTheRoute routing = null;
   // ignore: avoid_init_to_null
-  
 
   FillInInformation fii = null;
   
-
   @override
   void initState() {
     // TODO: implement initState
@@ -75,7 +70,7 @@ class _ScreenMapState extends State<ScreenMap> {
     routing = ShowTheRoute(context, hereMapController);
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
       if(error == null) {
-        hereMapController.camera.lookAtPointWithDistance(GeoCoordinates(6.245560, -75.600020), 2000);
+        hereMapController.camera.lookAtPointWithDistance(GeoCoordinates(6.245560, -75.600020), 100);    //info3.infoWalkList[/*widget.index*/0].legs[0].latOrig, info3.infoWalkList[/*widget.index*/0].legs[0].lonOrig), 10000);
       }
       else {
         print("Map scene not loaded. MapError: " + error.toString());
@@ -106,7 +101,7 @@ class _ScreenMapState extends State<ScreenMap> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 30.0, left: 12.0),
+            padding: EdgeInsets.only(top: 30.0),
           ),
           Expanded(
             flex: 1,
@@ -116,12 +111,16 @@ class _ScreenMapState extends State<ScreenMap> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                    color: Colors.white,
-                    icon: Icon(Icons.arrow_back), 
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0),
+                    child: IconButton(
+                      color: Colors.white,
+                      iconSize: 35.0,
+                      icon: Icon(Icons.arrow_back), 
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -151,6 +150,10 @@ class _ScreenMapState extends State<ScreenMap> {
                 onMapCreated: onMapCreated,
               ),
             ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(top: 20.0),
           ),
 
           Expanded( //tarjetas con informacion

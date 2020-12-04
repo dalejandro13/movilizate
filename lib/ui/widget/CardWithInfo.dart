@@ -13,8 +13,7 @@ class CardWithInfo extends StatelessWidget {
     info3 = Provider.of<InfoRouteServer>(context);
     this.index = index;
   }
-
-
+  
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
@@ -66,7 +65,26 @@ class CardWithInfo extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 5.0),
                 ),
-                //VerticalDivider(color: Colors.grey[300]),
+
+                
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                    ),
+                    info.infoRoutList[index][inx].startIcon,
+                    Container(
+                      height: 100.0,
+                      width: 80.0,
+                      child: info.infoRoutList[index][inx].lineRoute,
+                    ),
+                  ],
+                ),
+
+
+                
                 Padding(
                   padding: EdgeInsets.only(left: 5.0),
                 ),

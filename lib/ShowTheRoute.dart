@@ -1,4 +1,6 @@
 //import 'dart:math';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as colour;
 import 'package:flutter/services.dart';
@@ -9,6 +11,7 @@ import 'package:here_sdk/routing.dart' as here;
 import 'package:movilizate/bloc/ProcessData.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
+import 'dart:ui' as ui;
 
 class ShowTheRoute {
   BuildContext _context;
@@ -37,6 +40,13 @@ class ShowTheRoute {
     info3 = Provider.of<InfoRouteServer>(_context, listen: false);
     //_setLongPressGestureHandler();
     //_setTapGestureHandler();
+  }
+
+  Future<dynamic> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
   }
 
   Tuple4<int, int, int, int> hexColor(String hexString) {
@@ -80,16 +90,74 @@ class ShowTheRoute {
     return Tuple4(red, green, blue, alpha);
   }
 
-  Future<void> putMarker(double latitude, double longitude, bool enter) async {
+  Future<void> putMarker(double latitude, double longitude, bool enter, String transport) async {
     try{
-      ByteData imageData = null;
-      await rootBundle.load("images/markerBlack.png").then((value){
-        imageData = value;
-      });
+      MapImage imgUint = null;
+
+      if(transport == "SUBWAY"){
+        try{
+          ByteData fileData = await rootBundle.load("images/iconTrain.png");
+          var uint = Uint8List.view(fileData.buffer);
+          imgUint = MapImage.withPixelDataAndImageFormat(uint, ImageFormat.png);
+        }
+        catch(e){
+          print("Error $e");
+        }
+      }
+      else if(transport == "BUS"){
+        try{
+          ByteData fileData = await rootBundle.load("images/iconBus.png");
+          var uint = Uint8List.view(fileData.buffer);
+          imgUint = MapImage.withPixelDataAndImageFormat(uint, ImageFormat.png);
+        }
+        catch(e){
+          print("Error $e");
+        }
+      }
+      else if(transport == "BIKE"){
+        try{
+          ByteData fileData = await rootBundle.load("images/iconBike.png");
+          var uint = Uint8List.view(fileData.buffer);
+          imgUint = MapImage.withPixelDataAndImageFormat(uint, ImageFormat.png);
+        }
+        catch(e){
+          print("Error $e");
+        }
+      }
+      else if(transport == "WALK"){
+        try{
+          ByteData fileData = await rootBundle.load("images/iconWalking.png");
+          var uint = Uint8List.view(fileData.buffer);
+          imgUint = MapImage.withPixelDataAndImageFormat(uint, ImageFormat.png);
+        }
+        catch(e){
+          print("Error $e");
+        }
+      }
+      else if(transport == "Origen"){
+        try{
+        ByteData fileData = await rootBundle.load("images/markerBlack.png");
+        var uint = Uint8List.view(fileData.buffer);
+        imgUint = MapImage.withPixelDataAndImageFormat(uint, ImageFormat.png);
+        }
+        catch(e){
+          print("Error $e");
+        }
+      }
+      else{
+        try{
+          ByteData fileData = await rootBundle.load("images/markerGreen.png");
+          var uint = Uint8List.view(fileData.buffer);
+          imgUint = MapImage.withPixelDataAndImageFormat(uint, ImageFormat.png);
+        }
+        catch(e){
+          print("Error $e");
+        }
+      }
 
       if(enter){
-        if(imageData != null){
-          _marker = MapMarker(GeoCoordinates(latitude, longitude), MapImage.withImageData(imageData.buffer.asUint8List()));
+        if(imgUint != null){
+          _marker = MapMarker(GeoCoordinates(latitude, longitude), imgUint);
           _hereMapController
             ..camera.lookAtPointWithDistance(GeoCoordinates(latitude, longitude), 2000)
             ..mapScene.addMapMarker(_marker);
@@ -157,23 +225,47 @@ class ShowTheRoute {
   Future<void> pointOriginDestiny(int index) async {
     double lat1 = 0.0, lon1 = 0.0, lat2 = 0.0, lon2 = 0.0;
     List<GeoCoordinates> coord = [];
+    int ctrl = 0;
 
     for(int v = 0; v < info3.infoWalkList[index].legs.length; v++){
+
       var startGeoCoordinates = GeoCoordinates(info3.infoWalkList[index].legs[v].latOrig, info3.infoWalkList[index].legs[v].lonOrig);
       var destinationGeoCoordinates = GeoCoordinates(info3.infoWalkList[index].legs[v].latDest, info3.infoWalkList[index].legs[v].lonDest);
       coord = [startGeoCoordinates, destinationGeoCoordinates];
+
+      if(v == 0){
+        await putMarker(info3.infoWalkList[index].legs[v].latOrig, info3.infoWalkList[index].legs[v].lonOrig, true, "Origen"); //icono de origen
+      }
+
       if(info3.infoWalkList[index].legs[v].mode == "WALK"){
+        if(v != 0){
+          await putMarker(info3.infoWalkList[index].legs[v].latOrig, info3.infoWalkList[index].legs[v].lonOrig, true, "WALK");
+        }
+        await drawLineWalk(coord);
+      }
+      else if(info3.infoWalkList[index].legs[v].mode == "BIKE"){
+        if(v != 0){
+          await putMarker(info3.infoWalkList[index].legs[v].latOrig, info3.infoWalkList[index].legs[v].lonOrig, true, "BIKE");
+        }
         await drawLineWalk(coord);
       }
       else if(info3.infoWalkList[index].legs[v].mode == "BUS"){
+        if(v != 0){
+          await putMarker(info3.infoWalkList[index].legs[v].latOrig, info3.infoWalkList[index].legs[v].lonOrig, true, "BUS");
+        }
         var col = hexColor(info3.infoWalkList[index].legs[v].routeColor);
         await drawLineBus(coord, col);
       }
       else if(info3.infoWalkList[index].legs[v].mode == "SUBWAY"){
+        if(v != 0){
+          await putMarker(info3.infoWalkList[index].legs[v].latOrig, info3.infoWalkList[index].legs[v].lonOrig, true, "SUBWAY");
+        }
         var col = hexColor(info3.infoWalkList[index].legs[v].routeColor);
         await drawLineSubway(coord, col);
       }
+      ctrl = v;
     }
+    await putMarker(info3.infoWalkList[index].legs[ctrl].latDest, info3.infoWalkList[index].legs[ctrl].lonDest, true, "Destino"); //icono de destino
   }
 
   Future<List<Waypoint>> originAndDestiny() async {

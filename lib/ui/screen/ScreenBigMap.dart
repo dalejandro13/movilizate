@@ -28,7 +28,7 @@ class _ScreenBigMapState extends State<ScreenBigMap> {
       hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
         if (error == null) {
           hereMapController.camera.lookAtPointWithDistance(GeoCoordinates(6.245560, -75.600020), 2000);
-        } 
+        }
         else {
           print("Map scene not loaded. MapError: " + error.toString());
         }

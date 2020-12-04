@@ -8,6 +8,7 @@ import 'package:movilizate/repository/ConsultServer.dart';
 import 'package:movilizate/ui/screen/ScreenResult.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:movilizate/ui/widget/TextOriginDestiny.dart';
 
 class ButtonSearch extends StatefulWidget {
 
@@ -16,10 +17,13 @@ class ButtonSearch extends StatefulWidget {
   GetDataTrasnport gdt;
   GetIconsInfoCard infoCard;
   InnerIconsInfo iii;
+  FocusNode focusOrigin, focusDestiny;
 
-  ButtonSearch(ConsultServer consult, BuildContext context){
+  ButtonSearch(ConsultServer consult, BuildContext context, FocusNode focusOrigin, FocusNode focusDestiny){
     this.consult = consult;
     this.context = context;
+    this.focusOrigin = focusOrigin;
+    this.focusDestiny = focusDestiny;
     gdt = GetDataTrasnport(context);
     infoCard = GetIconsInfoCard(context);
     iii = InnerIconsInfo(context);
@@ -109,15 +113,38 @@ class _ButtonSearchState extends State<ButtonSearch> {
                       //info.focusDestiny.unfocus();
                       //info.focusOrigin.unfocus();
                       await getInfoOfRoutes();
-                      await widget.gdt.iconsOfTransport(); //obtengo la lista de iconos para los botones de trasnporte
-                      await widget.infoCard.getIconsInfo(context);
-                      await widget.iii.getIcon();
-                      if(info3.infoWalkList.length > 0 && info3.listOfTransport.length > 0 && info3.listOfInfo.length > 0 && info3.tileList.length > 0){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenResult(widget.consult, context)));  
+                      await widget.gdt.iconsOfTransport();
+                      if(info3.infoWalkList.length > 0){
+                        await widget.infoCard.getIconsInfo(context);
+                        await widget.iii.getIcon();
+                        if(info3.infoWalkList.length > 0 && info3.listOfTransport.length > 0 && info3.listOfInfo.length > 0 && info3.tileList.length > 0){
+                          var result1 = await Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenResult(widget.consult, context)));
+                          FocusScope.of(this.context).requestFocus(widget.focusOrigin);
+                          FocusScope.of(this.context).requestFocus(widget.focusDestiny);
+                          if(result1 == "Origen"){
+                            widget.focusOrigin.requestFocus();
+                          }
+                          else{
+                            if(result1 == "Destino"){
+                              widget.focusDestiny.requestFocus();
+                            }
+                          }
+                        }
+                        else{
+                          Fluttertoast.showToast(
+                            msg: "Informacion incompleta, intentalo nuevamente",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 30.0,
+                          );
+                          info3.infoWalkList.clear();
+                        }
                       }
                       else{
                         Fluttertoast.showToast(
-                          msg: "Informacion incompleta, intentalo nuevamente",
+                          msg: "Problemas con procesar la informacion, intentalo mas tarde",
                           toastLength: Toast.LENGTH_LONG,
                           gravity: ToastGravity.BOTTOM,
                           backgroundColor: Colors.grey,

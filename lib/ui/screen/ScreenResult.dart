@@ -73,7 +73,7 @@ class _ScreenResultState extends State<ScreenResult> {
                           ),
                           Expanded(
                             flex: 8,
-                            child: TextOriginDestiny("Origen", widget.consult, color1, info.dataOrigin, info.focusOrigin, false)//AutoCompleteOrigin2(widget.consult),
+                            child: TextOriginDestiny("Origen", widget.consult, color1, info.dataOrigin, info.focusOrigin, false, true)//AutoCompleteOrigin2(widget.consult),
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 30.0),
@@ -83,7 +83,7 @@ class _ScreenResultState extends State<ScreenResult> {
                     ),
 
                     Padding(
-                      padding: EdgeInsets.only(top:5.0),
+                      padding: EdgeInsets.only(top:10.0),
                     ),
 
                     Expanded(
@@ -96,7 +96,7 @@ class _ScreenResultState extends State<ScreenResult> {
                           ),
                           Expanded(
                             flex: 8,
-                            child: TextOriginDestiny("Destino", widget.consult, color2, info.dataDestiny, info.focusDestiny, false), //AutoCompleteDestiny2(widget.consult),
+                            child: TextOriginDestiny("Destino", widget.consult, color2, info.dataDestiny, info.focusDestiny, false, true), //AutoCompleteDestiny2(widget.consult),
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 30.0),
@@ -105,8 +105,12 @@ class _ScreenResultState extends State<ScreenResult> {
                       ),
                     ),
 
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.0),
+                    ),
+
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

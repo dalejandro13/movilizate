@@ -5,11 +5,12 @@ import 'package:movilizate/repository/ConsultServer.dart';
 
 class MatchList extends StatefulWidget {
 
-  // ConsultServer consult;
+  FocusNode focusOrigin, focusDestiny;
 
-  // MatchList(ConsultServer consult){
-  //   //this.consult = consult;
-  // }
+  MatchList(FocusNode focusOrigin, FocusNode focusDestiny){
+    this.focusOrigin = focusOrigin;
+    this.focusDestiny = focusDestiny;
+  }
 
   @override
   _MatchListState createState() => _MatchListState();
@@ -58,35 +59,45 @@ class _MatchListState extends State<MatchList> {
   // }
 
   void checkFocus(ProcessData info, DataOfPlace info2, int index) {
+    // try{
+    //   if(info.focusOrigin.hasFocus){
+    //     info.dataOrigin.text = info2.infoPlace[index].title;
+    //     //almacenar latitud y longitud de origen
+    //     info.getLatitudeOrigin = info2.infoPlace[index].lat;
+    //     info.getLongitudeOrigin = info2.infoPlace[index].lon;
+    //   }
+    //   else{
+    //     if(info.focusDestiny.hasFocus){
+    //       info.dataDestiny.text = info2.infoPlace[index].title;
+    //       //almacenar latitud y longitud de destino
+    //       info.getLatitudeDestiny = info2.infoPlace[index].lat;
+    //       info.getLongitudeDestiny = info2.infoPlace[index].lon;
+    //     }
+    //     else{
+    //       info.focusOrigin = FocusNode();
+    //       info.focusDestiny = FocusNode();
+    //     }
+    //   }
+    // }
+    // catch(e){
+    //   print("Error $e");
+    // }
+
     try{
-      if(info.focusOrigin.hasFocus){
+      if(widget.focusOrigin.hasFocus){
         info.dataOrigin.text = info2.infoPlace[index].title;
         //almacenar latitud y longitud de origen
         info.getLatitudeOrigin = info2.infoPlace[index].lat;
         info.getLongitudeOrigin = info2.infoPlace[index].lon;
       }
       else{
-        if(info.focusDestiny.hasFocus){
+        if(widget.focusDestiny.hasFocus){
           info.dataDestiny.text = info2.infoPlace[index].title;
           //almacenar latitud y longitud de destino
           info.getLatitudeDestiny = info2.infoPlace[index].lat;
           info.getLongitudeDestiny = info2.infoPlace[index].lon;
         }
       }
-      // if(info.focusOrigin2.hasFocus){
-      //   info.dataOrigin.text = info2.infoPlace[index].title;
-      //   //almacenar latitud y longitud de origen
-      //   info.getLatitudeOrigin = info2.infoPlace[index].lat;
-      //   info.getLongitudeOrigin = info2.infoPlace[index].lon;
-      // }
-      // else{
-      //   if(info.focusDestiny2.hasFocus){
-      //     info.dataDestiny.text = info2.infoPlace[index].title;
-      //     //almacenar latitud y longitud de destino
-      //     info.getLatitudeDestiny = info2.infoPlace[index].lat;
-      //     info.getLongitudeDestiny = info2.infoPlace[index].lon;
-      //   }
-      // }
     }
     catch(e){
       print("Error $e");

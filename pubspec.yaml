@@ -35,8 +35,7 @@ dependencies:
   location: ^3.0.0
   tuple: ^1.0.3
   intl: ^0.16.1
-  generic_bloc_provider: ^1.0.9
-    
+  generic_bloc_provider: ^1.0.9    
 
   # The following adds the HERE SDK for Flutter plugin folder to your application.
   here_sdk:
@@ -60,6 +59,10 @@ flutter:
     - images/markerBlack.png
     - images/markerGreen.png
     - images/iconBus.png
+    - images/iconWalking.png
+    - images/iconBike.png
+    - images/iconBus.png
+    - images/iconTrain.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

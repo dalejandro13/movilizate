@@ -34,6 +34,9 @@ class _ScreenSearchState extends State<ScreenSearch> {
   //AsyncMemoizer _memoizer = AsyncMemoizer();
   bool permission = true;
   dynamic color1 = null, color2 = null;
+  ProcessData info;
+  FocusNode focusOrigin = FocusNode();
+  FocusNode focusDestiny = FocusNode();
 
   @override
   void initState() {
@@ -69,7 +72,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
 
   Future<void> getLocationGps(BuildContext context) async {
     //var info2 = Provider.of<DataOfPlace>(context);
-    var info = Provider.of<ProcessData>(context, listen: false);
+    info = Provider.of<ProcessData>(context, listen: false);
     _locationData = await location.getLocation();
     info.getLatitudeOrigin = _locationData.latitude;
     info.getLongitudeOrigin = _locationData.longitude;
@@ -78,7 +81,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
 
   @override
   Widget build(BuildContext context) {
-    var info = Provider.of<ProcessData>(context);
+    info = Provider.of<ProcessData>(context);
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -119,7 +122,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                       ),
                       Expanded(
                         flex: 8,
-                        child: TextOriginDestiny("Origen", consult, color1, info.dataOrigin, info.focusOrigin, true), //AutoCompleteOrigin(context),
+                        child: TextOriginDestiny("Origen", consult, color1, info.dataOrigin, focusOrigin/*info.focusOrigin*/, true, false), //AutoCompleteOrigin(context),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 30.0),
@@ -142,7 +145,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                       ),
                       Expanded(
                         flex: 8,
-                        child: TextOriginDestiny("Destino", consult, color2, info.dataDestiny, info.focusDestiny, true), //AutoCompleteDestiny(context),
+                        child: TextOriginDestiny("Destino", consult, color2, info.dataDestiny, focusDestiny/*info.focusDestiny*/, true, false), //AutoCompleteDestiny(context),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 30.0),
@@ -167,7 +170,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
 
                       Expanded(
                         flex: 2,
-                        child: ButtonSearch(consult, context),
+                        child: ButtonSearch(consult, context, focusOrigin, focusDestiny),
                       ),
 
                       Expanded(
@@ -277,7 +280,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
 
                 Expanded(
                   flex: 6,
-                  child: MatchList(),
+                  child: MatchList(focusOrigin, focusDestiny),
                 ),
               ],
             ),
