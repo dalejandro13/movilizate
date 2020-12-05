@@ -59,7 +59,7 @@ class CardInfoRoutes {
   Widget iconTransportMedium;
   String hourEnds;
   Widget startIcon;
-  VerticalDivider lineRoute;
+  Container lineRoute;
   Widget endIcon;
   String nameTrasportMedium;
   String placeStartIn;

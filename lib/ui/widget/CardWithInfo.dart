@@ -74,12 +74,9 @@ class CardWithInfo extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(top: 20.0),
                     ),
-                    info.infoRoutList[index][inx].startIcon,
-                    Container(
-                      height: 100.0,
-                      width: 80.0,
-                      child: info.infoRoutList[index][inx].lineRoute,
-                    ),
+                    info.infoRoutList[index][inx].iconTransportMedium, //startIcon,
+
+                    info.infoRoutList[index][inx].lineRoute, //muestra la linea de ruta
                   ],
                 ),
 

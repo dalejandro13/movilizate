@@ -70,7 +70,8 @@ class _ScreenMapState extends State<ScreenMap> {
     routing = ShowTheRoute(context, hereMapController);
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
       if(error == null) {
-        hereMapController.camera.lookAtPointWithDistance(GeoCoordinates(6.245560, -75.600020), 100);    //info3.infoWalkList[/*widget.index*/0].legs[0].latOrig, info3.infoWalkList[/*widget.index*/0].legs[0].lonOrig), 10000);
+        //widget.index
+        hereMapController.camera.lookAtPointWithDistance(GeoCoordinates(info3.infoWalkList[0].legs[0].latOrig + 0.001, info3.infoWalkList[0].legs[0].lonOrig + 0.005), 2000);    //6.245560, -75.600020), 100);
       }
       else {
         print("Map scene not loaded. MapError: " + error.toString());
@@ -101,7 +102,7 @@ class _ScreenMapState extends State<ScreenMap> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 30.0),
+            padding: EdgeInsets.only(top: 15.0),
           ),
           Expanded(
             flex: 1,
@@ -152,9 +153,9 @@ class _ScreenMapState extends State<ScreenMap> {
             ),
           ),
 
-          Padding(
-            padding: EdgeInsets.only(top: 20.0),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.only(top: 20.0),
+          // ),
 
           Expanded( //tarjetas con informacion
             flex: 5,
@@ -166,15 +167,15 @@ class _ScreenMapState extends State<ScreenMap> {
             ),
           ),
 
-          Expanded( //zona inferior de la interfaz
-            flex: 2,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-              ),
-            ),
-          ),
+          // Expanded( //zona inferior de la interfaz
+          //   flex: 2,
+          //   child: Container(
+          //     width: MediaQuery.of(context).size.width,
+          //     decoration: BoxDecoration(
+          //       color: Colors.transparent,
+          //     ),
+          //   ),
+          // ),
 
 
         ],

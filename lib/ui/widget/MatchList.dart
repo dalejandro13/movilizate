@@ -17,72 +17,8 @@ class MatchList extends StatefulWidget {
 }
 
 class _MatchListState extends State<MatchList> {
-  
-  // List<String> details = ["uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez",
-  // "once", "doce", "trece", "catorce", "quince", "dieciseis", "diecisiete", "dieciocho", "diecinueve", "veinte"];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    
-    //widget.consult.getPreviousInfo();
-  }
-
-  // void _onFocusChange(ProcessData info, DataOfPlace info2, int index){
-  //   try{
-  //     if(info.focusOrigin.hasFocus){
-  //       info.dataOrigin.text = info2.infoPlace[index].title;
-  //       //almacenar latitud y longitud de origen
-  //       info.getLatitudeOrigin = info2.infoPlace[index].lat;
-  //       info.getLongitudeOrigin = info2.infoPlace[index].lon;
-  //     }
-  //   }
-  //   catch(e){
-  //     print("Error $e");
-  //   }
-  // }
-
-  // void _onFocusChange2(ProcessData info, DataOfPlace info2, int index){
-  //   try{
-  //     if(info.focusDestiny.hasFocus){ 
-  //       info.dataDestiny.text = info2.infoPlace[index].title;
-  //       //almacenar latitud y longitud de destino
-  //       info.getLatitudeDestiny = info2.infoPlace[index].lat;
-  //       info.getLongitudeDestiny = info2.infoPlace[index].lon;
-  //       info.focusDestiny.dispose();
-  //     }
-  //   }
-  //   catch(e){
-  //     print("Error $e");
-  //   }
-  // }
 
   void checkFocus(ProcessData info, DataOfPlace info2, int index) {
-    // try{
-    //   if(info.focusOrigin.hasFocus){
-    //     info.dataOrigin.text = info2.infoPlace[index].title;
-    //     //almacenar latitud y longitud de origen
-    //     info.getLatitudeOrigin = info2.infoPlace[index].lat;
-    //     info.getLongitudeOrigin = info2.infoPlace[index].lon;
-    //   }
-    //   else{
-    //     if(info.focusDestiny.hasFocus){
-    //       info.dataDestiny.text = info2.infoPlace[index].title;
-    //       //almacenar latitud y longitud de destino
-    //       info.getLatitudeDestiny = info2.infoPlace[index].lat;
-    //       info.getLongitudeDestiny = info2.infoPlace[index].lon;
-    //     }
-    //     else{
-    //       info.focusOrigin = FocusNode();
-    //       info.focusDestiny = FocusNode();
-    //     }
-    //   }
-    // }
-    // catch(e){
-    //   print("Error $e");
-    // }
-
     try{
       if(widget.focusOrigin.hasFocus){
         info.dataOrigin.text = info2.infoPlace[index].title;
@@ -148,8 +84,6 @@ class _MatchListState extends State<MatchList> {
               onTap: (){
                 try{
                   checkFocus(info, info2, index);
-                  //info.focusOrigin.addListener(_onFocusChange(info, info2, index));
-                  //info.focusDestiny.addListener(_onFocusChange2(info, info2, index));
                 }
                 catch(e){
                   print("Error $e");

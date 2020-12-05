@@ -680,7 +680,7 @@ class FillInInformation{
     //cardInfo = [];
     info.infoRoutes = null;
     info.infoRoutes = [];
-    double sizeIcon = 35.0, widthDivider = 70.0;
+    double sizeIcon = 35.0; //widthDivider = 70.0;
     //print("El indice es: ${widget.index}");
     
     for(int x = 0; x < info3.infoWalkList.length; x++){
@@ -706,13 +706,17 @@ class FillInInformation{
       for(int y = 0; y < info3.infoWalkList[x].legs.length; y++){
         int duration = info3.infoWalkList[x].legs[y].durationTransport.toInt();
         duration = (duration / 60).truncate(); //en minutos
-
         transport = info3.infoWalkList[x].legs[y].mode.toString().toLowerCase(); //nombre del medio de transporte en minuscula
         String transportMedium = "";
         if(transport == "subway"){
-          lineRoute = VerticalDivider(
-            width: widthDivider, 
-            color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+          lineRoute = Container(
+            height: 70.0,
+            width: 7.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+            ),
+            
           );
 
           if(x != 0){
@@ -755,9 +759,13 @@ class FillInInformation{
         }
         else{
           if(transport == "bus"){
-            lineRoute = VerticalDivider(
-              width: widthDivider, 
-              color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+            lineRoute = Container(
+              height: 70.0,
+              width: 7.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+              ),
             );
             if(x != 0){
               startIcon = Icon(
@@ -799,9 +807,13 @@ class FillInInformation{
           }
           else{
             if(transport == "bike"){
-              lineRoute = VerticalDivider(
-                //width: widthDivider, 
-                color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+              lineRoute = Container(
+                height: 70.0,
+                width: 7.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+                ),
               );
               if(x != 0){
                 startIcon = Icon(
@@ -819,9 +831,13 @@ class FillInInformation{
             else{
               if(transport == "walk"){
                 distance = Text((info3.infoWalkList[x].legs[y].distance).toInt().toString() + "m");
-                lineRoute = VerticalDivider(
-                  width: widthDivider, 
-                  color: Color.fromRGBO(0, 0, 0, 1.0),
+                lineRoute = Container(
+                  height: 70.0,
+                  width: 7.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: Color.fromRGBO(0, 0, 0, 1.0),
+                  ),
                 );
                 if(x != 0){
                   startIcon = Icon(

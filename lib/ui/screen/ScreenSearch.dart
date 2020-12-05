@@ -204,7 +204,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                     else{
                                         Fluttertoast.showToast(
                                         msg: "Falta ingresar datos de origen ó el destino",
-                                        toastLength: Toast.LENGTH_LONG,
+                                        toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
                                         backgroundColor: Colors.grey,
                                         textColor: Colors.white,
@@ -215,7 +215,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                   else{
                                     Fluttertoast.showToast(
                                       msg: "Falta ingresar el destino",
-                                      toastLength: Toast.LENGTH_LONG,
+                                      toastLength: Toast.LENGTH_SHORT,
                                       gravity: ToastGravity.BOTTOM,
                                       backgroundColor: Colors.grey,
                                       textColor: Colors.white,
@@ -226,7 +226,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                 else{
                                   Fluttertoast.showToast(
                                     msg: "Falta ingresar el origen",
-                                    toastLength: Toast.LENGTH_LONG,
+                                    toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.BOTTOM,
                                     backgroundColor: Colors.grey,
                                     textColor: Colors.white,
@@ -237,7 +237,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                               else{
                                 Fluttertoast.showToast(
                                   msg: "Falta ingresar el destino",
-                                  toastLength: Toast.LENGTH_LONG,
+                                  toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   backgroundColor: Colors.grey,
                                   textColor: Colors.white,
@@ -248,7 +248,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                             else{
                               Fluttertoast.showToast(
                                 msg: "Falta ingresar el origen",
-                                toastLength: Toast.LENGTH_LONG,
+                                toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.BOTTOM,
                                 backgroundColor: Colors.grey,
                                 textColor: Colors.white,

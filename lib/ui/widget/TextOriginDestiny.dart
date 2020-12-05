@@ -29,7 +29,7 @@ class TextOriginDestiny extends StatelessWidget {
     var info2 = Provider.of<DataOfPlace>(context);
     return Container(
       height: 40.0,
-      width: MediaQuery.of(context).size.width - 10.0,
+      width: MediaQuery.of(context).size.width - 3.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: Colors.white
