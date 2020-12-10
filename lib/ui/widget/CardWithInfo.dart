@@ -67,19 +67,23 @@ class CardWithInfo extends StatelessWidget {
                 ),
 
                 
-
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(top: 20.0),
                     ),
-                    info.infoRoutList[index][inx].iconTransportMedium, //startIcon,
+                    inx == 0 ?
+                      info.infoRoutList[index][inx].startIcon: //icono de inicio
+                      info.infoRoutList[index][inx].currentIcon, //icono corriente
 
                     info.infoRoutList[index][inx].lineRoute, //muestra la linea de ruta
+
+                    info.infoRoutList[index].length - 1 == inx ? 
+                      info.infoRoutList[index][inx].endIcon : //muestra el icono de punto de destino
+                      Container(),
                   ],
                 ),
-
 
                 
                 Padding(
@@ -96,7 +100,7 @@ class CardWithInfo extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.grey[350],
                         fontFamily: "AurulentSans-Bold",
-                        fontSize: 14.0,
+                        //fontSize: 14.0,
                       ),
                     ),
                     Text(
@@ -111,7 +115,7 @@ class CardWithInfo extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.grey[350],
                         fontFamily: "AurulentSans-Bold",
-                        fontSize: 14.0,
+                        //fontSize: 14.0,
                       ),
                     ),
                     Padding(
@@ -152,7 +156,7 @@ class CardWithInfo extends StatelessWidget {
                       info.infoRoutList[index][inx].time,
                       style: TextStyle(
                         fontFamily: "AurulentSans-Bold",
-                        fontSize: 10.0,
+                        //fontSize: 10.0,
                       ),
                     ),
                   ],

@@ -184,22 +184,20 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                 if(info.dataOrigin.text != ""){
                                   if(info.dataDestiny.text != ""){
                                     if(info.dataOrigin != null && info.dataDestiny != null){
-                                      //setState(() {
-                                        //intercambio valores de TextField de origen con el destino
-                                        var aux1 =  info.dataOrigin.text;
-                                        info.dataOrigin.text = info.dataDestiny.text;
-                                        info.dataDestiny.text = aux1;
-                                        
-                                        //intercambio coordenas de latitud de origen con el destino
-                                        var aux2 = info.getLatitudeOrigin;
-                                        info.getLatitudeOrigin = info.getLatitudeDestiny;
-                                        info.getLatitudeDestiny = aux2;
+                                      //intercambio valores de TextField de origen con el destino
+                                      var aux1 =  info.dataOrigin.text;
+                                      info.dataOrigin.text = info.dataDestiny.text;
+                                      info.dataDestiny.text = aux1;
+                                      
+                                      //intercambio coordenas de latitud de origen con el destino
+                                      var aux2 = info.getLatitudeOrigin;
+                                      info.getLatitudeOrigin = info.getLatitudeDestiny;
+                                      info.getLatitudeDestiny = aux2;
 
-                                        //intercambio coordenadas de longitud de origen con el destino
-                                        var aux3 = info.getLongitudeOrigin;
-                                        info.getLongitudeOrigin = info.getLongitudeDestiny;
-                                        info.getLongitudeDestiny = aux3;
-                                      //});
+                                      //intercambio coordenadas de longitud de origen con el destino
+                                      var aux3 = info.getLongitudeOrigin;
+                                      info.getLongitudeOrigin = info.getLongitudeDestiny;
+                                      info.getLongitudeDestiny = aux3;
                                     }
                                     else{
                                         Fluttertoast.showToast(
@@ -208,7 +206,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                         gravity: ToastGravity.BOTTOM,
                                         backgroundColor: Colors.grey,
                                         textColor: Colors.white,
-                                        fontSize: 30.0,
+                                        fontSize: 20.0,
                                       );
                                     }
                                   }
@@ -219,7 +217,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                       gravity: ToastGravity.BOTTOM,
                                       backgroundColor: Colors.grey,
                                       textColor: Colors.white,
-                                      fontSize: 30.0,
+                                      fontSize: 20.0,
                                     );
                                   }
                                 }
@@ -230,7 +228,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                     gravity: ToastGravity.BOTTOM,
                                     backgroundColor: Colors.grey,
                                     textColor: Colors.white,
-                                    fontSize: 30.0,
+                                    fontSize: 20.0,
                                   );
                                 }
                               }
@@ -241,7 +239,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                   gravity: ToastGravity.BOTTOM,
                                   backgroundColor: Colors.grey,
                                   textColor: Colors.white,
-                                  fontSize: 30.0,
+                                  fontSize: 20.0,
                                 );
                               }
                             }
@@ -252,7 +250,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                 gravity: ToastGravity.BOTTOM,
                                 backgroundColor: Colors.grey,
                                 textColor: Colors.white,
-                                fontSize: 30.0,
+                                fontSize: 20.0,
                               );
                             }
                           },

@@ -65,8 +65,8 @@ class TextOriginDestiny extends StatelessWidget {
               control.text = "";
               info2.infoPlace = [];
               if(isSecondScreen){
-                //info2.infoPlace = null;
-                //info2.infoPlace = [];
+                info2.infoPlace = null;
+                info2.infoPlace = [];
                 Navigator.pop(context, text);
               }
             },
@@ -79,12 +79,18 @@ class TextOriginDestiny extends StatelessWidget {
             info.dataText.text = val;
             await consult.getInfoInMaps(info, info2);
           }
-          else if(val.length >= 0 && val.length <= 2 ){
+          else if(val.length >= 0 && val.length <= 2){
             consult.place = null;
+            info2.infoPlace = null;
             consult.place = [];
             info2.infoPlace = [];
           }
-          //setState(() { });
+          else if(val.length < 0){
+            consult.place = null;
+            info2.infoPlace = null;
+            consult.place = [];
+            info2.infoPlace = [];
+          }
         }:
         null,
       ),

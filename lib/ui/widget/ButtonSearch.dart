@@ -79,11 +79,15 @@ class _ButtonSearchState extends State<ButtonSearch> {
       urlDestiny = "&toPlace=${info.getLatitudeDestiny},${info.getLongitudeDestiny}";
       urlTime = "&time=$actualTime";
       urlDate = "&date=$actualDate";
-      //urlMode = "&mode=TRANSIT,WALK";
-      //urlRest = "&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en";
-      //urlComplete = "$urlBase$urlOrigin$urlDestiny$urlTime$urlDate$urlMode$urlRest";
 
-      urlComplete = "http://181.140.181.103:9780/otp/routers/default/plan?fromPlace=6.260270778808053%2C-75.56984424591064&toPlace=6.263235600898669%2C-75.55920124053955&time=10%3A43am&date=11-06-2020&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en";
+      
+      urlMode = "&mode=TRANSIT,WALK";
+      urlRest = "&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en";
+      urlComplete = "$urlBase$urlOrigin$urlDestiny$urlTime$urlDate$urlMode$urlRest";
+      print(urlComplete);
+
+      //urlComplete = "http://181.140.181.103:9780/otp/routers/default/plan?fromPlace=6.260270778808053%2C-75.56984424591064&toPlace=6.263235600898669%2C-75.55920124053955&time=10%3A43am&date=11-06-2020&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en";
+      //urlComplete = "http://181.140.181.103:9780/otp/routers/default/plan?fromPlace=6.260270778808053%2C-75.56984424591064&toPlace=6.263235600898669%2C-75.55920124053955&time=10:34am&date=11-06-2020&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en";
 
       await widget.consult.getInfoFromServer(urlComplete, info3);
       
@@ -133,11 +137,11 @@ class _ButtonSearchState extends State<ButtonSearch> {
                         else{
                           Fluttertoast.showToast(
                             msg: "Informacion incompleta, intentalo nuevamente",
-                            toastLength: Toast.LENGTH_LONG,
+                            toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.BOTTOM,
                             backgroundColor: Colors.grey,
                             textColor: Colors.white,
-                            fontSize: 30.0,
+                            fontSize: 20.0,
                           );
                           info3.infoWalkList.clear();
                         }
@@ -145,11 +149,11 @@ class _ButtonSearchState extends State<ButtonSearch> {
                       else{
                         Fluttertoast.showToast(
                           msg: "Problemas con procesar la informacion, intentalo mas tarde",
-                          toastLength: Toast.LENGTH_LONG,
+                          toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           backgroundColor: Colors.grey,
                           textColor: Colors.white,
-                          fontSize: 30.0,
+                          fontSize: 20.0,
                         );
                         info3.infoWalkList.clear();
                       }
@@ -157,11 +161,11 @@ class _ButtonSearchState extends State<ButtonSearch> {
                     else{
                       Fluttertoast.showToast(
                         msg: "Ingresa el destino apropiado",
-                        toastLength: Toast.LENGTH_LONG,
+                        toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
                         backgroundColor: Colors.grey,
                         textColor: Colors.white,
-                        fontSize: 30.0,
+                        fontSize: 20.0,
                       );
                     }
                   }
@@ -204,22 +208,22 @@ class _ButtonSearchState extends State<ButtonSearch> {
                 else{
                   Fluttertoast.showToast(
                     msg: "Falta ingresar el destino",
-                    toastLength: Toast.LENGTH_LONG,
+                    toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     backgroundColor: Colors.grey,
                     textColor: Colors.white,
-                    fontSize: 30.0,
+                    fontSize: 20.0,
                   );
                 }
               }
               else{
                 Fluttertoast.showToast(
                   msg: "Falta ingresar el origen",
-                  toastLength: Toast.LENGTH_LONG,
+                  toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
                   backgroundColor: Colors.grey,
                   textColor: Colors.white,
-                  fontSize: 30.0,
+                  fontSize: 20.0,
                 );
               }
             }
@@ -227,11 +231,11 @@ class _ButtonSearchState extends State<ButtonSearch> {
           catch(e){
             Fluttertoast.showToast(
               msg: "No estas conectado a internet",
-              toastLength: Toast.LENGTH_LONG,
+              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               backgroundColor: Colors.grey,
               textColor: Colors.white,
-              fontSize: 30.0,
+              fontSize: 20.0,
             );
           }
         },

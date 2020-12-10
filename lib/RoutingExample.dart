@@ -88,9 +88,11 @@ class RoutingExample {
         if(waitData){
           waitData = false;
           if(coorList.length >= 2){ //condicion si se tiene dos elementos en la lista
+            clearMarkerOfMap();
             putMarker(coorList[0], coorList[1], true);
           }
           showModalBottomSheet(
+            isDismissible: true,
             context: _context,
             builder: (ctx) => _buildInfoBottom(ctx),
           );
@@ -99,12 +101,12 @@ class RoutingExample {
       }
       catch(e){
         print("Error $e");
+        waitData = true;
       }
-
     });
   }
 
-  void _setLongPressGestureHandler() {
+  void _setLongPressGestureHandler() async {
     _hereMapController.gestures.longPressListener = LongPressListener.fromLambdas(lambda_onLongPress: (GestureState gestureState, Point2D touchPoint) {
       _toList(_hereMapController.viewToGeoCoordinates(touchPoint));
       if (gestureState == GestureState.begin) {
@@ -118,6 +120,7 @@ class RoutingExample {
           if(waitData){
             waitData = false;
             if(coorList.length >= 2){ //condicion si se tiene dos elementos en la lista
+              
               putMarker(coorList[0], coorList[1], true);
             }
             showModalBottomSheet(
@@ -152,7 +155,7 @@ class RoutingExample {
           ListTile(
             title: Center(
               child: Text(
-                "${coorList[0]} , ${coorList[1]}", //"aqui van las coordenadas",
+                "${coorList[0].toStringAsFixed(6)} , ${coorList[1].toStringAsFixed(6)}", //"aqui van las coordenadas",
                 style: TextStyle(
                   fontFamily: "AurulentSans-Bold",
                   color: Colors.white,
@@ -281,6 +284,12 @@ class RoutingExample {
         _showDialog('Error', 'Error while calculating a route: $error');
       }
     });
+  }
+
+  void clearMarkerOfMap(){
+    if(_marker != null){
+      _hereMapController.mapScene.removeMapMarker(_marker);
+    }
   }
 
   void clearMap() {

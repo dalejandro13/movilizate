@@ -11,9 +11,6 @@ class ProcessData with ChangeNotifier{
   TextEditingController autocompleteOrigin = TextEditingController();
   TextEditingController autocompleteDestiny = TextEditingController();
 
-  // TextEditingController autocompleteOrigin2 = TextEditingController();
-  // TextEditingController autocompleteDestiny2 = TextEditingController();
-
   String time = "";
 
   double latitude = 0.0, longitude = 0.0, latitudeOrigin = 0.0, longitudeOrigin = 0.0, latitudeDestiny = 0.0, longitudeDestiny = 0.0;
@@ -57,24 +54,6 @@ class ProcessData with ChangeNotifier{
     notifyListeners();
   }
 
-  // get dataOrigin2{
-  //   return autocompleteOrigin2;
-  // }
-  // set dataOrigin2(TextEditingController data){
-  //   autocompleteOrigin2 = data;
-  //   notifyListeners();
-  // }
-
-  // get dataDestiny2{
-  //   return autocompleteDestiny2;
-  // }
-  // set dataDestiny2(TextEditingController data){
-  //   autocompleteDestiny2 = data;
-  //   notifyListeners();
-  // }
-
-
-
   get latitudeData{
     return latitude;
   }
@@ -115,14 +94,6 @@ class ProcessData with ChangeNotifier{
     notifyListeners();
   }
 
-  // get focusActive{
-  //   return focus;
-  // }
-  // set focusActive(bool val){
-  //   focus = val;
-  //   notifyListeners();
-  // }
-
   get focusOrigin{
     return focusOri;
   }
@@ -137,23 +108,6 @@ class ProcessData with ChangeNotifier{
     focusDes = val;
     notifyListeners();
   }
-
-
-  // get focusOrigin2{
-  //   return focusOri2;
-  // }
-  // set focusOrigin2(FocusNode val){
-  //   focusOri2 = val;
-  //   notifyListeners();
-  // }
-  // get focusDestiny2{
-  //   return focusDes2;
-  // }
-  // set focusDestiny2(FocusNode val){
-  //   focusDes2 = val;
-  //   notifyListeners();
-  // }
-
 
   get getLatitudeOrigin{
     return latitudeOrigin;
@@ -193,38 +147,11 @@ class ProcessData with ChangeNotifier{
     notifyListeners();
   }
 
-  // get changeOfTransport => change;
-  // set changeOfTransport(int val){
-  //   change = val;
-  //   notifyListeners();
-  // }
-
-  // get listOfTransport => listTransport;
-  // set listOfTransport(List<ListTile> val){
-  //   listTransport = val;
-  //   notifyListeners();
-  // }
-
-  // get listOfTransport2 => listTransport2;
-  // set listOfTransport2(List<ListTile> val){
-  //   listTransport2 = val;
-  //   notifyListeners();
-  // }
-
   get listCard => listTransport;
   set listCard(List<ListTile> val){
     listTransport = val;
     notifyListeners();
   }
-
-  // get listCard2 => listTransport2;
-  // set listCard2(List<ListTile> val){
-  //   listTransport2 = val;
-  //   notifyListeners();
-  // }
-
-  //ValueNotifier<List<ListTile>> listCard = ValueNotifier([z]);
-
 }
 
 class DataOfPlace with ChangeNotifier{
@@ -297,47 +224,4 @@ class InfoRouteServer with ChangeNotifier{
     listInfoIcon = val;
     notifyListeners();
   }
-
-
-  // get onTapCanceledList => listCanceled;
-  // set onTapCanceledList(List<Widget> val){
-  //   listCanceled = val;
-  //   notifyListeners();
-  // }
-
 }
-
-// class GetIconInList extends ChangeNotifier{
-//   GetIcons ic;
-//   GetIconInList(BuildContext context){
-//     ic = GetIcons(context);
-//   }
-
-//   @override
-//   void dispose() {
-//     // TODO: implement dispose
-//   }
-// }
-
-// class GetDataLegs extends ChangeNotifier{
-//   GetIcon ic;
-//   GetDataLegs(BuildContext context){
-//     ic = GetIcon(context);
-//   }
-// }
-
-// class GetDataOfRoutes extends ChangeNotifier{
-//   GetIconsInfoCard infoCard;
-
-//   GetDataOfRoutes(BuildContext context){
-//     infoCard = GetIconsInfoCard(context);
-//   }
-// }
-
-// class GetInnerIconsInfo{
-//   InnerIconsInfo infoInner;
-
-//   GetInnerIconsInfo(BuildContext context){
-//     infoInner = InnerIconsInfo(context);
-//   }
-// }

@@ -59,6 +59,7 @@ class CardInfoRoutes {
   Widget iconTransportMedium;
   String hourEnds;
   Widget startIcon;
+  Widget currentIcon;
   Container lineRoute;
   Widget endIcon;
   String nameTrasportMedium;
@@ -71,6 +72,7 @@ class CardInfoRoutes {
     this.iconTransportMedium,
     this.hourEnds,
     this.startIcon,
+    this.currentIcon,
     this.lineRoute,
     this.endIcon,
     this.nameTrasportMedium,

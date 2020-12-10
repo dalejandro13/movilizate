@@ -29,7 +29,7 @@ class _UseTheMapState extends State<UseTheMap> {
           } 
           catch(e) {
             Fluttertoast.showToast(
-              msg: "No estas conectado a internet",
+              msg: "Estas desconectado de internet, intenta conectarte a una red",
               toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.BOTTOM,
               fontSize: 30.0,

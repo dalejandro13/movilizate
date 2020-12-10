@@ -5,7 +5,6 @@ import 'package:movilizate/bloc/ProcessData.dart';
 import 'package:movilizate/RoutingExample.dart';
 import 'package:provider/provider.dart';
 
-
 class ScreenBigMap extends StatefulWidget {
 
   @override
@@ -22,9 +21,10 @@ class _ScreenBigMapState extends State<ScreenBigMap> {
 
     info = Provider.of<ProcessData>(context);
 
-    void onMapCreated(HereMapController hereMapController) {
+    void onMapCreated(HereMapController hereMapController) async {
       info.mapController = hereMapController;
       routing = RoutingExample(context, hereMapController);
+      await Future.delayed(Duration(seconds: 1));
       hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
         if (error == null) {
           hereMapController.camera.lookAtPointWithDistance(GeoCoordinates(6.245560, -75.600020), 2000);
@@ -37,10 +37,10 @@ class _ScreenBigMapState extends State<ScreenBigMap> {
 
     return Scaffold(
       body: Stack(
-      children: [ 
-        HereMap(
-          onMapCreated: onMapCreated,
-        ),
+      children: [
+          HereMap(
+            onMapCreated: onMapCreated,
+          ),
         ]
       ),
     );

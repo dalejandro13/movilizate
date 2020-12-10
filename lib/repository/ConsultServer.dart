@@ -6,6 +6,8 @@ import 'package:movilizate/bloc/ProcessData.dart';
 import 'package:movilizate/model/iconList.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:movilizate/ui/widget/MessageDialog.dart';
+import 'package:tuple/tuple.dart';
 
 class ConsultServer{
 
@@ -16,7 +18,7 @@ class ConsultServer{
   // }
 
   String urlBase = "https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=";
-  String urlUbication = "country=colombia;city=";
+  String urlUbication = "country=colombia;state=antioquia&q=";
   String apiKey = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
   List<DataOfPlace> place;
   //List<InfoRouteServer> place2;
@@ -26,35 +28,35 @@ class ConsultServer{
   List<Widget> cardListWidget;
   double lonOrig, latOrig, lonDest, latDest; 
 
-  Future<void> getPreviousInfo() async {
-    //info = Provider.of<ProcessData>(context);
-    place = null;
-    place = [];
+  // Future<void> getPreviousInfo() async {
+  //   //info = Provider.of<ProcessData>(context);
+  //   place = null;
+  //   place = [];
     
-    String completeUrl = "$urlBase$urlUbication"+"santafe"+"$apiKey";
-    try{
-      var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'});
-      if(resp.statusCode == 200){
-        var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
-        for(var vv in jsonResp["items"]){
-          place.add(
-            DataOfPlace(
-              title: vv["title"],
-              lat: vv["position"]["lat"],
-              lon: vv["position"]["lng"],
-            )
-          );
-        }
-        //print(info.infoPlace);
-      }
-      else{
-        print("Error en la consulta, intentalo nuevamente");
-      }
-    }
-    catch(e){
-      print("Error: $e");
-    }
-  }
+  //   String completeUrl = "$urlBase$urlUbication"+"santafe"+"$apiKey";
+  //   try{
+  //     var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'});
+  //     if(resp.statusCode == 200){
+  //       var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
+  //       for(var vv in jsonResp["items"]){
+  //         place.add(
+  //           DataOfPlace(
+  //             title: vv["title"],
+  //             lat: vv["position"]["lat"],
+  //             lon: vv["position"]["lng"],
+  //           )
+  //         );
+  //       }
+  //       //print(info.infoPlace);
+  //     }
+  //     else{
+  //       print("Error en la consulta, intentalo nuevamente");
+  //     }
+  //   }
+  //   catch(e){
+  //     print("Error: $e");
+  //   }
+  // }
 
   Future<void> getUbication(BuildContext context) async {
     place = null;
@@ -101,11 +103,13 @@ class ConsultServer{
     try{
       if(enter){
         enter = false;
-        if(place.length == 100){
+        if(place.length >= 100){
           place = null;
           place = [];
+          info2.infoPlace = null;
+          info2.infoPlace = [];
         }
-        var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'});
+        var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 10));
         if(resp.statusCode == 200){
           var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
           for(var vv in jsonResp["items"]){
@@ -116,42 +120,17 @@ class ConsultServer{
                 lon: vv["position"]["lng"],
               )
             );
-            //info.latitudeData = vv["position"]["lat"];
-            //info.longitudeData = vv["position"]["lng"];
-            //print("latitud: ${info.latitudeData.toString()}");
-            //print("longitud: ${info.longitudeData.toString()}");
-            //enter = true;
-            //await routing.putMarker(info.latitudeData, info.longitudeData, enter);
           }
-          place = place.toSet().toList();
-          info2.infoPlace = place;
-          // if(info.focusOrigin.hasFocus){
-          //   print("almacena en origen");
-          // }
-          // else{
-          //   if(info.focusDestiny.hasFocus){
-          //     print("almacena en destino");
-          //   }
-          // }
-          // if(info2.infoPlace.length > 0){
-          //   for(var jj in info2.infoPlace){
-          //     print(jj.title);
-          //     print(jj.lat);
-          //     print(jj.lon);
-          //   }
-          // }
-          //var nn = place;
-          //setState((){ });
-          // if(enter){
-          //   await routing.putMarker(info.latitudeData, info.longitudeData, enter);
-          // }
-          // else{
-          //   Fluttertoast.showToast(
-          //     msg: "Error en la consulta, intentalo nuevamente",
-          //     toastLength: Toast.LENGTH_LONG,
-          //     gravity: ToastGravity.BOTTOM,
-          //   );
-          // }
+          
+          if(place.length > 0){
+            //elimino la informacion repetida de la lista
+            Map<String, DataOfPlace> mp = {};
+            for(var item in place){
+              mp[item.title] = item;
+            }
+            info2.infoPlace = mp.values.toList();
+          }
+          
         }
         else{
           print("Error en la consulta, intentalo nuevamente");
@@ -168,9 +147,6 @@ class ConsultServer{
     }
   }
 
-
-
-
   Future<void> getInfoFromServer(String urlComplete, InfoRouteServer info3) async {
     try{
       legs = null;
@@ -182,7 +158,7 @@ class ConsultServer{
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
 
-      var resp = await http.get(urlComplete, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 15));
+      var resp = await http.get(urlComplete, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
       if(resp.statusCode == 200){
         var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
         if(jsonResp["error"] == null){
@@ -222,8 +198,8 @@ class ConsultServer{
               legs.add(
                 LegsInfo(
                   distance: distance,
-                  startTime: startTime,
-                  endTime: endTime,
+                  startTime: startTimeInitial,
+                  endTime: endTimeFinal,
                   mode: mode,
                   route: route,
                   routeColor: routeColor,
@@ -263,6 +239,7 @@ class ConsultServer{
         else{
           print("Error: ${jsonResp["error"]["id"]}");
           print("${jsonResp["error"]["msg"]}");
+          //MessageDialog();
         }
       }
       else{
@@ -363,8 +340,8 @@ class GetIconsInfoCard{
               routeTextColor: routeTextColor,
             )
           );
-
         }
+        
         info3.listOfInfo.add(
           IconList(
             timeArrived: timeArrived,
@@ -540,12 +517,7 @@ class InnerIconsInfo extends ChangeNotifier{
       }
       element.removeLast();
       route.tileList.add(element);
-      //listOfInfo.value.add(element);
-      //tile.value.add(element);
     }
-    //ic.iconListInner.add(element)
-    //tile.notifyListeners();
-    //listOfInfo.notifyListeners();
   }
 }
 
@@ -621,30 +593,25 @@ class GetIcons{
         data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
         data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
       }
-      else{
-        if(info3.infoWalkList[indexC.value].legs[y].mode == "BUS"){
-          data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
-          data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
-          data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
-          data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
-        }
-        else{
-          if(info3.infoWalkList[indexC.value].legs[y].mode == "BIKE"){
-            data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
-            data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
-            data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
-            data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
-          }
-          else{
-            if(info3.infoWalkList[indexC.value].legs[y].mode == "WALK"){
-              data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
-              data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
-              data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
-              data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
-            }
-          }
-        }
+      else if (info3.infoWalkList[indexC.value].legs[y].mode == "BUS"){
+        data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
+        data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
+        data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
+        data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
       }
+      else if(info3.infoWalkList[indexC.value].legs[y].mode == "BIKE"){
+        data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
+        data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
+        data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
+        data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
+      }
+      else{ //WALK
+        data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
+        data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
+        data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
+        data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
+      }
+      
       //data2.add(data);
       listIcon.value.add(data);
     }
@@ -657,13 +624,9 @@ class GetIcons{
 
 class FillInInformation{
 
-  List<CardInfoRoutes> cardInfo;
+  List<CardInfoRoutes> cardInfo = null;
   //InfoRouteServer info3;
   //ProcessData info;
-
-  FillInInformation(){
-
-  }
 
   Color hexColor(String hexString){
     var buffer = StringBuffer();
@@ -680,34 +643,32 @@ class FillInInformation{
     //cardInfo = [];
     info.infoRoutes = null;
     info.infoRoutes = [];
-    double sizeIcon = 35.0; //widthDivider = 70.0;
-    //print("El indice es: ${widget.index}");
-    
+    double sizeIcon = 35.0;
+    dynamic iconTransport = null, distance = null, originIcon = null, currentIcon = null, endIcon = null, lineRoute = null;
+    String transport = "";
+
     for(int x = 0; x < info3.infoWalkList.length; x++){
-      dynamic iconTransport = null, distance = null, startIcon = null, endIcon = null, lineRoute = null;
-      String transport = "";
       cardInfo = null;
       cardInfo = [];
-      //info3.tileList[index][ind]
 
-      if(x == 0){
-        startIcon = Icon( //icono del punto de origen
-          Icons.location_on, 
-          color: Color.fromRGBO(0, 0, 0, 1.0),
-        );
-      }
-      else if(x == info3.infoWalkList.length - 1){
-        endIcon = Icon( //icono del punto de destino
-          Icons.location_on, 
-          color: Color.fromRGBO(105, 190, 50, 1.0),
-        );
-      }
+      originIcon = Icon( //icono del punto de origen
+        Icons.location_on, 
+        color: Color.fromRGBO(0, 0, 0, 1.0),
+      );
+
+      endIcon = Icon( //icono del punto de destino
+        Icons.location_on, 
+        color: Color.fromRGBO(105, 190, 50, 1.0),
+      );
 
       for(int y = 0; y < info3.infoWalkList[x].legs.length; y++){
         int duration = info3.infoWalkList[x].legs[y].durationTransport.toInt();
         duration = (duration / 60).truncate(); //en minutos
         transport = info3.infoWalkList[x].legs[y].mode.toString().toLowerCase(); //nombre del medio de transporte en minuscula
         String transportMedium = "";
+
+        /////////////////////////////
+        
         if(transport == "subway"){
           lineRoute = Container(
             height: 70.0,
@@ -716,15 +677,13 @@ class FillInInformation{
               borderRadius: BorderRadius.all(Radius.circular(20)),
               color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
             ),
-            
           );
 
-          if(x != 0){
-            startIcon = Icon(
-              Icons.directions_subway, 
-              color: Color.fromRGBO(0, 0, 0, 1.0),
-            );
-          }
+          currentIcon = Icon(
+            Icons.directions_subway, 
+            color: Color.fromRGBO(0, 0, 0, 1.0),
+          );
+
           distance = Row(
             children: [
               Icon(
@@ -757,126 +716,128 @@ class FillInInformation{
             color: Colors.grey,
           );
         }
-        else{
-          if(transport == "bus"){
-            lineRoute = Container(
-              height: 70.0,
-              width: 7.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+        else if(transport == "bus"){
+          lineRoute = Container(
+            height: 70.0,
+            width: 7.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+            ),
+          );
+
+          currentIcon = Icon(
+            Icons.directions_bus, 
+            color: Color.fromRGBO(0, 0, 0, 1.0)
+          );
+
+          distance = Row(
+            children: [
+              Icon(
+                Icons.directions_bus,
+                size: sizeIcon,
+                color: Colors.black,
               ),
-            );
-            if(x != 0){
-              startIcon = Icon(
-                Icons.directions_bus, 
-                color: Color.fromRGBO(0, 0, 0, 1.0)
-              );
-            }
-            distance = Row(
-              children: [
-                Icon(
-                  Icons.directions_bus,
-                  size: sizeIcon,
-                  color: Colors.black,
+              Container(
+                height: 27.0,
+                width: 27.0,
+                decoration: BoxDecoration(
+                  color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
                 ),
-                Container(
-                  height: 27.0,
-                  width: 27.0,
-                  decoration: BoxDecoration(
-                    color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
-                  ),
-                  child: Center(
-                    child: Text(
-                      info3.infoWalkList[x].legs[y].route,
-                      style: TextStyle(
-                        fontFamily: "AurulentSans-Bold",
-                        color: hexColor(info3.infoWalkList[x].legs[y].routeTextColor),
-                      ),
+                child: Center(
+                  child: Text(
+                    info3.infoWalkList[x].legs[y].route,
+                    style: TextStyle(
+                      fontFamily: "AurulentSans-Bold",
+                      color: hexColor(info3.infoWalkList[x].legs[y].routeTextColor),
                     ),
                   ),
                 ),
-              ],
-            );
-            transportMedium = "Use route";
-            iconTransport = Icon(
-              Icons.directions_bus,
-              size: 35.0,
-              color: Colors.grey,
-            );
-          }
-          else{
-            if(transport == "bike"){
-              lineRoute = Container(
-                height: 70.0,
-                width: 7.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
-                ),
-              );
-              if(x != 0){
-                startIcon = Icon(
-                  Icons.directions_bike, 
-                  color: Color.fromRGBO(0, 0, 0, 1.0)
-                );
-              }
-              transportMedium = "Use route";
-              iconTransport = Icon(
-                Icons.directions_bike,
-                size: 35.0,
-                color: Colors.grey,
-              );
-            }
-            else{
-              if(transport == "walk"){
-                distance = Text((info3.infoWalkList[x].legs[y].distance).toInt().toString() + "m");
-                lineRoute = Container(
-                  height: 70.0,
-                  width: 7.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    color: Color.fromRGBO(0, 0, 0, 1.0),
-                  ),
-                );
-                if(x != 0){
-                  startIcon = Icon(
-                    Icons.directions_walk, 
-                    color: Color.fromRGBO(0, 0, 0, 1.0),
-                  ); 
-                }
-                transportMedium = "Walk";
-                iconTransport = Icon(
-                  Icons.directions_walk,
-                  size: 35.0,
-                  color: Colors.grey,
-                );
-              }
-            }
-          }
+              ),
+            ],
+          );
+          transportMedium = "Use route";
+          iconTransport = Icon(
+            Icons.directions_bus,
+            size: 35.0,
+            color: Colors.grey,
+          );
+        }
+        else if(transport == "bike"){
+          lineRoute = Container(
+            height: 70.0,
+            width: 7.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+            ),
+          );
+
+          currentIcon = Icon(
+            Icons.directions_bike, 
+            color: Color.fromRGBO(0, 0, 0, 1.0)
+          );
+
+          transportMedium = "Use route";
+          iconTransport = Icon(
+            Icons.directions_bike,
+            size: 35.0,
+            color: Colors.grey,
+          );
+        }
+        else{ //walk
+          distance = Text(
+            (info3.infoWalkList[x].legs[y].distance).toInt().toString() + "m",
+            style: TextStyle(
+              fontFamily: "AurulentSans-Bold",
+            ),
+          );
+          lineRoute = Container(
+            height: 70.0,
+            width: 7.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              color: Color.fromRGBO(0, 0, 0, 1.0),
+            ),
+          );
+
+          currentIcon = Icon(
+            Icons.directions_walk, 
+            color: Color.fromRGBO(0, 0, 0, 1.0),
+          ); 
+
+          transportMedium = "Walk";
+          iconTransport = Icon(
+            Icons.directions_walk,
+            size: 35.0,
+            color: Colors.grey,
+          );
         }
         
         var sTime = info3.infoWalkList[x].legs[y].startTime;
-        final now1 = Duration(seconds: sTime);
-        String startTime = "${now1.inHours}:${now1.inMinutes}"; //TODO: verificar por esta cantidad
-
-        TimeOfDay releaseTime = TimeOfDay(hour: int.parse("${now1.inHours}"), minute: int.parse("${now1.inMinutes}"));
-        print(releaseTime);
-        //var ff = DateFormat("hh:mma").format(startTime);
+        var result1 = await convertSecToDay(sTime);
+        String valueStartTime = "${result1.item2}:${result1.item3}";
+        DateTime date1 = DateFormat("HH:mm").parse(valueStartTime);
+        String startTime = DateFormat("hh:mma").format(date1);
+        startTime = startTime.toLowerCase();
 
         var eTime = info3.infoWalkList[x].legs[y].endTime;
-        final now2 = Duration(seconds: eTime);
-        String endTime = "${now2.inHours}:${now2.inMinutes}"; //TODO: verificar por esta cantidad
+        var result2 = await convertSecToDay(eTime);
+        String valueEndTime = "${result2.item2}:${result2.item3}";
+        DateTime date2 = DateFormat("HH:mm").parse(valueEndTime);
+        String endTime = DateFormat("hh:mma").format(date2);
+        endTime = endTime.toLowerCase();
 
         var startsIn = info3.infoWalkList[x].legs[y].nameFrom; //lugar de origen
         var endsIn = info3.infoWalkList[x].legs[y].nameTo; //lugar de destino
 
         cardInfo.add(
           CardInfoRoutes(
-            hourStart: "10:03 am", /*startTime,*/
+            hourStart: startTime,
             iconTransportMedium: iconTransport,
-            hourEnds: "10:40 am", /*endTime,*/
-            startIcon: startIcon,
+            hourEnds: endTime,
+            startIcon: originIcon,
+            currentIcon: currentIcon,
             lineRoute: lineRoute,
             endIcon: endIcon,
             placeStartIn: startsIn,
@@ -888,21 +849,32 @@ class FillInInformation{
               transport == "bus" ?
                 distance:
               transport == "bike" ?
-                Container(
+                Container( //TODO: falta poner la informacion (distance) en bike
                   height: 20.0,
                   width: 20.0,
                   color: Colors.yellow,
-                ): //TODO: falta poner la informacion (distance) en bike
+                ): 
                 distance,
             time: "$duration min",
           ),
         );
-        startIcon = Container();
       }
-      //auxList = cardInfo;
       info.infoRoutList.add(cardInfo);
     }
-    
   }
-    
+
+  Future<Tuple4<int, int, int, int>>convertSecToDay(int n){
+    int day = n ~/ (24 * 3600); 
+  
+    n = n % (24 * 3600); 
+    int hour = n ~/ 3600; 
+  
+    n %= 3600; 
+    int minutes = n ~/ 60; 
+  
+    n %= 60; 
+    int seconds = n;
+
+    return Future.value(Tuple4(day, hour, minutes, seconds));
+  }
 }

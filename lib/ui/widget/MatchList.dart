@@ -53,7 +53,6 @@ class _MatchListState extends State<MatchList> {
       child: ListView.separated(
         itemCount: info2.infoPlace.length,
         separatorBuilder: (_, __) => Divider(height: 1.5),
-        
         itemBuilder: (BuildContext context, int index){
           return Container(
             width: MediaQuery.of(context).size.width,
@@ -63,15 +62,15 @@ class _MatchListState extends State<MatchList> {
             ),
             child: ListTile(
               title: Text(
-                "Nombre: " + info2.infoPlace[index].title,
+                info2.infoPlace[index].title,
                 style: TextStyle(
                   fontFamily: "AurulentSans-Bold",
                   fontSize: 25.0,
-                  color: Color.fromRGBO(105, 190, 50, 1.0)
+                  color: Color.fromRGBO(105, 190, 50, 1.0),
                 ),
               ),
               subtitle: Text(
-                "Prueba - Autocompletado - lista",
+                info2.infoPlace[index].title,
                 style: TextStyle(
                   fontFamily: "AurulentSans-Bold",
                 ),
@@ -79,7 +78,7 @@ class _MatchListState extends State<MatchList> {
               leading: Icon(
                 Icons.location_on,
                 size: 40.0,
-                color: Color.fromRGBO(105, 190, 50, 1.0),
+                color: widget.focusDestiny.hasFocus ? Color.fromRGBO(105, 190, 50, 1.0) : Color.fromRGBO(0, 0, 0, 1.0),
               ),
               onTap: (){
                 try{
