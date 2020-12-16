@@ -86,7 +86,7 @@ class AutoComplete extends StatelessWidget {
       textChanged: (val) async {
         if(val.length >= 3){
           info.dataText.text = val;
-          await consult.getInfoInMaps(info, info2);
+          await consult.getInfoInSearch(info, info2);
         }
         if(val.length >= 0 && val.length <= 2 ){
           consult.place = null;

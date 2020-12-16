@@ -43,20 +43,7 @@ class CardInfoRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     info3 = Provider.of<InfoRouteServer>(context);
     info = Provider.of<ProcessData>(context);
-    //giil = Provider.of<GetIconInList>(context);
-    //giil = Provider.of<GetIconInList>(context);
-    //giil = GetIconInList(context);
-
-
-    //giil = GetIconInList(context); //no olvidar descomentar esto //Provider.of<GetIconInList>(context);
-    //giil.ic.indexC.value = index; //no olvidar descomentar esto
-    //giil.ic.getInfoIcon(); //no olvidar descomentar esto
-
-
-    //gii = Provider.of<GetInnerIconsInfo>(context);
-    //routes = Provider.of<GetDataOfRoutes>(context);
-    //gii = Provider.of<InnerIconsInfo>(context);
-
+    
     return ListTile(
       title: Padding(
         padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),

@@ -192,7 +192,7 @@ class InfoRouteServer with ChangeNotifier{
 
   List<IconList> listInfoIcon = [];
 
-  int index1 = 0;
+  int index1 = 0, bestT = 0;
 
 
   get infoWalkList => infoWalk;
@@ -222,6 +222,12 @@ class InfoRouteServer with ChangeNotifier{
   get listOfInfo => listInfoIcon;
   set listOfInfo(List<IconList> val){
     listInfoIcon = val;
+    notifyListeners();
+  }
+
+  get bestTime => bestT;
+  set bestTime(int val){
+    bestT = val;
     notifyListeners();
   }
 }

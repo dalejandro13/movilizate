@@ -36,17 +36,17 @@ class TextOriginDestiny extends StatelessWidget {
       ),
       child: TextFormField(
         controller: control,
-        focusNode: focusText, //_focusOrigin, //info.focusOrigin,
+        focusNode: focusText,
         style: TextStyle(
           fontFamily: "AurulentSans-Bold",
-          color: color, //Color.fromRGBO(81, 81, 81, 1.0),
+          color: color,
           fontSize: 18.0,
         ),
         decoration: InputDecoration(
           hintText: text,
           hintStyle: TextStyle(
             fontFamily: "AurulentSans-Bold",
-            color: color, //Color.fromRGBO(81, 81, 81, 1.0),
+            color: color,
             fontSize: 20.0,
           ),
           border: InputBorder.none,
@@ -55,7 +55,7 @@ class TextOriginDestiny extends StatelessWidget {
             icon: Icon(Icons.location_on),
             onPressed: (){},
             iconSize: 20.0,
-            color: color, //Color.fromRGBO(81, 81, 81, 1.0),
+            color: color,
           ),
           suffixIcon: IconButton(
             icon: Icon(Icons.close),
@@ -71,13 +71,13 @@ class TextOriginDestiny extends StatelessWidget {
               }
             },
             iconSize: 20.0,
-            color: color, //Color.fromRGBO(81, 81, 81, 1.0),
+            color: color,
           ),
         ),
         onChanged: activate ? (val) async {
           if(val.length >= 3){
             info.dataText.text = val;
-            await consult.getInfoInMaps(info, info2);
+            await consult.getInfoInSearch(info, info2);
           }
           else if(val.length >= 0 && val.length <= 2){
             consult.place = null;

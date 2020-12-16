@@ -14,8 +14,8 @@ class ScreenResult extends StatefulWidget {
 
   ScreenResult(ConsultServer consult, BuildContext context){
     this.consult = consult;
-    //giic = GetIconsInfoCard(context); //esta bien
-    //print(giic.listOfInfo.value); //esta bien
+    //giic = GetIconsInfoCard(context);
+    //print(giic.listOfInfo.value);
   }
 
   @override
@@ -26,6 +26,7 @@ class _ScreenResultState extends State<ScreenResult> {
 
   Color color1 = Color.fromRGBO(81, 81, 81, 1.0);
   Color color2 = Color.fromRGBO(105, 190, 50, 1.0);
+  bool passOne = true;
 
   @override
   Widget build(BuildContext context){
@@ -119,7 +120,8 @@ class _ScreenResultState extends State<ScreenResult> {
                           ),
                           Expanded(
                             flex: 8,
-                            child: ButtonsModesOfTransport(context)
+                            child: /*Icon(Icons.directions_bus, size: 60.0, color: Colors.white)*/ 
+                              ButtonsModesOfTransport(context, passOne),
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 30.0),

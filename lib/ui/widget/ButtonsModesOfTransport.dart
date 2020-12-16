@@ -1,31 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
-import 'package:movilizate/repository/ConsultServer.dart';
 import 'package:provider/provider.dart';
 
 class ButtonsModesOfTransport extends StatefulWidget {
-  //GetDataLegs dataLegs;
-  bool subway = false, bus = false, bike = false, walk = false;
-  //InnerIconsInfo gii;
-  //GetInnerIconsInfo gii;
-  //InfoRouteServer ic;
+  bool subway = false, bus = true, bike = false, walk = false;
   InfoRouteServer info3;
-  //GetIconInList giil;
+  bool passOne;
 
-  ButtonsModesOfTransport(BuildContext context) {
-    //giil = GetIconInList(context);
-    //this.subway = subway;
-    //this.bus = bus;
-    //this.bike = bike;
-    //this.walk = walk;
-    //dataLegs = GetDataLegs(context);
-    //this.gii = gii; //InnerIconsInfo(context); 
-    //gii = GetInnerIconsInfo(context);    
+  ButtonsModesOfTransport(BuildContext context, bool passOne) {
+    this.passOne = passOne;   
   }
 
   @override
-  _ButtonsModesOfTransportState createState() =>
-      _ButtonsModesOfTransportState();
+  _ButtonsModesOfTransportState createState() => _ButtonsModesOfTransportState();
 }
 
 class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
@@ -42,72 +29,90 @@ class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
           child: Row(
             children: [
               InkWell(
-                onTap: index == 0 ? (){
-                  setState(() {
-                    widget.subway = true;
-                    widget.bus = false;
-                    widget.bike = false;
-                    widget.walk = false;
-                  });
-                }:
-                index == 1 ? (){
-                  setState(() {
-                    widget.subway = false;
-                    widget.bus = true;
-                    widget.bike = false;
-                    widget.walk = false;
-                  });              
-                }:
-                index == 2 ? (){
-                  setState(() {
-                    widget.subway = false;
-                    widget.bus = false;
-                    widget.bike = true;
-                    widget.walk = false;
-                  });
-                }:
-                (){
-                  setState(() {
-                    widget.subway = false;
-                    widget.bus = false;
-                    widget.bike = false;
-                    widget.walk = true;
-                    //widget.giil.ic.listIcon.value[0].clear();
-                    //widget.info3.tileList[0].clear();
-                  });
-                },
+                onTap: null,
+
+                //NO OLVIDAR DESCOMENTAR ESTO
+                // index == 0 ? (){
+                //   setState(() {
+                //     widget.subway = true;
+                //     widget.bus = false;
+                //     widget.bike = false;
+                //     widget.walk = false;
+                //   });
+                // }:
+                // index == 1 ? (){
+                //   setState(() {
+                //     widget.subway = false;
+                //     widget.bus = true;
+                //     widget.bike = false;
+                //     widget.walk = false;
+                //   });              
+                // }:
+                // index == 2 ? (){
+                //   setState(() {
+                //     widget.subway = false;
+                //     widget.bus = false;
+                //     widget.bike = true;
+                //     widget.walk = false;
+                //   });
+                // }:
+                // (){
+                //   setState(() {
+                //     widget.subway = false;
+                //     widget.bus = false;
+                //     widget.bike = false;
+                //     widget.walk = true;
+                //     //widget.giil.ic.listIcon.value[0].clear();
+                //     //widget.info3.tileList[0].clear();
+                //   });
+                // },
 
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+
                     index == 0 ? 
                       Icon(
                         Icons.directions_subway,
                         size: 60.0,
                         color: Colors.white,
-                      ): 
-                    index == 1 ? 
+                      ):
                       Icon(
-                        Icons.directions_bus,
+                        Icons.directions_subway,
                         size: 60.0,
                         color: Colors.white,
-                      ): 
-                    index == 2 ? 
-                      Icon(
-                        Icons.directions_bike,
-                        size: 60.0,
-                        color: Colors.white,
-                      ): 
-                    Icon(
-                      Icons.directions_walk,
-                      size: 60.0,
-                      color: Colors.white,
-                    ),
+                      ),
+
+                    //NO OLVIDAR DESCOMENTAR ESTO
+                    // index == 0 ? 
+                    //   Icon(
+                    //     Icons.directions_subway,
+                    //     size: 60.0,
+                    //     color: Colors.white,
+                    //   ): 
+                    // index == 1 ? 
+                    //   Icon(
+                    //     Icons.directions_bus,
+                    //     size: 60.0,
+                    //     color: Colors.white,
+                    //   ): 
+                    // index == 2 ? 
+                    //   Icon(
+                    //     Icons.directions_bike,
+                    //     size: 60.0,
+                    //     color: Colors.white,
+                    //   ): 
+                    // Icon(
+                    //   Icons.directions_walk,
+                    //   size: 60.0,
+                    //   color: Colors.white,
+                    // ),
+
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "35 min",
+                          "${widget.info3.bestTime} min", //tiempo optimo
                           style: TextStyle(
                             fontFamily: "AurulentSans-Bold",
                             color: Colors.white
@@ -139,11 +144,29 @@ class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
       itemBuilder: (BuildContext context, int index){
 
         if(index == 1 && widget.info3.listOfTransport[index]){
-          return cardButton(index, widget.info3.listOfTransport[index], true/*widget.bus*/);
+          if(widget.passOne){
+            widget.passOne = false;
+            return cardButton(index, widget.info3.listOfTransport[index], true);
+          }
         }
         else{
-          return Container();
+          if(widget.passOne){
+            widget.passOne = false;
+            return cardButton(index, widget.info3.listOfTransport[index], true);
+          }
         }
+
+        /////////////////////NO BORRAR, MUY IMPORTANTE///////////////////////////
+        ///
+        // if(index == 1 && widget.info3.listOfTransport[index]){
+        //   return cardButton(index, widget.info3.listOfTransport[index], true);
+        // }
+        // else{
+        //   return Container(); //no olvidar descomentar esto
+        // }
+        //
+        /////////////////////////////////////////////////////////////////////////
+        
 
         //NO BORRAR ESTO
         // if(index == 0 && widget.info3.listOfTransport[index]){
@@ -218,7 +241,5 @@ class _ButtonsModesOfTransportState extends State<ButtonsModesOfTransport>{
     //       },
     //     );
     //   });
-
-
   }
 }

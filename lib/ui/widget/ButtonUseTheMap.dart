@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movilizate/ui/screen/ScreenBigMap.dart';
@@ -26,11 +25,19 @@ class _UseTheMapState extends State<UseTheMap> {
             if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenBigMap()));
             }
+            else{
+              Fluttertoast.showToast(
+                msg: "Estas desconectado de internet, intenta conectarte a una red",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                fontSize: 30.0,
+              );
+            }
           } 
           catch(e) {
             Fluttertoast.showToast(
               msg: "Estas desconectado de internet, intenta conectarte a una red",
-              toastLength: Toast.LENGTH_LONG,
+              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               fontSize: 30.0,
             );

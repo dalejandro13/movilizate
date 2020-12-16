@@ -4,18 +4,16 @@ import 'package:provider/provider.dart';
 
 class CardWithInfo extends StatelessWidget {
 
-  ProcessData info;
-  InfoRouteServer info3;
   int index;
 
   CardWithInfo(BuildContext context, int index){
-    info = Provider.of<ProcessData>(context);
-    info3 = Provider.of<InfoRouteServer>(context);
     this.index = index;
   }
   
   @override
   Widget build(BuildContext context) {
+    var info = Provider.of<ProcessData>(context);
+    var info3 = Provider.of<InfoRouteServer>(context);
     return ListView.separated(
       separatorBuilder: (_,__) => Container(width: 20.0, height: 20.0,child: Divider(height: 5.0, color: Colors.grey[300])),
       itemCount: info.infoRoutList[index].length,
@@ -23,7 +21,7 @@ class CardWithInfo extends StatelessWidget {
         return Container(
           height: 180.0,
           child: ListTile(
-          onTap: (){},
+          onTap: null,
           title: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(

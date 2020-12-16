@@ -98,8 +98,21 @@ class ConsultServer{
     }
   }
 
-  Future<void> getInfoInMaps(ProcessData info, DataOfPlace info2) async {
+  Future<void> getInfoInSearch(ProcessData info, DataOfPlace info2) async {
+
+    //https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=country=colombia;state=antioquia&q=san jose&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w
+    
+    // String urlBase = "https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=";
+    // String urlUbication = "country=colombia;state=antioquia&q=";
+    // String apiKey = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
+
+    // String urlBase1 = "https://discover.search.hereapi.com/v1/discover?languages=es&limit=20&qq=";
+    // String urlAt = "&at=6.268053,-75.580138";
+    // String urlUbication1 = "country=colombia;state=antioquia&q=";
+    // String apiKey1 = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
+
     String completeUrl = "$urlBase$urlUbication${info.dataText.text}$apiKey";
+
     try{
       if(enter){
         enter = false;
