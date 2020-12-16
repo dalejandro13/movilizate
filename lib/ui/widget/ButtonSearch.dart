@@ -129,7 +129,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
             try{
               var result = await InternetAddress.lookup('google.com'); //verifica la conexion a internet
               if(result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-                if(info.dataOrigin.text != ""){
+                if(info.dataOrigin.text != ""){ 
                   if(info.dataDestiny.text != ""){
                     if(info.getLatitudeOrigin != 0.0 && info.getLongitudeOrigin != 0.0){
                       if(info.getLatitudeDestiny != 0.0 && info.getLongitudeDestiny != 0.0){
