@@ -77,7 +77,7 @@ class TextOriginDestiny extends StatelessWidget {
         onChanged: activate ? (val) async {
           if(val.length >= 3){
             info.dataText.text = val;
-            await consult.getInfoInSearch(info, info2);
+            await consult.getInfoInSearch(info, info2); //consulto en la base de datos para llenar la lista
           }
           else if(val.length >= 0 && val.length <= 2){
             consult.place = null;

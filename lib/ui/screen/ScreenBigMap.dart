@@ -34,6 +34,7 @@ class _ScreenBigMapState extends State<ScreenBigMap> {
         }
         else {
           print("Map scene not loaded. MapError: " + error.toString());
+          readyToReturn = true;
         }
       });
     }

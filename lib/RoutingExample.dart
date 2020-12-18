@@ -17,10 +17,12 @@
  * License-Filename: LICENSE
  */
 
+import 'dart:io';
 import 'dart:math';
 //import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart';
@@ -125,7 +127,7 @@ class RoutingExample {
             }
             showModalBottomSheet(
               context: _context,
-              builder: (ctx) => _buildInfoBottom(ctx)
+              builder: (context) => _buildInfoBottom(context)
             );
           }
           Future.delayed(Duration(seconds: 1));
@@ -169,7 +171,7 @@ class RoutingExample {
 
               Expanded(
                 flex: 1,
-                child: Container(),
+                child: SizedBox(),
               ),
 
               Expanded(
@@ -182,12 +184,27 @@ class RoutingExample {
                     color: material.Color.fromRGBO(87, 114, 26, 1.0),
                   ),
                   child: InkWell(
-                    onTap: () {
-                      info.getLatitudeOrigin = coorList[0];
-                      info.getLongitudeOrigin = coorList[1];
-                      info.dataOrigin.text = "${coorList[0]} , ${coorList[1]}";
-                      Navigator.of(_context).pop();
-                      Navigator.of(_context).pop();
+                    onTap: () async {
+                      try{
+                        final result = await InternetAddress.lookup("google.com");
+                        if(result.isNotEmpty && result[0].rawAddress.isNotEmpty){
+                          info.getLatitudeOrigin = coorList[0];
+                          info.getLongitudeOrigin = coorList[1];
+                          info.dataOrigin.text = "${coorList[0]} , ${coorList[1]}";
+                          Navigator.of(_context).pop();
+                          Navigator.of(_context).pop();
+                        }
+                      }
+                      catch(e){
+                        Fluttertoast.showToast(
+                          msg: "Sin conexion a internet, conectate a internet e intentalo nuevamente",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
+                          fontSize: 20.0,
+                        );
+                      }
                     },
                     child: Center(
                       child: Text(
@@ -218,12 +235,27 @@ class RoutingExample {
                     color: material.Color.fromRGBO(87, 114, 26, 1.0),
                   ),
                   child: InkWell(
-                    onTap: () {
-                      info.getLatitudeDestiny = coorList[0];
-                      info.getLongitudeDestiny = coorList[1];
-                      info.dataDestiny.text = "${coorList[0]} , ${coorList[1]}";
-                      Navigator.of(_context).pop();
-                      Navigator.of(_context).pop();
+                    onTap: () async {
+                      try{
+                        final result = await InternetAddress.lookup("google.com");
+                        if(result.isNotEmpty && result[0].rawAddress.isNotEmpty){
+                          info.getLatitudeDestiny = coorList[0];
+                          info.getLongitudeDestiny = coorList[1];
+                          info.dataDestiny.text = "${coorList[0]} , ${coorList[1]}";
+                          Navigator.of(_context).pop();
+                          Navigator.of(_context).pop();
+                        }
+                      }
+                      catch(e){
+                        Fluttertoast.showToast(
+                          msg: "Sin conexion a internet, conectate a internet e intentalo nuevamente",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
+                          fontSize: 20.0,
+                        );
+                      }
                     },
                     child: Center(
                       child: Text(

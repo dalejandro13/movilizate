@@ -112,6 +112,7 @@ class ConsultServer{
     // String apiKey1 = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
 
     String completeUrl = "$urlBase$urlUbication${info.dataText.text}$apiKey";
+    print(completeUrl);
 
     try{
       if(enter){

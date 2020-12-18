@@ -78,6 +78,7 @@ class _ScreenMapState extends State<ScreenMap> {
       }
       else {
         print("Map scene not loaded. MapError: " + error.toString());
+        readyToReturn = true;
       }
     });
 

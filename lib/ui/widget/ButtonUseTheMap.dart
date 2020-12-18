@@ -30,7 +30,9 @@ class _UseTheMapState extends State<UseTheMap> {
                 msg: "Estas desconectado de internet, intenta conectarte a una red",
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.BOTTOM,
-                fontSize: 30.0,
+                backgroundColor: Colors.grey,
+                textColor: Colors.white,
+                fontSize: 20.0,
               );
             }
           } 
@@ -39,7 +41,9 @@ class _UseTheMapState extends State<UseTheMap> {
               msg: "Estas desconectado de internet, intenta conectarte a una red",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
-              fontSize: 30.0,
+              backgroundColor: Colors.grey,
+              textColor: Colors.white,
+              fontSize: 20.0,
             );
           }
         },
@@ -59,7 +63,7 @@ class _UseTheMapState extends State<UseTheMap> {
                 color: Color.fromRGBO(81, 81, 81, 1.0),
                 fontSize: 25.0,
               ),
-            )
+            ),
           ],
         ),
       ),

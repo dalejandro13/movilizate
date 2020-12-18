@@ -200,7 +200,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                       info.getLongitudeDestiny = aux3;
                                     }
                                     else{
-                                        Fluttertoast.showToast(
+                                      Fluttertoast.showToast(
                                         msg: "Falta ingresar datos de origen ó el destino",
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
