@@ -18,6 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 void main() {
+  //linea 1, linea 2, linea A, linea TA -> bien
+  //
   int index = 0;
   SdkContext.init(IsolateOrigin.main);
   // Making sure that BuildContext has MaterialLocalizations widget in the widget tree,

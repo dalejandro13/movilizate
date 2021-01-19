@@ -74,8 +74,8 @@ class _ScreenSearchState extends State<ScreenSearch> {
     //var info2 = Provider.of<DataOfPlace>(context);
     info = Provider.of<ProcessData>(context, listen: false);
     _locationData = await location.getLocation();
-    info.getLatitudeOrigin = _locationData.latitude;
-    info.getLongitudeOrigin = _locationData.longitude;
+    info.getLatitudeOrigin = double.parse(_locationData.latitude.toStringAsFixed(6));
+    info.getLongitudeOrigin = double.parse(_locationData.longitude.toStringAsFixed(6));
     info.dataOrigin.text = "${info.getLatitudeOrigin}, ${info.getLongitudeOrigin}";
   }
 

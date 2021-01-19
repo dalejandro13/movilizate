@@ -36,7 +36,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
   List<int> timeList;
   HereMapController hereMapController;
   ShowTheRoute showInfo;
-  String urlBase = "http://181.140.181.103:9780/otp/routers/default/plan?";
+  String urlBase = "http://190.29.195.216:9780/otp/routers/default/plan?"; //"http://181.140.181.103:9780/otp/routers/default/plan?";
   String urlOrigin = null;
   String urlDestiny = null;
   String urlTime = null;
@@ -77,7 +77,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
     showInfo = null;
 
     now = DateTime.now();
-    dfd = DateFormat("dd-MM-yyyy");
+    dfd = DateFormat("MM-dd-yyyy");
     dft = DateFormat("hh:mma");
     String actualDate = dfd.format(now);
     String actualTime = dft.format(now);
@@ -88,21 +88,15 @@ class _ButtonSearchState extends State<ButtonSearch> {
     urlTime = "&time=$actualTime";
     urlDate = "&date=$actualDate";
     
-    //////////////////////////////NO OLVIDAR DESCOMENTAR TODO ESTO///////////////////////
-    ///
-    // urlMode = "&mode=TRANSIT,WALK";
-    // urlRest = "&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en";
-    // urlComplete = "$urlBase$urlOrigin$urlDestiny$urlTime$urlDate$urlMode$urlRest";
-    // print(urlComplete);
-    ///
+    ///////////////////////////NO OLVIDAR DESCOMENTAR TODO ESTO///////////////////////
+    urlMode = "&mode=TRANSIT,WALK";
+    urlRest = "&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en";
+    urlComplete = "$urlBase$urlOrigin$urlDestiny$urlTime$urlDate$urlMode$urlRest";
+    print(urlComplete);
+    //URL DE CONSULTA: http://190.29.195.216:9780/otp/routers/default/plan?fromPlace=6.246267,-75.599008&toPlace=6.27436,-75.55569&time=10:19am&date=01-19-2021&mode=TRANSIT,WALK&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en
     ////////////////////////////////////////////////////////////////////////////////////
-
-    // http://181.140.181.103:9780/otp/routers/default/plan?fromPlace=6.246161611111111%2C-75.59900311111111&toPlace=6.340341111111111%2C-75.55916111111111&time=09%3A30am&date=15-12-2020&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en
-    urlComplete = "http://181.140.181.103:9780/otp/routers/default/plan?fromPlace=6.260270778808053%2C-75.56984424591064&toPlace=6.263235600898669%2C-75.55920124053955&time=10%3A43am&date=11-06-2020&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en";
-    //urlComplete = "http://181.140.181.103:9780/otp/routers/default/plan?fromPlace=6.260270778808053%2C-75.56984424591064&toPlace=6.263235600898669%2C-75.55920124053955&time=10:34am&date=11-06-2020&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en";
-
-    await widget.consult.getInfoFromServer(urlComplete, info3);
     
+    await widget.consult.getInfoFromServer(urlComplete, info3);
     showInfo = ShowTheRoute(context, hereMapController);
     showInfo.originAndDestiny().then((wayPoints) async {
       await showInfo.infoWalkRoute(wayPoints);
@@ -122,7 +116,18 @@ class _ButtonSearchState extends State<ButtonSearch> {
         borderRadius: BorderRadius.circular(8.0),
         color: Color.fromRGBO(87, 114, 26, 1.0),
       ),
+      
       child: InkWell(
+        child: Center(
+          child: Text(
+            "Search",
+            style: TextStyle(
+              fontFamily: "AurulentSans-Bold",
+              fontSize: 16.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
         onTap: () async {
           if(!processingData){
             processingData = true;
@@ -140,11 +145,21 @@ class _ButtonSearchState extends State<ButtonSearch> {
                         if(info3.infoWalkList.length > 0){
                           await widget.infoCard.getIconsInfo(context);
                           await widget.iii.getIcon();
+                          // for(int b = 0; b < info3.infoWalkList.length; b++){
+                          //   print(info3.infoWalkList);
+                          // }
                           if(info3.infoWalkList.length > 0 && info3.listOfTransport.length > 0 && info3.listOfInfo.length > 0 && info3.tileList.length > 0){
                             await getOptimalTime();
                             var result1 = await Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenResult(widget.consult, context)));
                             //FocusScope.of(this.context).requestFocus(widget.focusOrigin);
                             //FocusScope.of(this.context).requestFocus(widget.focusDestiny);
+
+                            //eliminar el arreglo del listView
+                            if(result1){
+                              info2.infoPlace.clear();
+                            }
+                            
+
                             processingData = false;
                             if(result1 == "Origen"){
                               widget.focusOrigin.requestFocus();
@@ -153,7 +168,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
                               widget.focusDestiny.requestFocus();
                             }
                             else{
-                              //cuando presiono el boton back, elmina los datos de destino para que el usuario ingrese uno nuevo
+                              //cuando presiono el boton back, elmina los datos de destino para que el usuario ingrese unos nuevos
                               info.dataDestiny.text = "";
                               info.getLatitudeDestiny = 0.0;
                               info.getLongitudeDestiny = 0.0;
@@ -162,6 +177,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
                             
                           }
                           else{
+                            FocusScope.of(context).unfocus();
                             Fluttertoast.showToast(
                               msg: "Informacion incompleta, intentalo nuevamente",
                               toastLength: Toast.LENGTH_SHORT,
@@ -175,6 +191,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
                           }
                         }
                         else{
+                          FocusScope.of(context).unfocus();
                           Fluttertoast.showToast(
                             msg: "Problemas con procesar la informacion, intentalo mas tarde",
                             toastLength: Toast.LENGTH_SHORT,
@@ -188,6 +205,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
                         }
                       }
                       else{
+                        FocusScope.of(context).unfocus();
                         Fluttertoast.showToast(
                           msg: "Ingresa el destino apropiado",
                           toastLength: Toast.LENGTH_SHORT,
@@ -236,6 +254,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
                     // }
                   }
                   else{
+                    FocusScope.of(context).unfocus();
                     Fluttertoast.showToast(
                       msg: "Falta ingresar el destino",
                       toastLength: Toast.LENGTH_SHORT,
@@ -248,6 +267,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
                   }
                 }
                 else{
+                  FocusScope.of(context).unfocus();
                   Fluttertoast.showToast(
                     msg: "Falta ingresar el origen",
                     toastLength: Toast.LENGTH_SHORT,
@@ -264,6 +284,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
               }
             }
             catch(e){
+              FocusScope.of(context).unfocus();
               Fluttertoast.showToast(
                 msg: "No estas conectado a internet, intenta conectarte a una red e intentalo nuevamente",
                 toastLength: Toast.LENGTH_SHORT,
@@ -276,16 +297,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
             }
           }
         },
-        child: Center(
-          child: Text(
-            "Search",
-            style: TextStyle(
-              fontFamily: "AurulentSans-Bold",
-              fontSize: 16.0,
-              color: Colors.white,
-            ),
-          ),
-        ),
+        
       ),
     );
   }

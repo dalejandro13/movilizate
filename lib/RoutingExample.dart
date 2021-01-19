@@ -90,8 +90,10 @@ class RoutingExample {
         if(waitData){
           waitData = false;
           if(coorList.length >= 2){ //condicion si se tiene dos elementos en la lista
+            var lt = double.parse(coorList[0].toStringAsFixed(6));
+            var lg = double.parse(coorList[1].toStringAsFixed(6));
             clearMarkerOfMap();
-            putMarker(coorList[0], coorList[1], true);
+            putMarker(lt, lg, true);
           }
           showModalBottomSheet(
             isDismissible: true,
@@ -157,7 +159,7 @@ class RoutingExample {
           ListTile(
             title: Center(
               child: Text(
-                "${coorList[0].toStringAsFixed(6)} , ${coorList[1].toStringAsFixed(6)}", //"aqui van las coordenadas",
+                "${coorList[0].toStringAsFixed(6)}, ${coorList[1].toStringAsFixed(6)}", //"aqui van las coordenadas",
                 style: TextStyle(
                   fontFamily: "AurulentSans-Bold",
                   color: Colors.white,
@@ -188,9 +190,9 @@ class RoutingExample {
                       try{
                         final result = await InternetAddress.lookup("google.com");
                         if(result.isNotEmpty && result[0].rawAddress.isNotEmpty){
-                          info.getLatitudeOrigin = coorList[0];
-                          info.getLongitudeOrigin = coorList[1];
-                          info.dataOrigin.text = "${coorList[0]} , ${coorList[1]}";
+                          info.getLatitudeOrigin = double.parse(coorList[0].toStringAsFixed(6));
+                          info.getLongitudeOrigin = double.parse(coorList[1].toStringAsFixed(6));
+                          info.dataOrigin.text = "${info.getLatitudeOrigin}, ${info.getLongitudeOrigin}";
                           Navigator.of(_context).pop();
                           Navigator.of(_context).pop();
                         }
@@ -239,9 +241,9 @@ class RoutingExample {
                       try{
                         final result = await InternetAddress.lookup("google.com");
                         if(result.isNotEmpty && result[0].rawAddress.isNotEmpty){
-                          info.getLatitudeDestiny = coorList[0];
-                          info.getLongitudeDestiny = coorList[1];
-                          info.dataDestiny.text = "${coorList[0]} , ${coorList[1]}";
+                          info.getLatitudeDestiny = double.parse(coorList[0].toStringAsFixed(6));
+                          info.getLongitudeDestiny = double.parse(coorList[1].toStringAsFixed(6));
+                          info.dataDestiny.text = "${info.getLatitudeDestiny}, ${info.getLongitudeDestiny}";
                           Navigator.of(_context).pop();
                           Navigator.of(_context).pop();
                         }

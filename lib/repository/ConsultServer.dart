@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_client/curl.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
 import 'package:movilizate/model/iconList.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:movilizate/ui/widget/MessageDialog.dart';
+//import 'package:movilizate/ui/widget/MessageDialog.dart';
 import 'package:tuple/tuple.dart';
+//import 'package:http_client/http_client.dart';
 
 class ConsultServer{
 
@@ -17,8 +19,11 @@ class ConsultServer{
   //   this.context = context;
   // }
 
+  String testUrlBase = "http://192.168.1.200:8888/Api/GetSearchOptions/";
+
+
   String urlBase = "https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=";
-  String urlUbication = "country=colombia;state=antioquia&q=";
+  String urlUbication = "country=colombia;state=antioquia;city=Medellin&q=";
   String apiKey = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
   List<DataOfPlace> place;
   //List<InfoRouteServer> place2;
@@ -83,8 +88,8 @@ class ConsultServer{
             // print(vv.title);
             // print(vv.lat);
             // print(vv.lon);
-            info.getLatitudeOrigin = vv.lat;
-            info.getLongitudeOrigin = vv.lon;
+            info.getLatitudeOrigin = double.parse(vv.lat.toStringAsFixed(6));
+            info.getLongitudeOrigin = double.parse(vv.lon.toStringAsFixed(6));
             info.dataOrigin.text = vv.title;
           }
         }
@@ -98,10 +103,10 @@ class ConsultServer{
     }
   }
 
-  Future<void> getInfoInSearch(ProcessData info, DataOfPlace info2) async {
+  Future<void> getInfoInSearch(ProcessData info, DataOfPlace info2, List<DataOfPlace> place1) async {
 
     //https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=country=colombia;state=antioquia&q=san jose&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w
-    
+
     // String urlBase = "https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=";
     // String urlUbication = "country=colombia;state=antioquia&q=";
     // String apiKey = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
@@ -111,38 +116,77 @@ class ConsultServer{
     // String urlUbication1 = "country=colombia;state=antioquia&q=";
     // String apiKey1 = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
 
-    String completeUrl = "$urlBase$urlUbication${info.dataText.text}$apiKey";
-    print(completeUrl);
+    //String completeUrl = "$urlBase$urlUbication${info.dataText.text}$apiKey"; //NO OLVIDAR DESCOMENTAR ESTO, LINEA ORIGINAL
+    String completeUrl = "$testUrlBase${info.dataText.text}";
+    bool ready1 = false, ready2 = false;
+
+    // final client = CurlClient();
+    // final rs = await client.send(Request('GET', completeUrl));
+    // if(rs.statusCode == 200){
+    //   //final textContent = await rs.readAsString();
+    //   //print(textContent);
+    // }
 
     try{
       if(enter){
         enter = false;
-        if(place.length >= 100){
-          place = null;
-          place = [];
-          info2.infoPlace = null;
-          info2.infoPlace = [];
-        }
+
+        // if(place1.length >= 6){
+        //   place1 = null;
+        //   place1 = [];
+        //   info2.infoPlace = null;
+        //   info2.infoPlace = [];
+        // }
+
         var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 10));
         if(resp.statusCode == 200){
           var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
-          for(var vv in jsonResp["items"]){
-            place.add(
-              DataOfPlace(
-                title: vv["title"],
-                lat: vv["position"]["lat"],
-                lon: vv["position"]["lng"],
-              )
-            );
+
+          for(var vv in jsonResp["hereItems"]["items"]){
+            if(vv["title"] != "Medellín, Colombia"){ //condicional para no tomar el dato si aparece este mensaje
+              place1.add(
+                DataOfPlace(
+                  title: vv["title"],
+                  lat: vv["position"]["lat"],
+                  lon: vv["position"]["lng"],
+                ),
+              );
+              ready1 = true;
+            }
+            else{
+              ready1 = true;
+            }
+          }
+
+          if(jsonResp["gtfsItems"] != null){ //condicional por si el dato es nulo
+            if(ready1){
+              for(var jj in jsonResp["gtfsItems"]["items"]){
+                place1.add(
+                  DataOfPlace(
+                    title: jj["title"],
+                    lat: jj["position"]["lat"],
+                    lon: jj["position"]["lng"],
+                  ),
+                );
+                ready2 = true;
+              }
+            }
+          }
+          else{
+            ready2 = true;
           }
           
-          if(place.length > 0){
-            //elimino la informacion repetida de la lista
-            Map<String, DataOfPlace> mp = {};
-            for(var item in place){
-              mp[item.title] = item;
+          if(ready1 && ready2){
+            ready1 = false;
+            ready2 = false;
+            if(place1.length > 0){
+              //elimino la informacion repetida de la lista
+              Map<String, DataOfPlace> mp = {};
+              for(var item in place1){
+                mp[item.title] = item;
+              }
+              info2.infoPlace = mp.values.toList();
             }
-            info2.infoPlace = mp.values.toList();
           }
           
         }
@@ -187,14 +231,14 @@ class ConsultServer{
           for(var vv in jsonResp["plan"]["itineraries"]){
             legs = null;
             legs = [];
-            duration = vv["duration"]; 
-            startTime = vv["startTime"]; 
-            endTime = vv["endTime"]; 
+            duration = vv["duration"];
+            startTime = vv["startTime"];
+            endTime = vv["endTime"];
             walkTime = vv["walkTime"];
             waitingTime = vv["waitingTime"];
             walkDistance = vv["walkDistance"];
-            for(var ss in vv["legs"]){ 
-              distance = ss["distance"]; 
+            for(var ss in vv["legs"]){
+              distance = ss["distance"];
               startTimeInitial = ss["startTime"];
               endTimeFinal = ss["endTime"];
               mode = ss["mode"];
@@ -671,7 +715,7 @@ class FillInInformation{
       );
 
       endIcon = Icon( //icono del punto de destino
-        Icons.location_on, 
+        Icons.location_on,
         color: Color.fromRGBO(105, 190, 50, 1.0),
       );
 
@@ -863,12 +907,12 @@ class FillInInformation{
               transport == "bus" ?
                 distance:
               transport == "bike" ?
-                Container( //TODO: falta poner la informacion (distance) en bike
+                Container( //TODO: falta poner la informacion (distance) en la opcion de bike
                   height: 20.0,
                   width: 20.0,
                   color: Colors.yellow,
                 ): 
-                distance,
+                distance, //informacion para walking
             time: "$duration min",
           ),
         );

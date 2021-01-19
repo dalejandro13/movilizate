@@ -35,7 +35,8 @@ dependencies:
   location: ^3.0.0
   tuple: ^1.0.3
   intl: ^0.16.1
-  generic_bloc_provider: ^1.0.9    
+  generic_bloc_provider: ^1.0.9
+  http_client: ^1.4.2 
 
   # The following adds the HERE SDK for Flutter plugin folder to your application.
   here_sdk:

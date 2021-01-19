@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class ScreenResult extends StatefulWidget {
 
   ConsultServer consult;
-  //GetIconsInfoCard giic;
+  //GetIconsInfoCard giic;2
 
   ScreenResult(ConsultServer consult, BuildContext context){
     this.consult = consult;
@@ -38,8 +38,7 @@ class _ScreenResultState extends State<ScreenResult> {
     
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
-        return Future(() => false);
+        Navigator.pop(context, true);
       },
       child: Scaffold(
         body: GestureDetector(
@@ -92,6 +91,7 @@ class _ScreenResultState extends State<ScreenResult> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+
                           Padding(
                             padding: EdgeInsets.only(left: 30.0),
                           ),
@@ -102,6 +102,7 @@ class _ScreenResultState extends State<ScreenResult> {
                           Padding(
                             padding: EdgeInsets.only(left: 30.0),
                           ),
+                          
                         ],
                       ),
                     ),
@@ -115,6 +116,7 @@ class _ScreenResultState extends State<ScreenResult> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+
                           Padding(
                             padding: EdgeInsets.only(left: 30.0),
                           ),
@@ -126,6 +128,7 @@ class _ScreenResultState extends State<ScreenResult> {
                           Padding(
                             padding: EdgeInsets.only(left: 30.0),
                           ),
+
                         ],
                       ),
                     ),

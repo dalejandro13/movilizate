@@ -12,6 +12,8 @@ class TextOriginDestiny extends StatelessWidget {
   FocusNode focusText;
   bool activate;
   bool isSecondScreen;
+  List<DataOfPlace> place;
+  int increment = 0;
 
   TextOriginDestiny(String text, ConsultServer consult, Color color, TextEditingController control, FocusNode focusText, bool activate, bool isSecondScreen){
     this.text = text;
@@ -21,6 +23,7 @@ class TextOriginDestiny extends StatelessWidget {
     this.focusText = focusText;
     this.activate = activate;
     this.isSecondScreen = isSecondScreen;
+    place = [];
   }
 
   @override
@@ -63,10 +66,13 @@ class TextOriginDestiny extends StatelessWidget {
               //controller.text = "";
               //info.dataOrigin.text = "";
               control.text = "";
+              increment = 0;
               info2.infoPlace = [];
               if(isSecondScreen){
                 info2.infoPlace = null;
                 info2.infoPlace = [];
+                place = null;
+                place = [];
                 Navigator.pop(context, text);
               }
             },
@@ -75,21 +81,34 @@ class TextOriginDestiny extends StatelessWidget {
           ),
         ),
         onChanged: activate ? (val) async {
+          
           if(val.length >= 3){
-            info.dataText.text = val;
-            await consult.getInfoInSearch(info, info2); //consulto en la base de datos para llenar la lista
+            if(val.length > increment){ //evitar la consulta cuando se empieza a borra en el TextFormField
+              increment = val.length;
+              info.dataText.text = val;
+              await consult.getInfoInSearch(info, info2, place); //consulto en la base de datos para llenar la lista
+            }
+            else{
+              increment = val.length;
+            }
           }
           else if(val.length >= 0 && val.length <= 2){
             consult.place = null;
             info2.infoPlace = null;
             consult.place = [];
             info2.infoPlace = [];
+            place = null;
+            place = [];
+            increment = 0;
           }
           else if(val.length < 0){
+            increment = 0;
             consult.place = null;
             info2.infoPlace = null;
             consult.place = [];
             info2.infoPlace = [];
+            place = null;
+            place = [];
           }
         }:
         null,

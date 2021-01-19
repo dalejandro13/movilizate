@@ -23,6 +23,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 class AutoComplete extends StatelessWidget {
 
   BuildContext context;
+  List<DataOfPlace> place = [];
 
   AutoComplete(context){
     this.context = context;
@@ -86,7 +87,7 @@ class AutoComplete extends StatelessWidget {
       textChanged: (val) async {
         if(val.length >= 3){
           info.dataText.text = val;
-          await consult.getInfoInSearch(info, info2);
+          await consult.getInfoInSearch(info, info2, place);
         }
         if(val.length >= 0 && val.length <= 2 ){
           consult.place = null;

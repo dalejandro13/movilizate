@@ -43,7 +43,6 @@ class _DurationListState extends State<DurationList> {
       },
     );
 
-
     // return ValueListenableBuilder(
     //   valueListenable: widget.routes.infoCard.listOfInfo, //widget.dataLegs.ic.listOfTransport,
     //   builder: (BuildContext context, dynamic value, Widget child){
