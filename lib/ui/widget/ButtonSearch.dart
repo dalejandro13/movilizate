@@ -36,7 +36,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
   List<int> timeList;
   HereMapController hereMapController;
   ShowTheRoute showInfo;
-  String urlBase = "http://190.29.195.216:9780/otp/routers/default/plan?"; //"http://181.140.181.103:9780/otp/routers/default/plan?";
+  String urlBase = "http://181.140.180.63:9780/otp/routers/default/plan?";  //"http://190.29.195.216:9780/otp/routers/default/plan?"; //"http://181.140.181.103:9780/otp/routers/default/plan?";
   String urlOrigin = null;
   String urlDestiny = null;
   String urlTime = null;
@@ -93,9 +93,9 @@ class _ButtonSearchState extends State<ButtonSearch> {
     urlRest = "&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en";
     urlComplete = "$urlBase$urlOrigin$urlDestiny$urlTime$urlDate$urlMode$urlRest";
     print(urlComplete);
-    //URL DE CONSULTA: http://190.29.195.216:9780/otp/routers/default/plan?fromPlace=6.246267,-75.599008&toPlace=6.27436,-75.55569&time=10:19am&date=01-19-2021&mode=TRANSIT,WALK&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en
+    //URL DE CONSULTA: http://181.140.180.63:9780/otp/routers/default/plan?fromPlace=6.246267,-75.599008&toPlace=6.27436,-75.55569&time=10:19am&date=01-19-2021&mode=TRANSIT,WALK&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en
     ////////////////////////////////////////////////////////////////////////////////////
-    
+        
     await widget.consult.getInfoFromServer(urlComplete, info3);
     showInfo = ShowTheRoute(context, hereMapController);
     showInfo.originAndDestiny().then((wayPoints) async {
@@ -134,7 +134,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
             try{
               var result = await InternetAddress.lookup('google.com'); //verifica la conexion a internet
               if(result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-                if(info.dataOrigin.text != ""){ 
+                if(info.dataOrigin.text != ""){
                   if(info.dataDestiny.text != ""){
                     if(info.getLatitudeOrigin != 0.0 && info.getLongitudeOrigin != 0.0){
                       if(info.getLatitudeDestiny != 0.0 && info.getLongitudeDestiny != 0.0){

@@ -33,7 +33,7 @@ class LegsInfo{
   String routeColor;
   String routeTextColor;
   double lonOrig, latOrig, lonDest, latDest, distance; //List<double> lonOrig, latOrig, lonDest, latDest;
-  String nameFrom, nameTo;
+  String nameFrom, nameTo, tripId, stopIdFrom, stopIdTo;
   double durationTransport;
 
   LegsInfo({
@@ -51,6 +51,9 @@ class LegsInfo{
     this.routeColor,
     this.routeTextColor,
     this.durationTransport,
+    this.tripId,
+    this.stopIdFrom,
+    this.stopIdTo,
   });
 }
 
@@ -104,5 +107,16 @@ class InfoRouteServ {
     this.waitingTime,
     this.walkDistance,
     this.legs,
+  });
+}
+
+class CoordInfo{
+  int secuence, distance;
+  double latitude, longitude;
+  CoordInfo({
+    this.secuence,
+    this.distance,
+    this.latitude,
+    this.longitude,
   });
 }

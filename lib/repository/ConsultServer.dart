@@ -19,9 +19,7 @@ class ConsultServer{
   //   this.context = context;
   // }
 
-  String testUrlBase = "http://192.168.1.200:8888/Api/GetSearchOptions/";
-
-
+  String testUrlBase = "http://192.168.1.200:8888/Api/GetSearchOptions/"; //192.168.1.200 //localhost
   String urlBase = "https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=";
   String urlUbication = "country=colombia;state=antioquia;city=Medellin&q=";
   String apiKey = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
@@ -138,7 +136,7 @@ class ConsultServer{
         //   info2.infoPlace = [];
         // }
 
-        var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 10));
+        var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
         if(resp.statusCode == 200){
           var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
 
@@ -151,11 +149,17 @@ class ConsultServer{
                   lon: vv["position"]["lng"],
                 ),
               );
-              ready1 = true;
             }
-            else{
-              ready1 = true;
+            else if(vv["title"] == "Medellín, Colombia" && (info.dataText.text.toLowerCase() == "medellin" || info.dataText.text.toLowerCase() == "medellín")){
+              place1.add(
+                DataOfPlace(
+                  title: vv["title"],
+                  lat: vv["position"]["lat"],
+                  lon: vv["position"]["lng"],
+                ),
+              );
             }
+            ready1 = true;
           }
 
           if(jsonResp["gtfsItems"] != null){ //condicional por si el dato es nulo
@@ -212,7 +216,7 @@ class ConsultServer{
       info3.infoWalkList = [];
       legs = [];
       
-      dynamic duration = null, startTime = null, endTime = null, walkTime = null, waitingTime = null, walkDistance = null, startTimeInitial = null, endTimeFinal = null, mode = null, route = null, routeColor = null, routeTextColor = null, nameFrom = null, nameTo = null, distance = null, durationTransport = null;
+      dynamic duration = null, startTime = null, endTime = null, walkTime = null, waitingTime = null, walkDistance = null, startTimeInitial = null, endTimeFinal = null, mode = null, route = null, routeColor = null, tripId = null, routeTextColor = null, nameFrom = null, nameTo = null, distance = null, durationTransport = null, stopIdFrom = null, stopIdTo = null;
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
 
@@ -245,14 +249,17 @@ class ConsultServer{
               route = ss["route"];
               routeColor = ss["routeColor"];
               routeTextColor = ss["routeTextColor"];
+              tripId = ss["tripId"]; //nuevo
+              nameFrom = ss["from"]["name"];
+              stopIdFrom = ss["from"]["stopId"]; //nuevo
               lonOrig = ss["from"]["lon"];
               latOrig = ss["from"]["lat"];
-              nameFrom = ss["from"]["name"];
+              nameTo = ss["to"]["name"];
+              stopIdTo = ss["to"]["stopId"]; //nuevo
               lonDest = ss["to"]["lon"];
               latDest = ss["to"]["lat"];
-              nameTo = ss["to"]["name"];
               durationTransport = ss["duration"];
-
+              
               legs.add(
                 LegsInfo(
                   distance: distance,
@@ -262,13 +269,17 @@ class ConsultServer{
                   route: route,
                   routeColor: routeColor,
                   routeTextColor: routeTextColor,
+                  tripId: tripId, //nuevo
+                  nameFrom: nameFrom,
+                  stopIdFrom: stopIdFrom, //nuevo
                   lonOrig: lonOrig,
                   latOrig: latOrig,
-                  nameFrom: nameFrom,
+                  nameTo: nameTo,
+                  stopIdTo: stopIdTo, //nuevo
                   lonDest: lonDest,
                   latDest: latDest,
-                  nameTo: nameTo,
                   durationTransport: durationTransport,
+                  
                 ),
               );
             }

@@ -100,9 +100,9 @@ class _ScreenMapState extends State<ScreenMap> {
     return WillPopScope(
       onWillPop: () async {
         if(readyToReturn){
-          Navigator.pop(context);
+          Navigator.pop(context, false);
         }
-        return await Future(() => false);
+        //return await Future(() => false);
       },
       child: Scaffold(
         body: Container(

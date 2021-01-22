@@ -53,6 +53,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
+        await consult.getUbication(context); //await getLocationGps(context); ///----
         return null;
       }
     }
