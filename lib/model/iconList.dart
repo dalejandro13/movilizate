@@ -35,6 +35,7 @@ class LegsInfo{
   double lonOrig, latOrig, lonDest, latDest, distance; //List<double> lonOrig, latOrig, lonDest, latDest;
   String nameFrom, nameTo, tripId, stopIdFrom, stopIdTo;
   double durationTransport;
+  List<double> ltWalk, lgWalk;
 
   LegsInfo({
     this.distance,
@@ -54,6 +55,8 @@ class LegsInfo{
     this.tripId,
     this.stopIdFrom,
     this.stopIdTo,
+    this.ltWalk,
+    this.lgWalk,
   });
 }
 

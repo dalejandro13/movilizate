@@ -21,11 +21,12 @@ class ConsultServer{
 
   String testUrlBase = "http://192.168.1.200:8888/Api/GetSearchOptions/"; //192.168.1.200 //localhost
   String urlBase = "https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=";
-  String urlUbication = "country=colombia;state=antioquia;city=Medellin&q=";
+  String urlUbication = "country=colombia;state=antioquia;city=Envigado&q=";
   String apiKey = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
   List<DataOfPlace> place;
   //List<InfoRouteServer> place2;
   List<LegsInfo> legs;
+  List<double> ltWalk, lgWalk; 
   bool enter = true;
   List<Widget> wid;
   List<Widget> cardListWidget;
@@ -67,7 +68,7 @@ class ConsultServer{
     try{
       var info2 = Provider.of<DataOfPlace>(context, listen: false);
       var info = Provider.of<ProcessData>(context, listen: false);
-      String completeUrl = "$urlBase$urlUbication"+"medellin"+"$apiKey";
+      String completeUrl = "$urlBase$urlUbication"+"envigado"+"$apiKey";
       var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'});
       if(resp.statusCode == 200){
         var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
@@ -212,9 +213,13 @@ class ConsultServer{
   Future<void> getInfoFromServer(String urlComplete, InfoRouteServer info3) async {
     try{
       legs = null;
+      ltWalk = null;
+      lgWalk = null;
       info3.infoWalkList = null;
       info3.infoWalkList = [];
       legs = [];
+      ltWalk = [];
+      lgWalk = [];
       
       dynamic duration = null, startTime = null, endTime = null, walkTime = null, waitingTime = null, walkDistance = null, startTimeInitial = null, endTimeFinal = null, mode = null, route = null, routeColor = null, tripId = null, routeTextColor = null, nameFrom = null, nameTo = null, distance = null, durationTransport = null, stopIdFrom = null, stopIdTo = null;
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
@@ -234,7 +239,11 @@ class ConsultServer{
           
           for(var vv in jsonResp["plan"]["itineraries"]){
             legs = null;
+            ltWalk = null;
+            lgWalk = null;
             legs = [];
+            ltWalk = [];
+            lgWalk = [];
             duration = vv["duration"];
             startTime = vv["startTime"];
             endTime = vv["endTime"];
@@ -259,6 +268,17 @@ class ConsultServer{
               lonDest = ss["to"]["lon"];
               latDest = ss["to"]["lat"];
               durationTransport = ss["duration"];
+
+              if(mode == "WALK"){ //nuevo
+                if(ss["steps"] != []){
+                  if(ss["steps"] != null){
+                    for(var xx in ss["steps"]){
+                      ltWalk.add(xx["lat"]);
+                      lgWalk.add(xx["lon"]);
+                    }
+                  }
+                }
+              }
               
               legs.add(
                 LegsInfo(
@@ -279,7 +299,8 @@ class ConsultServer{
                   lonDest: lonDest,
                   latDest: latDest,
                   durationTransport: durationTransport,
-                  
+                  ltWalk: ltWalk, //nuevo
+                  lgWalk: lgWalk, //nuevo
                 ),
               );
             }
