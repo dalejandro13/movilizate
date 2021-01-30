@@ -221,7 +221,7 @@ class ConsultServer{
       ltWalk = [];
       lgWalk = [];
       
-      dynamic duration = null, startTime = null, endTime = null, walkTime = null, waitingTime = null, walkDistance = null, startTimeInitial = null, endTimeFinal = null, mode = null, route = null, routeColor = null, tripId = null, routeTextColor = null, nameFrom = null, nameTo = null, distance = null, durationTransport = null, stopIdFrom = null, stopIdTo = null;
+      dynamic duration = null, startTime = null, endTime = null, walkTime = null, waitingTime = null, walkDistance = null, startTimeInitial = null, endTimeFinal = null, mode = null, route = null, routeColor = null, routeId = null, tripId = null, routeTextColor = null, nameFrom = null, nameTo = null, distance = null, durationTransport = null, stopIdFrom = null, stopIdTo = null;
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
       lonOrig = null; latOrig = null; lonDest = null; latDest = null;
 
@@ -257,6 +257,7 @@ class ConsultServer{
               mode = ss["mode"];
               route = ss["route"];
               routeColor = ss["routeColor"];
+              routeId = ss["routeId"]; //nuevo
               routeTextColor = ss["routeTextColor"];
               tripId = ss["tripId"]; //nuevo
               nameFrom = ss["from"]["name"];
@@ -288,6 +289,7 @@ class ConsultServer{
                   mode: mode,
                   route: route,
                   routeColor: routeColor,
+                  routeId: routeId,
                   routeTextColor: routeTextColor,
                   tripId: tripId, //nuevo
                   nameFrom: nameFrom,

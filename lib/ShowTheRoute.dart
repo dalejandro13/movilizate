@@ -254,7 +254,9 @@ class ShowTheRoute {
         if(v != 0){
           await putMarker(info3.infoWalkList[index].legs[v].latOrig, info3.infoWalkList[index].legs[v].lonOrig, true, "BIKE");
         }
-        await drawLineWalk(coord);
+        var col = hexColor(info3.infoWalkList[index].legs[v].routeColor);
+        //await drawLineWalk(coord);
+        await drawLineForBike(index, v, info3.infoWalkList[index].legs[v], col);
       }
       else if(info3.infoWalkList[index].legs[v].mode == "BUS"){
         if(v != 0){
@@ -321,6 +323,27 @@ class ShowTheRoute {
     }
   }
 
+  Future<void> drawLineForBike(int index, int v, LegsInfo array, Tuple4<int, int, int, int> col) async {
+    double widthInPixels = 10.0;
+    List<GeoCoordinates> coord = [];
+
+    GeoCoordinates originCoordinates = null;
+    GeoCoordinates destinyCoordinates = null;
+    Waypoint startWaypoint = null;
+    Waypoint destinationWaypoint = null;
+    List<Waypoint> waypoints = null;
+    waypoints = [];
+
+    if((array.ltWalk.length == array.lgWalk.length) && (array.ltWalk.length != 0 && array.lgWalk.length != 0)){
+      originCoordinates = GeoCoordinates(array.latOrig, array.lonOrig);
+      destinyCoordinates = GeoCoordinates(array.latDest, array.lonDest);
+      startWaypoint = Waypoint.withDefaults(originCoordinates);
+      destinationWaypoint = Waypoint.withDefaults(destinyCoordinates);
+      waypoints = [startWaypoint, destinationWaypoint];
+      await bikeRoute(waypoints);
+    }
+  }
+
   Future<void> drawLineForBus(int index, int v, Tuple4<int, int, int, int> col, double latOrigin, double lonOrigin, double latDest, double lonDest) async {
     double widthInPixels = 10.0;
     List<GeoCoordinates> coord = null;
@@ -329,14 +352,13 @@ class ShowTheRoute {
     coord = [];
     MapPolyline routeMapPolyline = null;
     GeoPolyline routeGeoPolyline = null;
-    String acum = null;
+    String acum = null, acum2 = null;
     String trip = null;
     GeoCoordinates originCoordinates = null;
     GeoCoordinates destinyCoordinates = null;
-    acum = "";
+    acum = ""; 
+    acum2 = "";
     trip ="";
-
-    trip = info3.infoWalkList[index].legs[v].tripId;
     int ctrlGetData = 0;
 
     // print("El trip: $trip");
@@ -345,7 +367,8 @@ class ShowTheRoute {
     // print("latitud destino: $latDest");
     // print("longitud destino: $lonDest");
 
-    //obtener la orientacion de la ruta aca
+    //obtener la orientacion de la rutas de linea 1 y linea 2 del metroPlus
+    trip = info3.infoWalkList[index].legs[v].tripId;
     for(int x = 2; x < trip.length - 5; x++){
       if(trip[x] == "-"){
         ctrlGetData++;
@@ -380,8 +403,19 @@ class ShowTheRoute {
       }
     }
     else{ //otras rutas de bus
-      if(acum != ""){
-        String urlConsult = "http://192.168.1.200:8888/Api/GetSearchOptions/Orientation/$acum";
+
+      trip = info3.infoWalkList[index].legs[v].routeId; //TODO: pendiente de como llega la informacion para tomar bien esta informacion
+      for(int x = 2; x < trip.length - 5; x++){
+        if(trip[x] == "-"){
+          ctrlGetData++;
+        }
+        if(ctrlGetData < 3){
+          acum2 += trip[x];  //TODO: observar esta informacion si lo toma bien
+        }
+      }
+
+      if(acum2 != ""){
+        String urlConsult = "http://192.168.1.200:8888/Api/GetSearchOptions/Orientation/$acum2";
         Tuple4<int, int, bool, dynamic> value = await getThePointOrigin(urlConsult, latOrigin, lonOrigin);
         if(value.item3){
           Tuple3<List<double>, List<double>, List<int>> value2 = await getThePointDestiny(value.item2, value.item4, latDest, lonDest);
@@ -638,6 +672,15 @@ class ShowTheRoute {
           _showDialog('Error', 'Error while calculating a route: $error');
         }
       });
+    }
+    catch(e){
+      print("Error $e");
+    }
+  }
+
+  Future<void> bikeRoute(List<Waypoint> waypoints) async {
+    try{
+      //TODO: buscar metodo que dibuje las rutas en bicicleta
     }
     catch(e){
       print("Error $e");

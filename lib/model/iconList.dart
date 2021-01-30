@@ -31,6 +31,7 @@ class LegsInfo{
   String mode;
   String route;
   String routeColor;
+  String routeId;
   String routeTextColor;
   double lonOrig, latOrig, lonDest, latDest, distance; //List<double> lonOrig, latOrig, lonDest, latDest;
   String nameFrom, nameTo, tripId, stopIdFrom, stopIdTo;
@@ -50,6 +51,7 @@ class LegsInfo{
     this.nameTo,
     this.route,
     this.routeColor,
+    this.routeId,
     this.routeTextColor,
     this.durationTransport,
     this.tripId,
