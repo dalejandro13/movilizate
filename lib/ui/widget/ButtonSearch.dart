@@ -92,10 +92,10 @@ class _ButtonSearchState extends State<ButtonSearch> {
     urlMode = "&mode=TRANSIT,WALK";
     urlRest = "&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en";
     urlComplete = "$urlBase$urlOrigin$urlDestiny$urlTime$urlDate$urlMode$urlRest";
-    print(urlComplete);
+    print("URL DE CONSULTA: $urlComplete");
     //URL DE CONSULTA: http://181.140.180.63:9780/otp/routers/default/plan?fromPlace=6.246267,-75.599008&toPlace=6.27436,-75.55569&time=10:19am&date=01-19-2021&mode=TRANSIT,WALK&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en
     ////////////////////////////////////////////////////////////////////////////////////
-        
+    
     await widget.consult.getInfoFromServer(urlComplete, info3);
     showInfo = ShowTheRoute(context, hereMapController);
     showInfo.originAndDestiny().then((wayPoints) async {
@@ -155,10 +155,9 @@ class _ButtonSearchState extends State<ButtonSearch> {
                             //FocusScope.of(this.context).requestFocus(widget.focusDestiny);
 
                             //eliminar el arreglo del listView
-                            if(result1){
-                              info2.infoPlace.clear();
-                            }
-                            
+                            // if(result1){
+                            //   info2.infoPlace.clear();
+                            // }
 
                             processingData = false;
                             if(result1 == "Origen"){

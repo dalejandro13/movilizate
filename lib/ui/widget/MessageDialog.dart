@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class MessageDialog extends StatefulWidget {
+  String information = null;
+  MessageDialog(@required String informacion){
+    this.information = information;
+  }
+
   @override
   _MessageDialogState createState() => _MessageDialogState();
 }
@@ -10,7 +15,7 @@ class _MessageDialogState extends State<MessageDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("Error"),
-      content: Text("Problemas con el procesamiento de la informacion, vuelve a intentarlo"),
+      content: Text(widget.information),
       actions: [
         FlatButton(
           child: Text("Aceptar"),
