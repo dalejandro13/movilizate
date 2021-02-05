@@ -46,6 +46,7 @@ class CardWithInfo extends StatelessWidget {
                         fontFamily: "AurulentSans-Bold",
                         fontSize: 10.0,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     info.infoRoutList[index][inx].iconTransportMedium,
                     Text(
@@ -54,6 +55,7 @@ class CardWithInfo extends StatelessWidget {
                         fontFamily: "AurulentSans-Bold",
                         fontSize: 10.0,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 5.0),
@@ -100,6 +102,7 @@ class CardWithInfo extends StatelessWidget {
                         fontFamily: "AurulentSans-Bold",
                         //fontSize: 14.0,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       info.infoRoutList[index][inx].nameTrasportMedium,
@@ -107,6 +110,7 @@ class CardWithInfo extends StatelessWidget {
                         fontFamily: "AurulentSans-Bold",
                         fontSize: 13.0,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       "Ends in: ",
@@ -115,6 +119,7 @@ class CardWithInfo extends StatelessWidget {
                         fontFamily: "AurulentSans-Bold",
                         //fontSize: 14.0,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 10.0),
@@ -127,19 +132,33 @@ class CardWithInfo extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(top: 5.0),
                     ),
-                    Text(
-                      info.infoRoutList[index][inx].placeStartIn,
-                      style: TextStyle(
-                        fontFamily: "AurulentSans-Bold",
-                        fontSize: 10.0,
+                    Tooltip(
+                      message: info.infoRoutList[index][inx].placeStartIn,
+                      child: Container(
+                        width: 100.0,
+                        child: Text(
+                          info.infoRoutList[index][inx].placeStartIn, //informacion de lugar de inicio
+                          style: TextStyle(
+                            fontFamily: "AurulentSans-Bold",
+                            fontSize: 10.0,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                     info.infoRoutList[index][inx].infoOfDistance, //aca va el widget que muestra la informacion de las rutas
-                    Text(
-                      info.infoRoutList[index][inx].placeEndsIn,
-                      style: TextStyle(
-                        fontFamily: "AurulentSans-Bold",
-                        fontSize: 10.0,
+                    Tooltip(
+                      message: info.infoRoutList[index][inx].placeEndsIn,
+                      child: Container(
+                        width: 100.0,
+                        child: Text(
+                          info.infoRoutList[index][inx].placeEndsIn, //informacion de lugar de llegada
+                          style: TextStyle(
+                            fontFamily: "AurulentSans-Bold",
+                            fontSize: 10.0,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                     Padding(
@@ -156,6 +175,7 @@ class CardWithInfo extends StatelessWidget {
                         fontFamily: "AurulentSans-Bold",
                         //fontSize: 10.0,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

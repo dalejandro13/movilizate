@@ -10,36 +10,12 @@ import 'package:here_sdk/core.dart';
 import 'package:movilizate/repository/ConsultServer.dart';
 import 'package:movilizate/ui/widget/CardWithInfo.dart';
 
-
-// class ScreenMap extends StatefulWidget {
-
-//   int index;
-
-//   ScreenMap(int index){
-//     this.index = index;
-//   }
-
-//   @override
-//   _ScreenMapState createState() => _ScreenMapState();
-// }
-
-// class _ScreenMapState extends State<ScreenMap> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-      
-//     );
-//   }
-// }
-
 class ScreenMap extends StatefulWidget {
 
   int index;
-  //GetDataOfRoutes routes;
   
   ScreenMap(int index, BuildContext context){
     this.index = index;
-    //routes = GetDataOfRoutes(context);
   }
 
   @override
@@ -66,8 +42,6 @@ class _ScreenMapState extends State<ScreenMap> {
   }
   
   Future<void> onMapCreated(HereMapController hereMapController) async {
-    //info.mapController = hereMapController;
-    //mapCtrl = hereMapController;
     routing = ShowTheRoute(context, hereMapController);
     await Future.delayed(Duration(seconds: 1));
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
@@ -97,13 +71,17 @@ class _ScreenMapState extends State<ScreenMap> {
     info = Provider.of<ProcessData>(context);
     info3 = Provider.of<InfoRouteServer>(context);
 
+    Future<bool> _willPopCallback() async {
+      if(readyToReturn){
+        return true; //regresa a la pantalla anterior
+      }
+      else{
+        return false; //quedate en la pantalla actual
+      }
+    }
+
     return WillPopScope(
-      onWillPop: () async {
-        if(readyToReturn){
-          Navigator.pop(context, false);
-        }
-        //return await Future(() => false);
-      },
+      onWillPop: _willPopCallback,
       child: Scaffold(
         body: Container(
         height: MediaQuery.of(context).size.height,

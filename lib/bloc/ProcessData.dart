@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+//import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:movilizate/model/iconList.dart';
-import 'package:movilizate/repository/ConsultServer.dart';
+//import 'package:movilizate/repository/ConsultServer.dart';
 
 class ProcessData with ChangeNotifier{
 
@@ -14,6 +14,7 @@ class ProcessData with ChangeNotifier{
   String time = "";
 
   double latitude = 0.0, longitude = 0.0, latitudeOrigin = 0.0, longitudeOrigin = 0.0, latitudeDestiny = 0.0, longitudeDestiny = 0.0;
+  // ignore: avoid_init_to_null
   HereMapController hereMapController = null;
   List<Widget> widgetList = List<Widget>();
   List<List<CardInfoRoutes>> infoRoutes = List<List<CardInfoRoutes>>();

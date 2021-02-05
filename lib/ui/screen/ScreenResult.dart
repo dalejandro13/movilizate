@@ -31,15 +31,13 @@ class _ScreenResultState extends State<ScreenResult> {
   @override
   Widget build(BuildContext context){
     var info = Provider.of<ProcessData>(context);
-    //var gii = Provider.of<InnerIconsInfo>(context);
-    
-    //var info2 = Provider.of<DataOfPlace>(context);
-    //var info3 = Provider.of<InfoRouteServer>(context);
-    
+
+    Future<bool> _willPopCallBack() async {
+      return true;
+    }
+
     return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context, true);
-      },
+      onWillPop: _willPopCallBack,
       child: Scaffold(
         body: GestureDetector(
           onTap:(){

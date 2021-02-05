@@ -2,23 +2,13 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_client/curl.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
 import 'package:movilizate/model/iconList.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-//import 'package:movilizate/ui/widget/MessageDialog.dart';
 import 'package:tuple/tuple.dart';
-//import 'package:http_client/http_client.dart';
 
 class ConsultServer{
-
-  // BuildContext context;
-  
-  // ConsultServer(BuildContext context){
-  //   this.context = context;
-  // }
-
   String testUrlBase = "http://192.168.1.200:8888/Api/GetSearchOptions/"; //192.168.1.200 //localhost
   String urlBase = "https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=";
   String urlUbication = "country=colombia;state=antioquia;city=Envigado&q=";
@@ -32,36 +22,6 @@ class ConsultServer{
   List<Widget> cardListWidget;
   double lonOrig, latOrig, lonDest, latDest; 
 
-  // Future<void> getPreviousInfo() async {
-  //   //info = Provider.of<ProcessData>(context);
-  //   place = null;
-  //   place = [];
-    
-  //   String completeUrl = "$urlBase$urlUbication"+"santafe"+"$apiKey";
-  //   try{
-  //     var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'});
-  //     if(resp.statusCode == 200){
-  //       var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
-  //       for(var vv in jsonResp["items"]){
-  //         place.add(
-  //           DataOfPlace(
-  //             title: vv["title"],
-  //             lat: vv["position"]["lat"],
-  //             lon: vv["position"]["lng"],
-  //           )
-  //         );
-  //       }
-  //       //print(info.infoPlace);
-  //     }
-  //     else{
-  //       print("Error en la consulta, intentalo nuevamente");
-  //     }
-  //   }
-  //   catch(e){
-  //     print("Error: $e");
-  //   }
-  // }
-
   Future<void> getUbication(BuildContext context) async {
     place = null;
     place = [];
@@ -69,7 +29,7 @@ class ConsultServer{
       var info2 = Provider.of<DataOfPlace>(context, listen: false);
       var info = Provider.of<ProcessData>(context, listen: false);
       String completeUrl = "$urlBase$urlUbication"+"envigado"+"$apiKey";
-      var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'});
+      var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
       if(resp.statusCode == 200){
         var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
         for(var vv in jsonResp["items"]){
@@ -83,10 +43,7 @@ class ConsultServer{
         }
         info2.initialPlace = place;
         if(info2.initialPlace.length > 0){
-          for(var vv in info2.initialPlace){
-            // print(vv.title);
-            // print(vv.lat);
-            // print(vv.lon);
+          for(dynamic vv in info2.initialPlace){
             info.getLatitudeOrigin = double.parse(vv.lat.toStringAsFixed(6));
             info.getLongitudeOrigin = double.parse(vv.lon.toStringAsFixed(6));
             info.dataOrigin.text = vv.title;
@@ -103,7 +60,6 @@ class ConsultServer{
   }
 
   Future<void> getInfoInSearch(ProcessData info, DataOfPlace info2, List<DataOfPlace> place1) async {
-
     //https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=country=colombia;state=antioquia&q=san jose&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w
 
     // String urlBase = "https://geocode.search.hereapi.com/v1/geocode?languages=es&limit=50&qq=";
@@ -116,28 +72,12 @@ class ConsultServer{
     // String apiKey1 = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
 
     //String completeUrl = "$urlBase$urlUbication${info.dataText.text}$apiKey"; //NO OLVIDAR DESCOMENTAR ESTO, LINEA ORIGINAL
-    String completeUrl = "$testUrlBase${info.dataText.text}";
+    String completeUrl1 = "$testUrlBase${info.dataText.text}";
     bool ready1 = false, ready2 = false;
-
-    // final client = CurlClient();
-    // final rs = await client.send(Request('GET', completeUrl));
-    // if(rs.statusCode == 200){
-    //   //final textContent = await rs.readAsString();
-    //   //print(textContent);
-    // }
-
     try{
       if(enter){
         enter = false;
-
-        // if(place1.length >= 6){
-        //   place1 = null;
-        //   place1 = [];
-        //   info2.infoPlace = null;
-        //   info2.infoPlace = [];
-        // }
-
-        var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
+        var resp = await http.get(completeUrl1, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
         if(resp.statusCode == 200){
           var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
 
@@ -228,15 +168,7 @@ class ConsultServer{
       var resp = await http.get(urlComplete, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
       if(resp.statusCode == 200){
         var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
-        if(jsonResp["error"] == null){
-          //dynamic date = jsonResp["plan"]["date"];
-          // var from = jsonResp["plan"]["from"];
-          // var name1 = from["name"];
-          // var lonOrigin = from["lon"];
-          // var latOrigin = from["lat"];
-          // var orig1 = from["orig"];
-          // var vertexType1 = from["vertexType"];
-          
+        if(jsonResp["error"] == null){          
           for(var vv in jsonResp["plan"]["itineraries"]){
             legs = null;
             ltWalk = null;
@@ -289,7 +221,7 @@ class ConsultServer{
                   mode: mode,
                   route: route,
                   routeColor: routeColor,
-                  routeId: routeId,
+                  routeId: routeId, //nuevo
                   routeTextColor: routeTextColor,
                   tripId: tripId, //nuevo
                   nameFrom: nameFrom,
@@ -319,19 +251,10 @@ class ConsultServer{
               ),
             );
           }
-
-          // for(int x = 0; x < info3.infoWalkList.length; x++){
-          //   for(int y = 0; y < info3.infoWalkList[x].legs.length; y++){
-          //     print(info3.infoWalkList[x].legs[y].mode);
-          //     print(info3.infoWalkList[x].legs[y].route);
-          //   }
-          // }
-
         }
         else{
           print("Error: ${jsonResp["error"]["id"]}");
           print("${jsonResp["error"]["msg"]}");
-          //MessageDialog();
         }
       }
       else{
@@ -353,17 +276,14 @@ class GetIconsInfoCard{
 
   GetIconsInfoCard(BuildContext context){
     info3 = Provider.of<InfoRouteServer>(context);
-    //getIconsInfo(context);
   }
 
   Future<void> getIconsInfo(BuildContext context) async {
-    //listOfInfo = null;
-    //listOfInfo = ValueNotifier([]);
     info3.listOfInfo = null;
     info3.listOfInfo = [];
     legs = null;
     legs = [];
-    String timeArrived = null, timeDuration = null, subway = null, bus = null, bike = null, walk = null;
+    String timeArrived = null, timeDuration = null, cableCar = null, subway = null, bus = null, bike = null, walk = null;
     String route = null, routeColor = null, routeTextColor = null;
     for(int i = 0; i < info3.infoWalkList.length; i++){
       try{
@@ -377,8 +297,19 @@ class GetIconsInfoCard{
         legs = [];
 
         for(int y = 0; y < info3.infoWalkList[i].legs.length; y++){
-          
-          if(info3.infoWalkList[i].legs[y].mode == "SUBWAY"){
+
+          if(info3.infoWalkList[i].legs[y].mode == "CABLE_CAR"){
+            cableCar = "CABLE_CAR";
+            subway = "";
+            bus = "";
+            bike = "";
+            walk = "";
+            route = info3.infoWalkList[i].legs[y].route;
+            routeColor = info3.infoWalkList[i].legs[y].routeColor;
+            routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+          }
+          else if(info3.infoWalkList[i].legs[y].mode == "SUBWAY"){
+            cableCar = "";
             subway = "SUBWAY";
             bus = "";
             bike = "";
@@ -387,39 +318,79 @@ class GetIconsInfoCard{
             routeColor = info3.infoWalkList[i].legs[y].routeColor;
             routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
           }
-          else{
-            if(info3.infoWalkList[i].legs[y].mode == "BUS"){
-              subway = "";
-              bus = "BUS";
-              bike = "";
-              walk = "";
-              route = info3.infoWalkList[i].legs[y].route;
-              routeColor = info3.infoWalkList[i].legs[y].routeColor;
-              routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
-            }
-            else{
-              if(info3.infoWalkList[i].legs[y].mode == "BIKE"){
-                subway = "";
-                bus = "";
-                bike = "BIKE";
-                walk = "";
-                route = info3.infoWalkList[i].legs[y].route;
-                routeColor = info3.infoWalkList[i].legs[y].routeColor;
-                routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
-              }
-              else{
-                if(info3.infoWalkList[i].legs[y].mode == "WALK"){
-                  subway = "";
-                  bus = "";
-                  bike = "";
-                  walk = "WALK";
-                  route = info3.infoWalkList[i].legs[y].route;
-                  routeColor = info3.infoWalkList[i].legs[y].routeColor;
-                  routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
-                }
-              }
-            }
+          else if(info3.infoWalkList[i].legs[y].mode == "BUS"){
+            cableCar = "";
+            subway = "";
+            bus = "BUS";
+            bike = "";
+            walk = "";
+            route = info3.infoWalkList[i].legs[y].route;
+            routeColor = info3.infoWalkList[i].legs[y].routeColor;
+            routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
           }
+          else if(info3.infoWalkList[i].legs[y].mode == "BIKE"){
+            cableCar = "";
+            subway = "";
+            bus = "";
+            bike = "BIKE";
+            walk = "";
+            route = info3.infoWalkList[i].legs[y].route;
+            routeColor = info3.infoWalkList[i].legs[y].routeColor;
+            routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+          }
+          else if(info3.infoWalkList[i].legs[y].mode == "WALK"){
+            cableCar = "";
+            subway = "";
+            bus = "";
+            bike = "";
+            walk = "WALK";
+            route = info3.infoWalkList[i].legs[y].route;
+            routeColor = info3.infoWalkList[i].legs[y].routeColor;
+            routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+          }
+          
+          // if(info3.infoWalkList[i].legs[y].mode == "SUBWAY"){
+          //   subway = "SUBWAY";
+          //   bus = "";
+          //   bike = "";
+          //   walk = "";
+          //   route = info3.infoWalkList[i].legs[y].route;
+          //   routeColor = info3.infoWalkList[i].legs[y].routeColor;
+          //   routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+          // }
+          // else{
+          //   if(info3.infoWalkList[i].legs[y].mode == "BUS"){
+          //     subway = "";
+          //     bus = "BUS";
+          //     bike = "";
+          //     walk = "";
+          //     route = info3.infoWalkList[i].legs[y].route;
+          //     routeColor = info3.infoWalkList[i].legs[y].routeColor;
+          //     routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+          //   }
+          //   else{
+          //     if(info3.infoWalkList[i].legs[y].mode == "BIKE"){
+          //       subway = "";
+          //       bus = "";
+          //       bike = "BIKE";
+          //       walk = "";
+          //       route = info3.infoWalkList[i].legs[y].route;
+          //       routeColor = info3.infoWalkList[i].legs[y].routeColor;
+          //       routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+          //     }
+          //     else{
+          //       if(info3.infoWalkList[i].legs[y].mode == "WALK"){
+          //         subway = "";
+          //         bus = "";
+          //         bike = "";
+          //         walk = "WALK";
+          //         route = info3.infoWalkList[i].legs[y].route;
+          //         routeColor = info3.infoWalkList[i].legs[y].routeColor;
+          //         routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
+          //       }
+          //     }
+          //   }
+          // }
           
           legs.add(
             LegsList(
@@ -447,29 +418,16 @@ class GetIconsInfoCard{
         print("Error $e");
       }
     }
-    //listOfInfo.notifyListeners();
   }
 }
 
-
 class InnerIconsInfo extends ChangeNotifier{
-  //ValueNotifier<List<List<Widget>>> tile = ValueNotifier([]);
-  //ValueNotifier<List<List<Widget>>> listOfInfo = ValueNotifier([]);
   double sizeIcon = 35.0;
   InfoRouteServer route; 
   List<Widget> element = List<Widget>();
-  //GetDataOfRoutes ii;
-  //InfoRouteServer ic;
 
-  InnerIconsInfo(BuildContext context/*, int index*/){
-    //ii = Provider.of<GetDataOfRoutes>(context);
+  InnerIconsInfo(BuildContext context){
     route = Provider.of<InfoRouteServer>(context);
-    //ic = Provider.of<InfoRouteServer>(context);
-
-    //tile.value = null;
-    //tile.value = [];
-
-    //getIcon(true);
   }
 
   Color hexColor(String hexString){
@@ -488,10 +446,10 @@ class InnerIconsInfo extends ChangeNotifier{
       element = null;
       element = [];
       for(int j = 0; j < route.infoWalkList[i].legs.length; j++){
-        if(route.infoWalkList[i].legs[j].mode == "SUBWAY"){
+        if(route.infoWalkList[i].legs[j].mode == "CABLE_CAR"){
           element.add(
             Icon(
-              Icons.directions_subway,
+              Icons.directions_train,
               size: sizeIcon,
               color: Colors.black,
             )
@@ -525,17 +483,17 @@ class InnerIconsInfo extends ChangeNotifier{
               color: Color.fromRGBO(105, 190, 50, 1.0),
             )
           );
-          
         }
         else{
-          if(route.infoWalkList[i].legs[j].mode == "BUS"){
+          if(route.infoWalkList[i].legs[j].mode == "SUBWAY"){
             element.add(
               Icon(
-                Icons.directions_bus,
+                Icons.directions_subway,
                 size: sizeIcon,
                 color: Colors.black,
-              ),
+              )
             );
+
             if(route.infoWalkList[i].legs[j].routeColor != null && route.infoWalkList[i].legs[j].routeTextColor != null){
               element.add(
                 Container(
@@ -564,44 +522,84 @@ class InnerIconsInfo extends ChangeNotifier{
                 color: Color.fromRGBO(105, 190, 50, 1.0),
               )
             );
-
+            
           }
           else{
-            if(route.infoWalkList[i].legs[j].mode == "BIKE"){
+            if(route.infoWalkList[i].legs[j].mode == "BUS"){
+              element.add(
+                Icon(
+                  Icons.directions_bus,
+                  size: sizeIcon,
+                  color: Colors.black,
+                ),
+              );
+              if(route.infoWalkList[i].legs[j].routeColor != null && route.infoWalkList[i].legs[j].routeTextColor != null){
                 element.add(
-                  Icon(
-                    Icons.directions_bike,
-                    size: sizeIcon,
-                    color: Colors.black,
-                  )
-                );
-
-                element.add(
-                  Icon(
-                    Icons.chevron_right,
-                    size: sizeIcon,
-                    color: Color.fromRGBO(105, 190, 50, 1.0),
-                  )
-                );
-                
-            }
-            else{
-              if(route.infoWalkList[i].legs[j].mode == "WALK"){
-                element.add(
-                  Icon(
-                    Icons.directions_walk,
-                    size: sizeIcon,
-                    color: Colors.black,
+                  Container(
+                    height: 27.0,
+                    width: 27.0,
+                    decoration: BoxDecoration(
+                      color: hexColor(route.infoWalkList[i].legs[j].routeColor),
+                    ),
+                    child: Center(
+                      child: Text(
+                        route.infoWalkList[i].legs[j].route,
+                        style: TextStyle(
+                          fontFamily: "AurulentSans-Bold",
+                          color: hexColor(route.infoWalkList[i].legs[j].routeTextColor),
+                        ),
+                      ),
+                    ),
                   ),
                 );
+              }
 
-                element.add(
-                  Icon(
-                    Icons.chevron_right,
-                    size: sizeIcon,
-                    color: Color.fromRGBO(105, 190, 50, 1.0),
-                  )
-                );
+              element.add(
+                Icon(
+                  Icons.chevron_right,
+                  size: sizeIcon,
+                  color: Color.fromRGBO(105, 190, 50, 1.0),
+                )
+              );
+
+            }
+            else{
+              if(route.infoWalkList[i].legs[j].mode == "BIKE"){
+                  element.add(
+                    Icon(
+                      Icons.directions_bike,
+                      size: sizeIcon,
+                      color: Colors.black,
+                    )
+                  );
+
+                  element.add(
+                    Icon(
+                      Icons.chevron_right,
+                      size: sizeIcon,
+                      color: Color.fromRGBO(105, 190, 50, 1.0),
+                    )
+                  );
+                  
+              }
+              else{
+                if(route.infoWalkList[i].legs[j].mode == "WALK"){
+                  element.add(
+                    Icon(
+                      Icons.directions_walk,
+                      size: sizeIcon,
+                      color: Colors.black,
+                    ),
+                  );
+
+                  element.add(
+                    Icon(
+                      Icons.chevron_right,
+                      size: sizeIcon,
+                      color: Color.fromRGBO(105, 190, 50, 1.0),
+                    )
+                  );
+                }
               }
             }
           }
@@ -617,38 +615,41 @@ class GetDataTrasnport{
 
   BuildContext context;
   InfoRouteServer info3;
-  //GetDataLegs dataLegs;
   bool subway = false, bus = false, bike = false, walk = false;
 
   GetDataTrasnport(BuildContext context){
     this.context = context;
     info3 = Provider.of<InfoRouteServer>(context);
-    //dataLegs = GetDataLegs(context);
   }
 
   Future<void> iconsOfTransport() async {
     info3.listOfTransport = null;
-    info3.listOfTransport = [false, false, false, false];
+    info3.listOfTransport = [false, false, false, false, false];
     for(int i = 0; i < info3.infoWalkList.length; i++){      
       for(int j = 0; j < info3.infoWalkList[i].legs.length; j++){
-        if(info3.infoWalkList[i].legs[j].mode == "SUBWAY"){
+        if(info3.infoWalkList[i].legs[j].mode == "CABLE_CAR"){
           if(info3.listOfTransport[0] == false){
             info3.listOfTransport[0] = true;
           }
         }
-        else if(info3.infoWalkList[i].legs[j].mode == "BUS"){
+        else if(info3.infoWalkList[i].legs[j].mode == "SUBWAY"){
           if(info3.listOfTransport[1] == false){
             info3.listOfTransport[1] = true;
           }
         }
-        else if(info3.infoWalkList[i].legs[j].mode == "BIKE"){
+        else if(info3.infoWalkList[i].legs[j].mode == "BUS"){
           if(info3.listOfTransport[2] == false){
             info3.listOfTransport[2] = true;
           }
         }
-        else if(info3.infoWalkList[i].legs[j].mode == "WALK"){
+        else if(info3.infoWalkList[i].legs[j].mode == "BIKE"){
           if(info3.listOfTransport[3] == false){
             info3.listOfTransport[3] = true;
+          }
+        }
+        else if(info3.infoWalkList[i].legs[j].mode == "WALK"){
+          if(info3.listOfTransport[4] == false){
+            info3.listOfTransport[4] = true;
           }
         }
       }
@@ -666,20 +667,23 @@ class GetIcons{
 
   GetIcons(BuildContext context){
     info3 = Provider.of<InfoRouteServer>(context);
-    //getInfoIcon();
   }
 
   getInfoIcon(){
     data2 = null;
-    //listIcon = null;
     data2 = [];
-    //listIcon = ValueNotifier([]);
     data2 = null;
     data2 = [];
     for(int y = 0; y < info3.infoWalkList[indexC.value].legs.length; y++){
       data = null;
       data = [];
-      if(info3.infoWalkList[indexC.value].legs[y].mode == "SUBWAY"){
+      if(info3.infoWalkList[indexC.value].legs[y].mode == "CABLE_CAR"){
+        data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
+        data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
+        data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
+        data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
+      }
+      else if(info3.infoWalkList[indexC.value].legs[y].mode == "SUBWAY"){
         data.add(info3.infoWalkList[indexC.value].legs[y].mode); //tipo de transporte
         data.add(info3.infoWalkList[indexC.value].legs[y].route); //nombre de ruta
         data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
@@ -703,11 +707,8 @@ class GetIcons{
         data.add(info3.infoWalkList[indexC.value].legs[y].routeColor); //color de ruta
         data.add(info3.infoWalkList[indexC.value].legs[y].routeTextColor); //color de letra de la ruta
       }
-      
-      //data2.add(data);
       listIcon.value.add(data);
     }
-    //listIcon.value.add(data);
     listIcon.notifyListeners();
     indexC.notifyListeners();
   }
@@ -717,8 +718,6 @@ class GetIcons{
 class FillInInformation{
 
   List<CardInfoRoutes> cardInfo = null;
-  //InfoRouteServer info3;
-  //ProcessData info;
 
   Color hexColor(String hexString){
     var buffer = StringBuffer();
@@ -730,9 +729,6 @@ class FillInInformation{
   }
 
   Future<void> getDataToShow(ProcessData info, InfoRouteServer info3) async {
-    //info3.infoWalkList
-    //cardInfo = null;
-    //cardInfo = [];
     info.infoRoutes = null;
     info.infoRoutes = [];
     double sizeIcon = 35.0;
@@ -760,8 +756,54 @@ class FillInInformation{
         String transportMedium = "";
 
         /////////////////////////////
-        
-        if(transport == "subway"){
+        if(transport == "cable_car"){
+          lineRoute = Container(
+            height: 70.0,
+            width: 7.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+            ),
+          );
+
+          currentIcon = Icon(
+            Icons.directions_train, 
+            color: Color.fromRGBO(0, 0, 0, 1.0),
+          );
+
+          distance = Row(
+            children: [
+              Icon(
+                Icons.directions_train,
+                size: sizeIcon,
+                color: Colors.black,
+              ),
+              Container(
+                height: 27.0,
+                width: 27.0,
+                decoration: BoxDecoration(
+                  color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
+                ),
+                child: Center(
+                  child: Text(
+                    info3.infoWalkList[x].legs[y].route,
+                    style: TextStyle(
+                      fontFamily: "AurulentSans-Bold",
+                      color: hexColor(info3.infoWalkList[x].legs[y].routeTextColor),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+          transportMedium = "Use route";
+          iconTransport = Icon(
+            Icons.directions_train,
+            size: 35.0,
+            color: Colors.grey,
+          );
+        }
+        else if(transport == "subway"){
           lineRoute = Container(
             height: 70.0,
             width: 7.0,
@@ -820,7 +862,7 @@ class FillInInformation{
 
           currentIcon = Icon(
             Icons.directions_bus, 
-            color: Color.fromRGBO(0, 0, 0, 1.0)
+            color: Color.fromRGBO(0, 0, 0, 1.0),
           );
 
           distance = Row(
@@ -906,22 +948,22 @@ class FillInInformation{
           );
         }
         
-        var sTime = info3.infoWalkList[x].legs[y].startTime;
-        var result1 = await convertSecToDay(sTime);
+        dynamic sTime = info3.infoWalkList[x].legs[y].startTime;
+        Tuple4<int, int, int, int> result1 = await convertSecToDay(sTime);
         String valueStartTime = "${result1.item2}:${result1.item3}";
         DateTime date1 = DateFormat("HH:mm").parse(valueStartTime);
         String startTime = DateFormat("hh:mma").format(date1);
         startTime = startTime.toLowerCase();
 
-        var eTime = info3.infoWalkList[x].legs[y].endTime;
-        var result2 = await convertSecToDay(eTime);
+        dynamic eTime = info3.infoWalkList[x].legs[y].endTime;
+        Tuple4<int, int, int, int> result2 = await convertSecToDay(eTime);
         String valueEndTime = "${result2.item2}:${result2.item3}";
         DateTime date2 = DateFormat("HH:mm").parse(valueEndTime);
         String endTime = DateFormat("hh:mma").format(date2);
         endTime = endTime.toLowerCase();
 
-        var startsIn = info3.infoWalkList[x].legs[y].nameFrom; //lugar de origen
-        var endsIn = info3.infoWalkList[x].legs[y].nameTo; //lugar de destino
+        dynamic startsIn = info3.infoWalkList[x].legs[y].nameFrom; //lugar de origen
+        dynamic endsIn = info3.infoWalkList[x].legs[y].nameTo; //lugar de destino
 
         cardInfo.add(
           CardInfoRoutes(
@@ -969,4 +1011,5 @@ class FillInInformation{
 
     return Future.value(Tuple4(day, hour, minutes, seconds));
   }
+
 }
