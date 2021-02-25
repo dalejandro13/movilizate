@@ -28,19 +28,19 @@ class ConsultServer{
     try{
       var info2 = Provider.of<DataOfPlace>(context, listen: false);
       var info = Provider.of<ProcessData>(context, listen: false);
-      String completeUrl = "$urlBase$urlUbication"+"envigado"+"$apiKey";
-      var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
-      if(resp.statusCode == 200){
-        var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
-        for(var vv in jsonResp["items"]){
-          place.add(
-            DataOfPlace(
-              title: vv["title"],
-              lat: vv["position"]["lat"],
-              lon: vv["position"]["lng"],
-            )
-          );
-        }
+      //String completeUrl = "$urlBase$urlUbication"+"estacion envigado"+"$apiKey";
+      //var resp = await http.get(completeUrl, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
+      //if(resp.statusCode == 200){
+        //var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
+        //for(var vv in jsonResp["items"]){
+        place.add(
+          DataOfPlace(
+            title: "Estacion metro envigado", //vv["title"],
+            lat: 6.174495, //vv["position"]["lat"],
+            lon: -75.595850, //vv["position"]["lng"],
+          )
+        );
+        //}
         info2.initialPlace = place;
         if(info2.initialPlace.length > 0){
           for(dynamic vv in info2.initialPlace){
@@ -49,10 +49,10 @@ class ConsultServer{
             info.dataOrigin.text = vv.title;
           }
         }
-      }
-      else{
-        print("Error en la consulta, intentalo nuevamente");
-      }
+      // }
+      // else{
+      //   print("Error en la consulta, intentalo nuevamente");
+      // }
     }
     catch(e){
       print("Error: $e");
@@ -72,71 +72,76 @@ class ConsultServer{
     // String apiKey1 = "&apiKey=UXMqWoRbB7fHSTkIRgcP9l7BgUSgUEDNx6D5ggQnP9w";
 
     //String completeUrl = "$urlBase$urlUbication${info.dataText.text}$apiKey"; //NO OLVIDAR DESCOMENTAR ESTO, LINEA ORIGINAL
+
+
     String completeUrl1 = "$testUrlBase${info.dataText.text}";
+    print("URL DE CONSULTA CON DB: $completeUrl1");
     bool ready1 = false, ready2 = false;
     try{
       if(enter){
         enter = false;
-        var resp = await http.get(completeUrl1, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
-        if(resp.statusCode == 200){
-          var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
+        if(info.dataText.text.toLowerCase() == "chingui" || info.dataText.text.toLowerCase() == "chinguí"){ //NUEVA CONDICION
+          var resp = await http.get(completeUrl1, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
+          if(resp.statusCode == 200){
+            var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
 
-          for(var vv in jsonResp["hereItems"]["items"]){
-            if(vv["title"] != "Medellín, Colombia"){ //condicional para no tomar el dato si aparece este mensaje
-              place1.add(
-                DataOfPlace(
-                  title: vv["title"],
-                  lat: vv["position"]["lat"],
-                  lon: vv["position"]["lng"],
-                ),
-              );
-            }
-            else if(vv["title"] == "Medellín, Colombia" && (info.dataText.text.toLowerCase() == "medellin" || info.dataText.text.toLowerCase() == "medellín")){
-              place1.add(
-                DataOfPlace(
-                  title: vv["title"],
-                  lat: vv["position"]["lat"],
-                  lon: vv["position"]["lng"],
-                ),
-              );
-            }
-            ready1 = true;
-          }
-
-          if(jsonResp["gtfsItems"] != null){ //condicional por si el dato es nulo
-            if(ready1){
-              for(var jj in jsonResp["gtfsItems"]["items"]){
+            for(var vv in jsonResp["hereItems"]["items"]){
+              if(vv["title"] != "Envigado, Colombia"){ //condicional para no tomar el dato si aparece este mensaje
                 place1.add(
                   DataOfPlace(
-                    title: jj["title"],
-                    lat: jj["position"]["lat"],
-                    lon: jj["position"]["lng"],
+                    title: vv["title"],
+                    lat: vv["position"]["lat"],
+                    lon: vv["position"]["lng"],
                   ),
                 );
-                ready2 = true;
+              }
+              else if(vv["title"] == "Envigado, Colombia" && (info.dataText.text.toLowerCase() == "envigado" || info.dataText.text.toLowerCase() == "envigado")){
+                place1.add(
+                  DataOfPlace(
+                    title: vv["title"],
+                    lat: vv["position"]["lat"],
+                    lon: vv["position"]["lng"],
+                  ),
+                );
+              }
+              ready1 = true;
+            }
+
+            if(jsonResp["gtfsItems"] != null){ //condicional por si el dato es nulo
+              if(ready1){
+                for(var jj in jsonResp["gtfsItems"]["items"]){
+                  place1.add(
+                    DataOfPlace(
+                      title: jj["title"],
+                      lat: jj["position"]["lat"],
+                      lon: jj["position"]["lng"],
+                    ),
+                  );
+                  ready2 = true;
+                }
               }
             }
+            else{
+              ready2 = true;
+            }
+            
+            if(ready1 && ready2){
+              ready1 = false;
+              ready2 = false;
+              if(place1.length > 0){
+                //elimino la informacion repetida de la lista
+                Map<String, DataOfPlace> mp = {};
+                for(var item in place1){
+                  mp[item.title] = item;
+                }
+                info2.infoPlace = mp.values.toList();
+              }
+            }
+            
           }
           else{
-            ready2 = true;
+            print("Error en la consulta, intentalo nuevamente");
           }
-          
-          if(ready1 && ready2){
-            ready1 = false;
-            ready2 = false;
-            if(place1.length > 0){
-              //elimino la informacion repetida de la lista
-              Map<String, DataOfPlace> mp = {};
-              for(var item in place1){
-                mp[item.title] = item;
-              }
-              info2.infoPlace = mp.values.toList();
-            }
-          }
-          
-        }
-        else{
-          print("Error en la consulta, intentalo nuevamente");
         }
         enter = true;
       }
@@ -299,7 +304,7 @@ class GetIconsInfoCard{
         for(int y = 0; y < info3.infoWalkList[i].legs.length; y++){
 
           if(info3.infoWalkList[i].legs[y].mode == "CABLE_CAR"){
-            cableCar = "CABLE_CAR";
+            cableCar = info3.infoWalkList[i].legs[y].mode; //"CABLE_CAR";
             subway = "";
             bus = "";
             bike = "";
@@ -310,7 +315,7 @@ class GetIconsInfoCard{
           }
           else if(info3.infoWalkList[i].legs[y].mode == "SUBWAY"){
             cableCar = "";
-            subway = "SUBWAY";
+            subway = info3.infoWalkList[i].legs[y].mode; //"SUBWAY";
             bus = "";
             bike = "";
             walk = "";
@@ -321,7 +326,7 @@ class GetIconsInfoCard{
           else if(info3.infoWalkList[i].legs[y].mode == "BUS"){
             cableCar = "";
             subway = "";
-            bus = "BUS";
+            bus = info3.infoWalkList[i].legs[y].mode; //"BUS";
             bike = "";
             walk = "";
             route = info3.infoWalkList[i].legs[y].route;
@@ -332,7 +337,7 @@ class GetIconsInfoCard{
             cableCar = "";
             subway = "";
             bus = "";
-            bike = "BIKE";
+            bike = info3.infoWalkList[i].legs[y].mode; //"BIKE";
             walk = "";
             route = info3.infoWalkList[i].legs[y].route;
             routeColor = info3.infoWalkList[i].legs[y].routeColor;
@@ -343,7 +348,7 @@ class GetIconsInfoCard{
             subway = "";
             bus = "";
             bike = "";
-            walk = "WALK";
+            walk = info3.infoWalkList[i].legs[y].mode; //"WALK";
             route = info3.infoWalkList[i].legs[y].route;
             routeColor = info3.infoWalkList[i].legs[y].routeColor;
             routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
@@ -430,11 +435,11 @@ class InnerIconsInfo extends ChangeNotifier{
     route = Provider.of<InfoRouteServer>(context);
   }
 
-  Color hexColor(String hexString){
+  Future<Color> hexColor(String hexString) async {
     var buffer = StringBuffer();
     if (hexString.length == 6 || hexString.length == 7){
       buffer.write('ff');
-    } 
+    }
     buffer.write(hexString.replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
   }
@@ -461,14 +466,14 @@ class InnerIconsInfo extends ChangeNotifier{
                 height: 27.0,
                 width: 27.0,
                 decoration: BoxDecoration(
-                  color: hexColor(route.infoWalkList[i].legs[j].routeColor),
+                  color: await hexColor(route.infoWalkList[i].legs[j].routeColor),
                 ),
                 child: Center(
                   child: Text(
                     route.infoWalkList[i].legs[j].route,
                     style: TextStyle(
                       fontFamily: "AurulentSans-Bold",
-                      color: hexColor(route.infoWalkList[i].legs[j].routeTextColor),
+                      color: await hexColor(route.infoWalkList[i].legs[j].routeTextColor),
                     ),
                   ),
                 ),
@@ -500,14 +505,14 @@ class InnerIconsInfo extends ChangeNotifier{
                   height: 27.0,
                   width: 27.0,
                   decoration: BoxDecoration(
-                    color: hexColor(route.infoWalkList[i].legs[j].routeColor),
+                    color: await hexColor(route.infoWalkList[i].legs[j].routeColor),
                   ),
                   child: Center(
                     child: Text(
                       route.infoWalkList[i].legs[j].route,
                       style: TextStyle(
                         fontFamily: "AurulentSans-Bold",
-                        color: hexColor(route.infoWalkList[i].legs[j].routeTextColor),
+                        color: await hexColor(route.infoWalkList[i].legs[j].routeTextColor),
                       ),
                     ),
                   ),
@@ -539,14 +544,14 @@ class InnerIconsInfo extends ChangeNotifier{
                     height: 27.0,
                     width: 27.0,
                     decoration: BoxDecoration(
-                      color: hexColor(route.infoWalkList[i].legs[j].routeColor),
+                      color: await hexColor(route.infoWalkList[i].legs[j].routeColor),
                     ),
                     child: Center(
                       child: Text(
                         route.infoWalkList[i].legs[j].route,
                         style: TextStyle(
                           fontFamily: "AurulentSans-Bold",
-                          color: hexColor(route.infoWalkList[i].legs[j].routeTextColor),
+                          color: await hexColor(route.infoWalkList[i].legs[j].routeTextColor),
                         ),
                       ),
                     ),

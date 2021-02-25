@@ -285,7 +285,7 @@ class ShowTheRoute {
   }
 
   Future<void> drawLineForWalk(int index, int v, LegsInfo array) async {
-    double widthInPixels = 10.0;
+    double widthInPixels = 20.0;
     List<GeoCoordinates> coord = [];
 
     GeoCoordinates originCoordinates = null;
@@ -298,10 +298,11 @@ class ShowTheRoute {
     //_mapPolylines = null;
     //_mapPolylines = [];
 
-    //MapPolyline routeMapPolyline = null;
-    //GeoPolyline routeGeoPolyline = null;
+    MapPolyline routeMapPolyline = null;
+    GeoPolyline routeGeoPolyline = null;
 
     if((array.ltWalk.length == array.lgWalk.length) && (array.ltWalk.length != 0 && array.lgWalk.length != 0)){
+      
       originCoordinates = GeoCoordinates(array.latOrig, array.lonOrig);
       destinyCoordinates = GeoCoordinates(array.latDest, array.lonDest);
       startWaypoint = Waypoint.withDefaults(originCoordinates);
@@ -309,7 +310,8 @@ class ShowTheRoute {
       waypoints = [startWaypoint, destinationWaypoint];
       await walkingRoute(waypoints);
 
-      // NO BORRAR, GENERA RUTAS TRAZANDO LAS LINEAS ENTRE COORDENADAS
+
+      // NO BORRAR, GENERA RUTAS TRAZANDO LINEAS ENTRE COORDENADAS
       // for(int i = 0; i < array.ltWalk.length - 1; i++){
       //   var originCoordinates = GeoCoordinates(array.ltWalk[i], array.lgWalk[i]);
       //   var destinyCoordinates = GeoCoordinates(array.ltWalk[i + 1], array.lgWalk[i + 1]);
@@ -318,30 +320,34 @@ class ShowTheRoute {
       //   routeMapPolyline = MapPolyline(routeGeoPolyline, widthInPixels, Color.withAlpha(0, 0, 0, 0));
       //   _hereMapController.mapScene.addMapPolyline(routeMapPolyline);
       //   _mapPolylines.add(routeMapPolyline);
+      //   //TODO: mostrar resultados con print, verificar que los datos sean consistentes
       // }
+
+      
       
     }
   }
 
   Future<void> drawLineForBike(int index, int v, LegsInfo array, Tuple4<int, int, int, int> col) async {
-    double widthInPixels = 10.0;
-    List<GeoCoordinates> coord = [];
+    //TODO: graficar las rutas en bicicleta
+    // double widthInPixels = 10.0;
+    // List<GeoCoordinates> coord = [];
 
-    GeoCoordinates originCoordinates = null;
-    GeoCoordinates destinyCoordinates = null;
-    Waypoint startWaypoint = null;
-    Waypoint destinationWaypoint = null;
-    List<Waypoint> waypoints = null;
-    waypoints = [];
+    // GeoCoordinates originCoordinates = null;
+    // GeoCoordinates destinyCoordinates = null;
+    // Waypoint startWaypoint = null;
+    // Waypoint destinationWaypoint = null;
+    // List<Waypoint> waypoints = null;
+    // waypoints = [];
 
-    if((array.ltWalk.length == array.lgWalk.length) && (array.ltWalk.length != 0 && array.lgWalk.length != 0)){
-      originCoordinates = GeoCoordinates(array.latOrig, array.lonOrig);
-      destinyCoordinates = GeoCoordinates(array.latDest, array.lonDest);
-      startWaypoint = Waypoint.withDefaults(originCoordinates);
-      destinationWaypoint = Waypoint.withDefaults(destinyCoordinates);
-      waypoints = [startWaypoint, destinationWaypoint];
-      await bikeRoute(waypoints);
-    }
+    // if((array.ltWalk.length == array.lgWalk.length) && (array.ltWalk.length != 0 && array.lgWalk.length != 0)){
+    //   originCoordinates = GeoCoordinates(array.latOrig, array.lonOrig);
+    //   destinyCoordinates = GeoCoordinates(array.latDest, array.lonDest);
+    //   startWaypoint = Waypoint.withDefaults(originCoordinates);
+    //   destinationWaypoint = Waypoint.withDefaults(destinyCoordinates);
+    //   waypoints = [startWaypoint, destinationWaypoint];
+    //   await bikeRoute(waypoints);
+    // }
   }
 
   Future<void> drawLineForBus(int index, int v, Tuple4<int, int, int, int> col, double latOrigin, double lonOrigin, double latDest, double lonDest) async {
@@ -353,12 +359,15 @@ class ShowTheRoute {
     MapPolyline routeMapPolyline = null;
     GeoPolyline routeGeoPolyline = null;
     String acum = null, acum2 = null;
-    String trip = null;
+    String trip = null, rId = null, orientation = null;
+    
     GeoCoordinates originCoordinates = null;
     GeoCoordinates destinyCoordinates = null;
     acum = ""; 
     acum2 = "";
     trip ="";
+    rId = "";
+    orientation = "";
     int ctrlGetData = 0;
 
     //obtener la orientacion de la rutas de linea 1 y linea 2 del metroPlus
@@ -397,9 +406,10 @@ class ShowTheRoute {
       }
     }
     else{ //otras rutas de bus
-      trip = info3.infoWalkList[index].legs[v].routeId;
-      for(int x = 2; x < trip.length; x++){
-        acum2 += trip[x];
+      rId = info3.infoWalkList[index].legs[v].routeId;
+      orientation = rId[0];
+      for(int x = 2; x < rId.length; x++){
+        acum2 += rId[x];
       }
       List<String> info = null;
       info = []; //almacena la informacion de las rutas de envigado
@@ -407,7 +417,10 @@ class ShowTheRoute {
       if(acum2 != ""){
         // ignore: avoid_init_to_null
         dynamic jsonResp = null;
+        //acum2 = "ENV_TEST_0"; //nueva linea de codigo
+        //acum2 = "ENV001"; //SOLO PARA PRUEBAS, LUEGO SE BORRA
         String urlGetData = "http://192.168.1.200:8888/Api/GetSearchOptions/GetData/$acum2";
+        print("URL DE DATOS BUS1: $urlGetData");
         dynamic resp = await http.get(urlGetData, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
         if(resp.statusCode == 200){
           jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
@@ -419,7 +432,11 @@ class ShowTheRoute {
           else if(jsonResp.length > 1){
             for(int x = 0; x < jsonResp.length; x++){
               if(jsonResp[x.toString()].length != 0){
+                //String name = jsonResp[x.toString()][0];
+                //if(name[name.length - 1] == orientation){
+                //  print(name);
                 info.add(jsonResp[x.toString()][0]);
+                //}
               }
             }
           }
@@ -433,9 +450,15 @@ class ShowTheRoute {
           for(int j = 0; j < info.length; j++){
             try{
               String urlConsult = "http://192.168.1.200:8888/Api/GetSearchOptions/Orientation/${info[j]}";
+              //String urlConsult = "http://192.168.1.200:8888/Api/GetSearchOptions/Orientation/ENV-DMA_1";
+              print("URL DE DATOS BUS2: $urlConsult");
               Tuple4<int, int, bool, dynamic> value = await getThePointOrigin(urlConsult, latOrigin, lonOrigin);
               if(value.item3){
+
+                //await grafica(value.item4);
+
                 Tuple3<List<double>, List<double>, List<int>> value2 = await getThePointDestiny(value.item2, value.item4, latDest, lonDest);
+
                 if(value2.item1 != null && value2.item2 != null){
                   if(value2.item1.length == value2.item2.length){
                     //diagrama de las coordenadas
@@ -450,6 +473,7 @@ class ShowTheRoute {
                     }
                   }
                 }
+
               }
               else{
                 print("No se puede consultar la informacion, intentalo mas tarde");
@@ -470,6 +494,46 @@ class ShowTheRoute {
     }
   }
 
+  Future<void> grafica(dynamic jsonResp) async{
+
+    // HereMapController _hereMapController = null;
+    // // ignore: avoid_init_to_null
+    // List<MapPolyline> _mapPolylines = null;
+    // // ignore: avoid_init_to_null
+    // RoutingEngine _routingEngine = null;
+    // // ignore: avoid_init_to_null
+    // MapMarker _marker = null;
+
+    List<GeoCoordinates> coord = null;
+    _mapPolylines = null;
+    _mapPolylines = [];
+    coord = [];
+    double widthInPixels = 10.0;
+    MapPolyline routeMapPolyline = null;
+    GeoPolyline routeGeoPolyline = null;
+    String acum = null, acum2 = null;
+    String trip = null;
+    GeoCoordinates originCoordinates = null;
+    GeoCoordinates destinyCoordinates = null;
+
+    for(int i = 0; i < jsonResp.length - 1; i++){
+
+      double ptoLat = double.parse(jsonResp[i]["shape_pt_lat"]);
+      double ptoLon = double.parse(jsonResp[i]["shape_pt_lon"]);
+
+      double ptoLat2 = double.parse(jsonResp[i + 1]["shape_pt_lat"]);
+      double ptoLon2 = double.parse(jsonResp[i + 1]["shape_pt_lon"]);
+
+      originCoordinates = GeoCoordinates(ptoLat, ptoLon);
+      destinyCoordinates = GeoCoordinates(ptoLat2, ptoLon2);
+      coord = [originCoordinates, destinyCoordinates];
+      routeGeoPolyline = GeoPolyline(coord);
+      routeMapPolyline = MapPolyline(routeGeoPolyline, widthInPixels, Color.withAlpha(0, 0, 0, 0));
+      _hereMapController.mapScene.addMapPolyline(routeMapPolyline);
+      _mapPolylines.add(routeMapPolyline);
+    }
+  }
+
   Future<void> drawLineForSubway(int index, int v, double latOrigin, double lonOrigin, double latDest, double lonDest, Tuple4<int, int, int, int> col) async {
     List<GeoCoordinates> coord = null;
     coord = [];
@@ -481,6 +545,9 @@ class ShowTheRoute {
     // ignore: avoid_init_to_null
     String acum = null;
     String trip = null;
+    String rtId = null;
+    String orientation = null;
+    String urlConsult = null;
 
     GeoCoordinates originCoordinates = null;
     GeoCoordinates destinyCoordinates = null;
@@ -490,57 +557,73 @@ class ShowTheRoute {
 
     acum = "";
     trip = "";
+    rtId = "";
+    orientation = "";
+    urlConsult = "";
 
-    //obtener la orientacion de la ruta aca
-    trip = info3.infoWalkList[index].legs[v].tripId;
-    int ctrlGetData = 0;
-    for(int x = 2; x < trip.length - 5; x++){
-      if(trip[x] == "-"){
-        ctrlGetData++;
+    if(info3.infoWalkList[index].legs[v].route == "A"){
+      trip = info3.infoWalkList[index].legs[v].tripId; //obtener la orientacion de la ruta
+      int ctrlGetData = 0;
+      for(int x = 2; x < trip.length - 5; x++){
+        if(trip[x] == "-"){
+          ctrlGetData++;
+        }
+        if(ctrlGetData < 3){
+          acum += trip[x];
+        }
       }
-      if(ctrlGetData < 3){
-        acum += trip[x];
+      urlConsult = "http://192.168.1.200:8888/Api/GetSearchOptions/Orientation/$acum";
+    }
+    else if(info3.infoWalkList[index].legs[v].route == "B"){
+      rtId = info3.infoWalkList[index].legs[v].routeId; //obtener la orientacion de la ruta
+      for(int x = 0; x < rtId.length; x++){
+        if(x == 0){
+          orientation = rtId[x];
+        }
+        if(x >= 2 && x < rtId.length){
+          acum += rtId[x];
+        }
       }
+      urlConsult = "http://192.168.1.200:8888/Api/GetSearchOptions/Orientation/${acum}_$orientation";
     }
 
-    if(info3.infoWalkList[index].legs[v].route == "A" || info3.infoWalkList[index].legs[v].route == "B"){
-      //formar la geocerca
-      if(acum != ""){
-        try{
-          String urlConsult = "http://192.168.1.200:8888/Api/GetSearchOptions/Orientation/$acum"; //"http://192.168.1.10:5000/API/shape?shape=$orientation"; //importante: hay que cambiar la url de la consulta
-          var value = await getThePointOrigin(urlConsult, latOrigin, lonOrigin);
-          if(value.item3){
-            var value2 = await getThePointDestiny(value.item2, value.item4, latDest, lonDest);
-            if(value2.item1 != null && value2.item2 != null){
-              if(value2.item1.length == value2.item2.length){
-                for(int i = 0; i < value2.item1.length - 1; i++){
-                  originCoordinates = GeoCoordinates(value2.item1[i], value2.item2[i]);
-                  destinyCoordinates = GeoCoordinates(value2.item1[i + 1], value2.item2[i + 1]);
-                  coord = [originCoordinates, destinyCoordinates];
-                  routeGeoPolyline = GeoPolyline(coord);
-                  routeMapPolyline = MapPolyline(routeGeoPolyline, widthInPixels, Color.withAlpha(col.item1, col.item2, col.item3, col.item4));
-                  _hereMapController.mapScene.addMapPolyline(routeMapPolyline);
-                  _mapPolylines.add(routeMapPolyline);
-                }
-                
+    if(acum != "" && urlConsult != ""){
+      try{
+        var value = await getThePointOrigin(urlConsult, latOrigin, lonOrigin);
+        if(value.item3){
+          var value2 = await getThePointDestiny(value.item2, value.item4, latDest, lonDest);
+          if(value2.item1 != null && value2.item2 != null){
+            if(value2.item1.length == value2.item2.length){
+              for(int i = 0; i < value2.item1.length - 1; i++){
+                originCoordinates = GeoCoordinates(value2.item1[i], value2.item2[i]);
+                destinyCoordinates = GeoCoordinates(value2.item1[i + 1], value2.item2[i + 1]);
+                coord = [originCoordinates, destinyCoordinates];
+                routeGeoPolyline = GeoPolyline(coord);
+                routeMapPolyline = MapPolyline(routeGeoPolyline, widthInPixels, Color.withAlpha(col.item1, col.item2, col.item3, col.item4));
+                _hereMapController.mapScene.addMapPolyline(routeMapPolyline);
+                _mapPolylines.add(routeMapPolyline);
               }
             }
           }
-          else{
-            showAlertDialog(_context, "Error, la ruta no se puede consultar, intentalo nuevamente");
-          }
-        }
-        catch(e){
-          showAlertDialog(_context, "Error en la consulta, intentalo nuevamente");
         }
       }
+      catch(e){
+        if(orientation != ""){
+          showAlertDialog(_context, "Error en la consulta con la linea B del metro, intentalo nuevamente");
+        }
+        else{
+          showAlertDialog(_context, "Error en la consulta con la linea A del metro, intentalo nuevamente");
+        }
+      }
+    }
+    else{
+      showAlertDialog(_context, "Error, no se puede consultar la informacion, intentalo nuevamente");
     }
   }
 
   Future<void> drawLineForCableCar(int index, int v, double latOrigin, double lonOrigin, double latDest, double lonDest, Tuple4<int, int, int, int> col) async {
     double widthInPixels = 10.0;
     List<GeoCoordinates> coord = null;
-    
     _mapPolylines = null;
     _mapPolylines = [];
     coord = [];
@@ -646,7 +729,6 @@ class ShowTheRoute {
   }
 
   Future<Tuple3<List<double>, List<double>, List<int>>> getThePointDestiny(int secu, dynamic jsonResp, double latDest, double lonDest) async {
-    //volver a consultar el resultado de la base de datos teniendo como base la secuencia (secu)
     double uppLatitude = latDest + 0.002264;
     double bottLatitude = latDest - 0.002264;
     double leftLongitude = lonDest - 0.002264;
@@ -668,7 +750,6 @@ class ShowTheRoute {
       ptoLonRef = double.parse(result["shape_pt_lon"]);
       if((ptoLatRef <= uppLatitude) && (ptoLatRef >= bottLatitude) && (ptoLonRef >= leftLongitude) && (ptoLonRef <= rightLongitude)){
         int distance = await calculateDistance(latDest, lonDest, ptoLatRef, ptoLonRef);
-        //print("distancia2 es: $distance");
         infoList.add(
           CoordInfo(
             distance: distance,
@@ -682,23 +763,28 @@ class ShowTheRoute {
         print("Estas por fuera de la geocerca");
       }
     }
-
     if(infoList.length != 0){
       infoList.sort((a, b) => a.distance.compareTo(b.distance));
-      int secu2 = infoList[0].secuence;      
+      int secu2 = infoList[0].secuence;
       //volver a poner el ciclo for para obtener la informacion mas precisa
       for(dynamic result2 in jsonResp){
         int secuence2 = result2["shape_pt_sequence"];
         double ptoLatRef2 = double.parse(result2["shape_pt_lat"]);
         double ptoLonRef2 = double.parse(result2["shape_pt_lon"]);
 
-        if(secuence2 >= secu && secuence2 <= secu2){
+        // if(secuence2 >= 1 && secuence2 <= secu){ //SOLO PARA PRUEBAS
+        //   lt.add(ptoLatRef2);
+        //   lg.add(ptoLonRef2);
+        //   secuenceList.add(secuence2);
+        // }
+
+        if(secuence2 >= secu && secuence2 <= secu2){ //LINEA DE CODIGO ORIGINAL
           lt.add(ptoLatRef2);
           lg.add(ptoLonRef2);
           secuenceList.add(secuence2);
         }
       }
-      
+
       if((lt.length == lg.length) && (lt.length != 0 && lg.length != 0)){
         return Tuple3(lt, lg, secuenceList);
       }
@@ -766,7 +852,7 @@ class ShowTheRoute {
 
   Future<void> bikeRoute(List<Waypoint> waypoints) async {
     try{
-      //TODO: generar metodo que dibuje las rutas en cuando sea en bicicleta
+      //TODO: generar metodo que dibuje las rutas en bicicleta
     }
     catch(e){
       print("Error $e");
@@ -811,7 +897,7 @@ class ShowTheRoute {
     }
   }
 
-  void clearMap() {
+  Future<void> clearMap() async {
     for (var mapPolyline in _mapPolylines) {
       _hereMapController.mapScene.removeMapPolyline(mapPolyline);
     }
@@ -864,7 +950,7 @@ class ShowTheRoute {
     double widthInPixels = 0.0;
     
     if(selectColor == 0){ //caminando
-      widthInPixels = 10.0;
+      widthInPixels = 18.0;
       routeMapPolyline = MapPolyline(routeGeoPolyline, widthInPixels, Color.withAlpha(0, 0, 0, 0));
     }
     else if(selectColor == 1){ //en Auto

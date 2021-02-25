@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class ButtonSearch extends StatefulWidget {
-
   ConsultServer consult; 
   BuildContext context;
   GetDataTrasnport gdt;
@@ -284,7 +283,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
                     else{
                       FocusScope.of(context).unfocus();
                       Fluttertoast.showToast(
-                        msg: "Tienes el mismo origen y destino, por favor cambia uno de los dos valores",
+                        msg: "Tienes el mismo origen y destino, por favor ingresa un origen y destino diferentes",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
                         backgroundColor: Colors.grey,
