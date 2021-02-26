@@ -36,8 +36,8 @@ class ConsultServer{
         place.add(
           DataOfPlace(
             title: "Estacion metro envigado", //vv["title"],
-            lat: 6.174495, //vv["position"]["lat"],
-            lon: -75.595850, //vv["position"]["lng"],
+            lat: 6.174508, //vv["position"]["lat"],
+            lon: -75.595364, //vv["position"]["lng"],
           )
         );
         //}
@@ -80,7 +80,7 @@ class ConsultServer{
     try{
       if(enter){
         enter = false;
-        if(info.dataText.text.toLowerCase() == "chingui" || info.dataText.text.toLowerCase() == "chinguí"){ //NUEVA CONDICION
+        if(info.dataText.text.toLowerCase() == "alcaldia" || info.dataText.text.toLowerCase() == "alcaldía" || info.dataText.text.toLowerCase() == "parque de " || info.dataText.text.toLowerCase() == "socoda" || info.dataText.text.toLowerCase() == "calle 38 sur" || info.dataText.text.toLowerCase() == "point 16" || info.dataText.text.toLowerCase() == "Drogueria santa ana envigado"){ //NUEVA CONDICION
           var resp = await http.get(completeUrl1, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
           if(resp.statusCode == 200){
             var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
@@ -109,6 +109,11 @@ class ConsultServer{
 
             if(jsonResp["gtfsItems"] != null){ //condicional por si el dato es nulo
               if(ready1){
+
+                if(place1.length != 0){
+                  place1.clear(); //elimina la informacion repetida de HereMaps
+                }
+
                 for(var jj in jsonResp["gtfsItems"]["items"]){
                   place1.add(
                     DataOfPlace(
@@ -119,6 +124,7 @@ class ConsultServer{
                   );
                   ready2 = true;
                 }
+
               }
             }
             else{

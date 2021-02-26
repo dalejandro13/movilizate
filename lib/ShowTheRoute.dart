@@ -285,7 +285,7 @@ class ShowTheRoute {
   }
 
   Future<void> drawLineForWalk(int index, int v, LegsInfo array) async {
-    double widthInPixels = 20.0;
+    double widthInPixels = 10.0;
     List<GeoCoordinates> coord = [];
 
     GeoCoordinates originCoordinates = null;
@@ -950,7 +950,7 @@ class ShowTheRoute {
     double widthInPixels = 0.0;
     
     if(selectColor == 0){ //caminando
-      widthInPixels = 18.0;
+      widthInPixels = 10.0;
       routeMapPolyline = MapPolyline(routeGeoPolyline, widthInPixels, Color.withAlpha(0, 0, 0, 0));
     }
     else if(selectColor == 1){ //en Auto

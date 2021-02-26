@@ -88,14 +88,12 @@ class _ButtonSearchState extends State<ButtonSearch> {
     urlTime = "&time=$actualTime";
     urlDate = "&date=$actualDate";
     
-    ///////////////////////////NO OLVIDAR DESCOMENTAR TODO ESTO///////////////////////
     urlMode = "&mode=TRANSIT,WALK";
     urlRest = "&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en";
     urlComplete = "$urlBase$urlOrigin$urlDestiny$urlTime$urlDate$urlMode$urlRest";
     print("URL DE CONSULTA: $urlComplete");
     //URL DE CONSULTA: http://181.140.180.63:9780/otp/routers/default/plan?fromPlace=6.246267,-75.599008&toPlace=6.27436,-75.55569&time=10:19am&date=01-19-2021&mode=TRANSIT,WALK&maxWalkDistance=10000.672&arriveBy=false&wheelchair=false&locale=en
-    ////////////////////////////////////////////////////////////////////////////////////
-    
+
     await widget.consult.getInfoFromServer(urlComplete, info3);
     showInfo = ShowTheRoute(context, hereMapController);
     showInfo.originAndDestiny().then((wayPoints) async {
