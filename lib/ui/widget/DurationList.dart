@@ -32,14 +32,25 @@ class _DurationListState extends State<DurationList> {
       separatorBuilder: (_, __) => Divider(height: 10.0, color: Colors.transparent),
       itemCount: info3.listOfInfo.length, //widget.infoCard.listOfInfo.value.length,
       itemBuilder: (BuildContext context, int index) {
-        return Container(
-          height: 170.0,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: CardInfoRoute(index, context, true), //cardInfoRoute(index, widget.routes.infoCard.listOfInfo.value[index], context, true),
-        );
+        return //(info3.listOfInfo.length == 1) ?  
+          Container(
+            height: 170.0,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: CardInfoRoute(index, context, true), //cardInfoRoute(index, widget.routes.infoCard.listOfInfo.value[index], context, true),
+          );
+        // (info3.listOfInfo.length > 1 && info3.tileList[index].length == 1 && info3.listOfInfo[index].legs[0].walk == "WALK") ? 
+        //   SizedBox.shrink() :  //hay solo una ruta a pie
+        //   Container(
+        //     height: 170.0,
+        //     width: MediaQuery.of(context).size.width,
+        //     decoration: BoxDecoration(
+        //       color: Colors.transparent,
+        //     ),
+        //     child: CardInfoRoute(index, context, true), //cardInfoRoute(index, widget.routes.infoCard.listOfInfo.value[index], context, true),
+        //);
       },
     );
 

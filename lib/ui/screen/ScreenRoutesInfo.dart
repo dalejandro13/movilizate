@@ -47,7 +47,7 @@ class _ScreenMapState extends State<ScreenMap> {
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
       if(error == null) {
         hereMapController.camera.lookAtPointWithDistance(GeoCoordinates(info3.infoWalkList[0].legs[0].latOrig + 0.001, info3.infoWalkList[0].legs[0].lonOrig + 0.005), 2000);    //6.245560, -75.600020), 100);
-        Future.delayed(Duration(seconds: 3));
+        Future.delayed(Duration(seconds: 4));
         readyToReturn = true;
       }
       else {

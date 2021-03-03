@@ -6,7 +6,6 @@ import 'package:movilizate/ui/screen/ScreenSearch.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  //linea 1, linea 2, linea A, linea TA -> bien
   //
   //int index = 0;
   SdkContext.init(IsolateOrigin.main);

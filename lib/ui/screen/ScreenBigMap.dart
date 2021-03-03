@@ -29,7 +29,7 @@ class _ScreenBigMapState extends State<ScreenBigMap> {
       hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
         if (error == null) {
           hereMapController.camera.lookAtPointWithDistance(GeoCoordinates(6.170039, -75.587251), 2000);
-          Future.delayed(Duration(seconds: 3));
+          Future.delayed(Duration(seconds: 4));
           readyToReturn = true;
         }
         else {

@@ -320,7 +320,6 @@ class ShowTheRoute {
       //   routeMapPolyline = MapPolyline(routeGeoPolyline, widthInPixels, Color.withAlpha(0, 0, 0, 0));
       //   _hereMapController.mapScene.addMapPolyline(routeMapPolyline);
       //   _mapPolylines.add(routeMapPolyline);
-      //   //TODO: mostrar resultados con print, verificar que los datos sean consistentes
       // }
 
       
@@ -702,14 +701,31 @@ class ShowTheRoute {
                   secuence: secuence,
                   latitude: ptoLatRef,
                   longitude: ptoLonRef,
-                )
+                ),
               );
             }
           }
+          
           if(infoList.length != 0){
             infoList.sort((a, b) => a.distance.compareTo(b.distance));
-            int smallDistance = infoList[0].distance;
-            int secu = infoList[0].secuence;
+            // ignore: avoid_init_to_null
+            int smallDistance = null;
+            // ignore: avoid_init_to_null
+            int secu = null;
+            if(infoList.length == 1){ //solo hay un elemento en el arreglo
+              smallDistance = infoList[0].distance;
+              secu = infoList[0].secuence;
+            }
+            else if(infoList.length > 1){
+              if((infoList[0].secuence < infoList[1].secuence) && (infoList[0].distance < infoList[1].distance)){
+                smallDistance = infoList[0].distance;
+                secu = infoList[0].secuence;
+              }
+              else{
+                smallDistance = infoList[1].distance;
+                secu = infoList[1].secuence;
+              }
+            }
             return Tuple4(smallDistance, secu, true, jsonResp);
           }
           else{
@@ -717,7 +733,6 @@ class ShowTheRoute {
           }
         }
         else{
-          print("no se puede obtener la informacion");
           return Tuple4(0, 0, false, null);
         }
       }
@@ -766,6 +781,7 @@ class ShowTheRoute {
     if(infoList.length != 0){
       infoList.sort((a, b) => a.distance.compareTo(b.distance));
       int secu2 = infoList[0].secuence;
+
       //volver a poner el ciclo for para obtener la informacion mas precisa
       for(dynamic result2 in jsonResp){
         int secuence2 = result2["shape_pt_sequence"];
@@ -783,13 +799,24 @@ class ShowTheRoute {
           lg.add(ptoLonRef2);
           secuenceList.add(secuence2);
         }
+        
       }
 
       if((lt.length == lg.length) && (lt.length != 0 && lg.length != 0)){
         return Tuple3(lt, lg, secuenceList);
       }
-      else{
-        return Tuple3(null, null, null);
+      else{ //si falla la adquisicion de las coordenadas
+        for(dynamic result2 in jsonResp){
+          int secuence2 = result2["shape_pt_sequence"];
+          double ptoLatRef2 = double.parse(result2["shape_pt_lat"]);
+          double ptoLonRef2 = double.parse(result2["shape_pt_lon"]);
+          if(secuence2 >= secu2 && secuence2 <= secu){
+            lt.add(ptoLatRef2);
+            lg.add(ptoLonRef2);
+            secuenceList.add(secuence2);
+          }
+        }
+        return Tuple3(lt, lg, secuenceList); //Tuple3(null, null, null);
       }
     }
     else{

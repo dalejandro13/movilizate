@@ -80,7 +80,7 @@ class ConsultServer{
     try{
       if(enter){
         enter = false;
-        if(info.dataText.text.toLowerCase() == "alcaldia" || info.dataText.text.toLowerCase() == "alcaldía" || info.dataText.text.toLowerCase() == "parque de " || info.dataText.text.toLowerCase() == "socoda" || info.dataText.text.toLowerCase() == "calle 38 sur" || info.dataText.text.toLowerCase() == "point 16" || info.dataText.text.toLowerCase() == "Drogueria santa ana envigado"){ //NUEVA CONDICION
+        //if(info.dataText.text.toLowerCase() == "alcaldia" || info.dataText.text.toLowerCase() == "alcaldía" || info.dataText.text.toLowerCase() == "parque de " || info.dataText.text.toLowerCase() == "socoda" || info.dataText.text.toLowerCase() == "calle 38 sur" || info.dataText.text.toLowerCase() == "point 16" || info.dataText.text.toLowerCase() == "Drogueria santa ana envigado"){ //NUEVA CONDICION
           var resp = await http.get(completeUrl1, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
           if(resp.statusCode == 200){
             var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
@@ -148,7 +148,7 @@ class ConsultServer{
           else{
             print("Error en la consulta, intentalo nuevamente");
           }
-        }
+        //}
         enter = true;
       }
       else{
@@ -463,7 +463,7 @@ class InnerIconsInfo extends ChangeNotifier{
               Icons.directions_train,
               size: sizeIcon,
               color: Colors.black,
-            )
+            ),
           );
 
           if(route.infoWalkList[i].legs[j].routeColor != null && route.infoWalkList[i].legs[j].routeTextColor != null){
@@ -502,7 +502,8 @@ class InnerIconsInfo extends ChangeNotifier{
                 Icons.directions_subway,
                 size: sizeIcon,
                 color: Colors.black,
-              )
+              ),
+
             );
 
             if(route.infoWalkList[i].legs[j].routeColor != null && route.infoWalkList[i].legs[j].routeTextColor != null){
@@ -514,11 +515,14 @@ class InnerIconsInfo extends ChangeNotifier{
                     color: await hexColor(route.infoWalkList[i].legs[j].routeColor),
                   ),
                   child: Center(
-                    child: Text(
-                      route.infoWalkList[i].legs[j].route,
-                      style: TextStyle(
-                        fontFamily: "AurulentSans-Bold",
-                        color: await hexColor(route.infoWalkList[i].legs[j].routeTextColor),
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
+                        route.infoWalkList[i].legs[j].route,
+                        style: TextStyle(
+                          fontFamily: "AurulentSans-Bold",
+                          color: await hexColor(route.infoWalkList[i].legs[j].routeTextColor),
+                        ),
                       ),
                     ),
                   ),
@@ -553,11 +557,14 @@ class InnerIconsInfo extends ChangeNotifier{
                       color: await hexColor(route.infoWalkList[i].legs[j].routeColor),
                     ),
                     child: Center(
-                      child: Text(
-                        route.infoWalkList[i].legs[j].route,
-                        style: TextStyle(
-                          fontFamily: "AurulentSans-Bold",
-                          color: await hexColor(route.infoWalkList[i].legs[j].routeTextColor),
+                      child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          route.infoWalkList[i].legs[j].route,
+                          style: TextStyle(
+                            fontFamily: "AurulentSans-Bold",
+                            color: await hexColor(route.infoWalkList[i].legs[j].routeTextColor),
+                          ),
                         ),
                       ),
                     ),
@@ -796,11 +803,14 @@ class FillInInformation{
                   color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
                 ),
                 child: Center(
-                  child: Text(
-                    info3.infoWalkList[x].legs[y].route,
-                    style: TextStyle(
-                      fontFamily: "AurulentSans-Bold",
-                      color: hexColor(info3.infoWalkList[x].legs[y].routeTextColor),
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      info3.infoWalkList[x].legs[y].route,
+                      style: TextStyle(
+                        fontFamily: "AurulentSans-Bold",
+                        color: hexColor(info3.infoWalkList[x].legs[y].routeTextColor),
+                      ),
                     ),
                   ),
                 ),
@@ -843,11 +853,14 @@ class FillInInformation{
                   color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
                 ),
                 child: Center(
-                  child: Text(
-                    info3.infoWalkList[x].legs[y].route,
-                    style: TextStyle(
-                      fontFamily: "AurulentSans-Bold",
-                      color: hexColor(info3.infoWalkList[x].legs[y].routeTextColor),
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      info3.infoWalkList[x].legs[y].route,
+                      style: TextStyle(
+                        fontFamily: "AurulentSans-Bold",
+                        color: hexColor(info3.infoWalkList[x].legs[y].routeTextColor),
+                      ),
                     ),
                   ),
                 ),
@@ -890,11 +903,14 @@ class FillInInformation{
                   color: hexColor(info3.infoWalkList[x].legs[y].routeColor),
                 ),
                 child: Center(
-                  child: Text(
-                    info3.infoWalkList[x].legs[y].route,
-                    style: TextStyle(
-                      fontFamily: "AurulentSans-Bold",
-                      color: hexColor(info3.infoWalkList[x].legs[y].routeTextColor),
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      info3.infoWalkList[x].legs[y].route,
+                      style: TextStyle(
+                        fontFamily: "AurulentSans-Bold",
+                        color: hexColor(info3.infoWalkList[x].legs[y].routeTextColor),
+                      ),
                     ),
                   ),
                 ),
