@@ -110,9 +110,9 @@ class ConsultServer{
             if(jsonResp["gtfsItems"] != null){ //condicional por si el dato es nulo
               if(ready1){
 
-                if(place1.length != 0){
-                  place1.clear(); //elimina la informacion repetida de HereMaps
-                }
+                // if(place1.length != 0){
+                //   place1.clear(); //elimina la informacion repetida de HereMaps
+                // }
 
                 for(var jj in jsonResp["gtfsItems"]["items"]){
                   place1.add(
@@ -134,7 +134,7 @@ class ConsultServer{
             if(ready1 && ready2){
               ready1 = false;
               ready2 = false;
-              if(place1.length > 0){
+              if(place1.isNotEmpty){
                 //elimino la informacion repetida de la lista
                 Map<String, DataOfPlace> mp = {};
                 for(var item in place1){
