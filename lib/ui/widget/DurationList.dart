@@ -32,8 +32,7 @@ class _DurationListState extends State<DurationList> {
       separatorBuilder: (_, __) => Divider(height: 10.0, color: Colors.transparent),
       itemCount: info3.listOfInfo.length, //widget.infoCard.listOfInfo.value.length,
       itemBuilder: (BuildContext context, int index) {
-        return //(info3.listOfInfo.length == 1) ?  
-          Container(
+        return Container(
             height: 170.0,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(

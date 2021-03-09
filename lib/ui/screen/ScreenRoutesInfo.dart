@@ -72,6 +72,7 @@ class _ScreenMapState extends State<ScreenMap> {
     info3 = Provider.of<InfoRouteServer>(context);
 
     Future<bool> _willPopCallback() async {
+      await Future.delayed(Duration(milliseconds: 700));
       if(readyToReturn){
         return true; //regresa a la pantalla anterior
       }
@@ -95,26 +96,34 @@ class _ScreenMapState extends State<ScreenMap> {
             ),
             Expanded(
               flex: 1,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 50.0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 15.0),
-                      child: IconButton(
-                        color: Colors.white,
-                        iconSize: 35.0,
-                        icon: Icon(Icons.arrow_back), 
-                        onPressed: (){
-                          if(readyToReturn){
-                            Navigator.pop(context);
-                          }
-                        },
+              child: Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(40.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 60.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 15.0),
+                        child: IconButton(
+                          color: Colors.white,
+                          iconSize: 35.0,
+                          icon: Icon(Icons.arrow_back), 
+                          onPressed: () async {
+                            if(readyToReturn){
+                              await Future.delayed(Duration(milliseconds: 700));
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

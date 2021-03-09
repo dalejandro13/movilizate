@@ -48,7 +48,7 @@ class RoutingExample {
   bool waitData = true;
   ProcessData info;
   
-  RoutingExample(BuildContext context, HereMapController hereMapController) {
+  RoutingExample(BuildContext context, HereMapController hereMapController){
     _context = context;
     _hereMapController = hereMapController;
     _mapPolylines = [];
@@ -83,8 +83,8 @@ class RoutingExample {
     }
   }
 
-  void _setTapGestureHandler() {
-    _hereMapController.gestures.tapListener = TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
+  Future<void> _setTapGestureHandler() async {
+    _hereMapController.gestures.tapListener = TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) async {
       _toList(_hereMapController.viewToGeoCoordinates(touchPoint));
       try{
         if(waitData){
@@ -92,14 +92,15 @@ class RoutingExample {
           if(coorList.length >= 2){ //condicion si se tiene dos elementos en la lista
             var lt = double.parse(coorList[0].toStringAsFixed(6));
             var lg = double.parse(coorList[1].toStringAsFixed(6));
-            clearMarkerOfMap();
-            putMarker(lt, lg, true);
+            await clearMarkerOfMap();
+            await putMarker(lt, lg, true);
           }
-          showModalBottomSheet(
+          Future<void> future = showModalBottomSheet(
             isDismissible: true,
             context: _context,
             builder: (ctx) => _buildInfoBottom(ctx),
           );
+          future.then((void value) => _closeModal(value));
           waitData = true;
         }
       }
@@ -110,8 +111,8 @@ class RoutingExample {
     });
   }
 
-  void _setLongPressGestureHandler() async {
-    _hereMapController.gestures.longPressListener = LongPressListener.fromLambdas(lambda_onLongPress: (GestureState gestureState, Point2D touchPoint) {
+  Future<void> _setLongPressGestureHandler() async {
+    _hereMapController.gestures.longPressListener = LongPressListener.fromLambdas(lambda_onLongPress: (GestureState gestureState, Point2D touchPoint) async {
       _toList(_hereMapController.viewToGeoCoordinates(touchPoint));
       if (gestureState == GestureState.begin) {
         waitData = true;
@@ -124,13 +125,13 @@ class RoutingExample {
           if(waitData){
             waitData = false;
             if(coorList.length >= 2){ //condicion si se tiene dos elementos en la lista
-              
-              putMarker(coorList[0], coorList[1], true);
+              await putMarker(coorList[0], coorList[1], true);
             }
-            showModalBottomSheet(
+            Future<void> future = showModalBottomSheet(
               context: _context,
               builder: (context) => _buildInfoBottom(context)
             );
+            future.then((void value) => _closeModal(value));
           }
           Future.delayed(Duration(seconds: 1));
         }
@@ -144,6 +145,10 @@ class RoutingExample {
         Future.delayed(Duration(seconds: 1));
       }
     });
+  }
+
+  Future<void> _closeModal(void value) async { //borra el marcador del mapa
+    await clearMarkerOfMap();
   }
 
   _buildInfoBottom(BuildContext context){
@@ -310,8 +315,8 @@ class RoutingExample {
         (RoutingError routingError, List<here.Route> routeList) async {
       if (routingError == null) {
         here.Route route = routeList.first;
-        _showRouteDetails(route);
-        _showRouteOnMap(route);
+        await _showRouteDetails(route);
+        await _showRouteOnMap(route);
       } 
       else {
         var error = routingError.toString();
@@ -320,7 +325,7 @@ class RoutingExample {
     });
   }
 
-  void clearMarkerOfMap(){
+  Future<void> clearMarkerOfMap() async {
     if(_marker != null){
       _hereMapController.mapScene.removeMapMarker(_marker);
     }
@@ -333,7 +338,7 @@ class RoutingExample {
     _mapPolylines.clear();
   }
 
-  void _showRouteDetails(here.Route route) {
+  Future<void> _showRouteDetails(here.Route route) async {
     int estimatedTravelTimeInSeconds = route.durationInSeconds;
     int lengthInMeters = route.lengthInMeters;
 
@@ -359,7 +364,7 @@ class RoutingExample {
     return '$kilometers.$remainingMeters km';
   }
 
-  _showRouteOnMap(here.Route route) {
+  Future<void> _showRouteOnMap(here.Route route) async {
     // Show route as polyline.
     GeoPolyline routeGeoPolyline = GeoPolyline(route.polyline);
 

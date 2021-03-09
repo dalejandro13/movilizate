@@ -80,7 +80,7 @@ class ConsultServer{
     try{
       if(enter){
         enter = false;
-        //if(info.dataText.text.toLowerCase() == "alcaldia" || info.dataText.text.toLowerCase() == "alcaldía" || info.dataText.text.toLowerCase() == "parque de " || info.dataText.text.toLowerCase() == "socoda" || info.dataText.text.toLowerCase() == "calle 38 sur" || info.dataText.text.toLowerCase() == "point 16" || info.dataText.text.toLowerCase() == "Drogueria santa ana envigado"){ //NUEVA CONDICION
+        //if(info.dataText.text.toLowerCase() == "alcaldia" || info.dataText.text.toLowerCase() == "alcaldía" || info.dataText.text.toLowerCase() == "parque de " || info.dataText.text.toLowerCase() == "socoda" || info.dataText.text.toLowerCase() == "calle 38 sur" || info.dataText.text.toLowerCase() == "point 16" || info.dataText.text.toLowerCase() == "Drogueria santa ana envigado"){
           var resp = await http.get(completeUrl1, headers: {'Content-Type': 'application/json'}).timeout(Duration(seconds: 7));
           if(resp.statusCode == 200){
             var jsonResp = jsonDecode(utf8.decode(resp.bodyBytes));
@@ -114,7 +114,7 @@ class ConsultServer{
                 //   place1.clear(); //elimina la informacion repetida de HereMaps
                 // }
 
-                for(var jj in jsonResp["gtfsItems"]["items"]){
+                for(dynamic jj in jsonResp["gtfsItems"]["items"]){
                   place1.add(
                     DataOfPlace(
                       title: jj["title"],
@@ -137,7 +137,7 @@ class ConsultServer{
               if(place1.isNotEmpty){
                 //elimino la informacion repetida de la lista
                 Map<String, DataOfPlace> mp = {};
-                for(var item in place1){
+                for(DataOfPlace item in place1){
                   mp[item.title] = item;
                 }
                 info2.infoPlace = mp.values.toList();
@@ -277,7 +277,6 @@ class ConsultServer{
     }
   }
 }
-
 
 class GetIconsInfoCard{
 
@@ -643,7 +642,7 @@ class GetDataTrasnport{
   Future<void> iconsOfTransport() async {
     info3.listOfTransport = null;
     info3.listOfTransport = [false, false, false, false, false];
-    for(int i = 0; i < info3.infoWalkList.length; i++){      
+    for(int i = 0; i < info3.infoWalkList.length; i++){
       for(int j = 0; j < info3.infoWalkList[i].legs.length; j++){
         if(info3.infoWalkList[i].legs[j].mode == "CABLE_CAR"){
           if(info3.listOfTransport[0] == false){

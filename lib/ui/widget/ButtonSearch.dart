@@ -135,15 +135,11 @@ class _ButtonSearchState extends State<ButtonSearch> {
     info = Provider.of<ProcessData>(context);
     info2 = Provider.of<DataOfPlace>(context);
     info3 = Provider.of<InfoRouteServer>(context);
-    return Container(
-      height: 60.0,
-      width: 180.0,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: Color.fromRGBO(87, 114, 26, 1.0),
-      ),
-      
+    return Material(
+      color: Color.fromRGBO(87, 114, 26, 1.0),
+      borderRadius: BorderRadius.circular(8.0),
       child: InkWell(
+        borderRadius: BorderRadius.circular(8.0),
         child: Center(
           child: Text(
             "Search",

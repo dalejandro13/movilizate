@@ -44,17 +44,13 @@ class CardInfoRoute extends StatelessWidget {
     info3 = Provider.of<InfoRouteServer>(context);
     info = Provider.of<ProcessData>(context);
     
-    return ListTile(
-      title: Padding(
-        padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-        child: Container(
-          height: 140.0,
-          width: 70.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            color: Colors.white,
-          ),
-          child: Column(
+    return Padding(
+      padding: EdgeInsets.only(top: 25.0, left: 25.0, right: 25.0),
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        child: ListTile(
+          title: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
@@ -92,14 +88,13 @@ class CardInfoRoute extends StatelessWidget {
                 children: [
 
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                    padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                     child: Container(
                       height: 50.0,
                       width: 200.0,
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                       ),
-
 
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -255,26 +250,24 @@ class CardInfoRoute extends StatelessWidget {
                               ),
                             )
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
 
                 ],
               ),
-
-
-                
               
             ],
           ),
+          onTap: enable ? () async {
+            await fii.getDataToShow(info, info3);
+            await Future.delayed(Duration(milliseconds: 300));
+            await Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenMap(index, context)));
+          }:
+          (){ },
         ),
       ),
-      onTap: enable ? () async {
-        await fii.getDataToShow(info, info3);
-        await Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenMap(index, context)));
-      }:
-      (){ },
     );
 
 

@@ -37,6 +37,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
   ProcessData info;
   FocusNode focusOrigin = FocusNode();
   FocusNode focusDestiny = FocusNode();
+  double opacityLevel = 1.0;
 
   @override
   void initState() {
@@ -75,6 +76,10 @@ class _ScreenSearchState extends State<ScreenSearch> {
     //var info2 = Provider.of<DataOfPlace>(context);
     info = Provider.of<ProcessData>(context, listen: false);
     _locationData = await location.getLocation();
+    info.getLatitudeOrigin = null;
+    info.getLongitudeOrigin = null;
+    info.dataOrigin.text = null;
+    
     info.getLatitudeOrigin = double.parse(_locationData.latitude.toStringAsFixed(6));
     info.getLongitudeOrigin = double.parse(_locationData.longitude.toStringAsFixed(6));
     info.dataOrigin.text = "${info.getLatitudeOrigin}, ${info.getLongitudeOrigin}";
@@ -123,7 +128,11 @@ class _ScreenSearchState extends State<ScreenSearch> {
                       ),
                       Expanded(
                         flex: 8,
-                        child: TextOriginDestiny("Origen", consult, color1, info.dataOrigin, focusOrigin/*info.focusOrigin*/, true, false), //AutoCompleteOrigin(context),
+                        child: AnimatedOpacity(
+                          duration: Duration(seconds: 3),
+                          curve: Curves.elasticOut,
+                          opacity: info.opacityLevelOrigin,
+                          child: TextOriginDestiny("Origen", consult, color1, info.dataOrigin, focusOrigin/*info.focusOrigin*/, true, false)), //AutoCompleteOrigin(context),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 30.0),
@@ -146,7 +155,11 @@ class _ScreenSearchState extends State<ScreenSearch> {
                       ),
                       Expanded(
                         flex: 8,
-                        child: TextOriginDestiny("Destino", consult, color2, info.dataDestiny, focusDestiny/*info.focusDestiny*/, true, false), //AutoCompleteDestiny(context),
+                        child: AnimatedOpacity(
+                          duration: Duration(seconds: 3),
+                          curve: Curves.elasticOut,
+                          opacity: info.opacityLevelDestiny, //opacityLevel,
+                          child: TextOriginDestiny("Destino", consult, color2, info.dataDestiny, focusDestiny/*info.focusDestiny*/, true, false)), //AutoCompleteDestiny(context),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 30.0),
@@ -176,33 +189,64 @@ class _ScreenSearchState extends State<ScreenSearch> {
 
                       Expanded(
                         flex: 2,
-                        child: IconButton(
-                          color: Colors.white,
-                          iconSize: 40.0,
-                          onPressed: () {
-                            if(info.dataOrigin != null){
-                              if(info.dataDestiny != null){
-                                if(info.dataOrigin.text != ""){
-                                  if(info.dataDestiny.text != ""){
-                                    if(info.dataOrigin != null && info.dataDestiny != null){
-                                      //intercambio valores de TextField de origen con el destino
-                                      var aux1 =  info.dataOrigin.text;
-                                      info.dataOrigin.text = info.dataDestiny.text;
-                                      info.dataDestiny.text = aux1;
-                                      
-                                      //intercambio coordenas de latitud de origen con el destino
-                                      var aux2 = info.getLatitudeOrigin;
-                                      info.getLatitudeOrigin = info.getLatitudeDestiny;
-                                      info.getLatitudeDestiny = aux2;
+                        child: Material(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(25.0),
+                          child: FittedBox(
+                            fit: BoxFit.fitHeight,
+                            alignment: Alignment.center,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.swap_vert
+                              ),
+                              color: Colors.white,
+                              iconSize: 300.0,
+                              onPressed: () {
+                                if(info.dataOrigin != null){
+                                  if(info.dataDestiny != null){
+                                    if(info.dataOrigin.text != ""){
+                                      if(info.dataDestiny.text != ""){
+                                        if(info.dataOrigin != null && info.dataDestiny != null){
+                                          //intercambio valores de TextField de origen con el destino
+                                          var aux1 =  info.dataOrigin.text;
+                                          info.dataOrigin.text = info.dataDestiny.text;
+                                          info.dataDestiny.text = aux1;
+                                          
+                                          //intercambio coordenas de latitud de origen con el destino
+                                          var aux2 = info.getLatitudeOrigin;
+                                          info.getLatitudeOrigin = info.getLatitudeDestiny;
+                                          info.getLatitudeDestiny = aux2;
 
-                                      //intercambio coordenadas de longitud de origen con el destino
-                                      var aux3 = info.getLongitudeOrigin;
-                                      info.getLongitudeOrigin = info.getLongitudeDestiny;
-                                      info.getLongitudeDestiny = aux3;
+                                          //intercambio coordenadas de longitud de origen con el destino
+                                          var aux3 = info.getLongitudeOrigin;
+                                          info.getLongitudeOrigin = info.getLongitudeDestiny;
+                                          info.getLongitudeDestiny = aux3;
+                                        }
+                                        else{
+                                          Fluttertoast.showToast(
+                                            msg: "Falta ingresar datos de origen ó el destino",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            backgroundColor: Colors.grey,
+                                            textColor: Colors.white,
+                                            fontSize: 20.0,
+                                          );
+                                        }
+                                      }
+                                      else{
+                                        Fluttertoast.showToast(
+                                          msg: "Falta ingresar el destino",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey,
+                                          textColor: Colors.white,
+                                          fontSize: 20.0,
+                                        );
+                                      }
                                     }
                                     else{
                                       Fluttertoast.showToast(
-                                        msg: "Falta ingresar datos de origen ó el destino",
+                                        msg: "Falta ingresar el origen",
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
                                         backgroundColor: Colors.grey,
@@ -232,31 +276,9 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                     fontSize: 20.0,
                                   );
                                 }
-                              }
-                              else{
-                                Fluttertoast.showToast(
-                                  msg: "Falta ingresar el destino",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  backgroundColor: Colors.grey,
-                                  textColor: Colors.white,
-                                  fontSize: 20.0,
-                                );
-                              }
-                            }
-                            else{
-                              Fluttertoast.showToast(
-                                msg: "Falta ingresar el origen",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                backgroundColor: Colors.grey,
-                                textColor: Colors.white,
-                                fontSize: 20.0,
-                              );
-                            }
-                          },
-                          icon: Icon(
-                            Icons.swap_vert
+                              },
+                              
+                            ),
                           ),
                         ),
                       ),
@@ -279,7 +301,26 @@ class _ScreenSearchState extends State<ScreenSearch> {
 
                 Expanded(
                   flex: 6,
-                  child: MatchList(focusOrigin, focusDestiny),
+                  child: AnimatedCrossFade(
+                    duration: Duration(milliseconds: 100),
+                    crossFadeState: info.animationStart,
+                    firstChild: info.progressIndicatorShow ? 
+                      Container(
+                        height: 100.0,
+                        width: 100.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(height: 20.0),
+                            CircularProgressIndicator(),
+                          ],
+                        )
+                      ) : 
+                      Container(
+                        color: Colors.transparent
+                      ),
+                    secondChild: MatchList(focusOrigin, focusDestiny),
+                  ),
                 ),
               ],
             ),

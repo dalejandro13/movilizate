@@ -8,14 +8,11 @@ import 'package:movilizate/ui/widget/TextOriginDestiny.dart';
 import 'package:provider/provider.dart';
 
 class ScreenResult extends StatefulWidget {
-
+  
   ConsultServer consult;
-  //GetIconsInfoCard giic;2
 
   ScreenResult(ConsultServer consult, BuildContext context){
     this.consult = consult;
-    //giic = GetIconsInfoCard(context);
-    //print(giic.listOfInfo.value);
   }
 
   @override
@@ -31,8 +28,10 @@ class _ScreenResultState extends State<ScreenResult> {
   @override
   Widget build(BuildContext context){
     var info = Provider.of<ProcessData>(context);
-
+    var info2 = Provider.of<DataOfPlace>(context);
     Future<bool> _willPopCallBack() async {
+      info2.infoPlace = null;
+      info2.infoPlace = [];
       return true;
     }
 
@@ -48,7 +47,6 @@ class _ScreenResultState extends State<ScreenResult> {
           },
         child: Stack(
           children: [
-              //Text(info2.title), //pendiente de borrar
               Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,

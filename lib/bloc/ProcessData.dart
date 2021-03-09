@@ -12,8 +12,10 @@ class ProcessData with ChangeNotifier{
   TextEditingController autocompleteDestiny = TextEditingController();
 
   String time = "";
-
+  CrossFadeState firstState = CrossFadeState.showFirst;
+  bool progressIndicator = false;
   double latitude = 0.0, longitude = 0.0, latitudeOrigin = 0.0, longitudeOrigin = 0.0, latitudeDestiny = 0.0, longitudeDestiny = 0.0;
+  double opacityOrigin = 1.0, opacityDestiny = 1.0;
   // ignore: avoid_init_to_null
   HereMapController hereMapController = null;
   List<Widget> widgetList = List<Widget>();
@@ -153,6 +155,31 @@ class ProcessData with ChangeNotifier{
     listTransport = val;
     notifyListeners();
   }
+
+  get opacityLevelOrigin => opacityOrigin;
+  set opacityLevelOrigin(double val){
+    opacityOrigin = val;
+    notifyListeners();
+  }
+
+  get opacityLevelDestiny => opacityDestiny;
+  set opacityLevelDestiny(double val){
+    opacityDestiny = val;
+    notifyListeners();
+  }
+
+  get animationStart => firstState;
+  set animationStart(CrossFadeState val){
+    firstState = val;
+    notifyListeners();
+  }
+
+  get progressIndicatorShow => progressIndicator;
+  set progressIndicatorShow(bool val){
+    progressIndicator = val;
+    notifyListeners();
+  }
+
 }
 
 class DataOfPlace with ChangeNotifier{

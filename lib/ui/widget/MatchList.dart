@@ -18,13 +18,19 @@ class MatchList extends StatefulWidget {
 
 class _MatchListState extends State<MatchList> {
 
-  void checkFocus(ProcessData info, DataOfPlace info2, int index) {
+  Future<void> checkFocus(ProcessData info, DataOfPlace info2, int index) async {
     try{
       if(widget.focusOrigin.hasFocus){
         info.dataOrigin.text = info2.infoPlace[index].title;
         //almacenar latitud y longitud de origen
         info.getLatitudeOrigin = info2.infoPlace[index].lat;
         info.getLongitudeOrigin = info2.infoPlace[index].lon;
+
+        //animacion para TextFormField de origen
+        info.opacityLevelOrigin = info.opacityLevelOrigin == 1.0 ? 0.5 : 1.0;
+        await Future.delayed(Duration(milliseconds: 200));                         
+        info.opacityLevelOrigin = info.opacityLevelOrigin == 1.0 ? 1.0 : 1.0;
+
       }
       else{
         if(widget.focusDestiny.hasFocus){
@@ -32,6 +38,12 @@ class _MatchListState extends State<MatchList> {
           //almacenar latitud y longitud de destino
           info.getLatitudeDestiny = info2.infoPlace[index].lat;
           info.getLongitudeDestiny = info2.infoPlace[index].lon;
+
+          //animacion para TextFormField de destino
+          info.opacityLevelDestiny = info.opacityLevelDestiny == 1.0 ? 0.5 : 1.0;
+          await Future.delayed(Duration(milliseconds: 200));                                   
+          info.opacityLevelDestiny = info.opacityLevelDestiny == 1.0 ? 1.0 : 1.0;
+
         }
       }
     }
@@ -56,10 +68,8 @@ class _MatchListState extends State<MatchList> {
         itemBuilder: (BuildContext context, int index){
           return ConstrainedBox(
             constraints: BoxConstraints(maxHeight: 200.0, minHeight: 100.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
+            child: Material(
+              color: Colors.white,
               child: ListTile(
                 title: Text(
                   info2.infoPlace[index].title,
@@ -80,9 +90,9 @@ class _MatchListState extends State<MatchList> {
                   size: 40.0,
                   color: widget.focusDestiny.hasFocus ? Color.fromRGBO(105, 190, 50, 1.0) : Color.fromRGBO(0, 0, 0, 1.0),
                 ),
-                onTap: (){
+                onTap: () async {                  
                   try{
-                    checkFocus(info, info2, index);
+                    await checkFocus(info, info2, index);
                   }
                   catch(e){
                     print("Error $e");

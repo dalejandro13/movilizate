@@ -63,10 +63,11 @@ class TextOriginDestiny extends StatelessWidget {
           suffixIcon: IconButton(
             icon: Icon(Icons.close),
             onPressed: (){
-              //controller.text = "";
-              //info.dataOrigin.text = "";
+              info.progressIndicatorShow = false;
+              info.animationStart = CrossFadeState.showFirst;
               control.text = "";
               increment = 0;
+              info2.infoPlace = null;
               info2.infoPlace = [];
               if(isSecondScreen){
                 info2.infoPlace = null;
@@ -81,15 +82,24 @@ class TextOriginDestiny extends StatelessWidget {
           ),
         ),
         onChanged: activate ? (val) async {
-          
           if(val.length >= 3){
             if(val.length > increment){ //evitar la consulta cuando se empieza a borra en el TextFormField
               increment = val.length;
               info.dataText.text = val;
+              info.progressIndicatorShow = true;
+              info.animationStart = CrossFadeState.showFirst;
               await consult.getInfoInSearch(info, info2, place); //consulto en la base de datos para llenar la lista
+              info.progressIndicatorShow = false;
+              info.animationStart = CrossFadeState.showSecond;
             }
             else{
               increment = val.length;
+              info.dataText.text = val;
+              info.progressIndicatorShow = true;
+              info.animationStart = CrossFadeState.showFirst;
+              await consult.getInfoInSearch(info, info2, place);
+              info.progressIndicatorShow = false;
+              info.animationStart = CrossFadeState.showSecond;
             }
           }
           else if(val.length >= 0 && val.length <= 2){
