@@ -12,9 +12,10 @@ class IconList{
 }
 
 class LegsList{
-  String subway, bus, bike, walk, route, routeColor, routeTextColor;
+  String cableCar, subway, bus, bike, walk, route, routeColor, routeTextColor;
 
   LegsList({
+    this.cableCar,
     this.subway, 
     this.bus, 
     this.bike, 

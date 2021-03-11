@@ -87,7 +87,7 @@ class _ScreenMapState extends State<ScreenMap> {
         body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: material.Color.fromRGBO(105, 190, 50, 1.0),
+        color: material.Color.fromRGBO(105, 190, 40, 1.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -96,33 +96,36 @@ class _ScreenMapState extends State<ScreenMap> {
             ),
             Expanded(
               flex: 1,
-              child: Material(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(40.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 60.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 15.0),
-                        child: IconButton(
-                          color: Colors.white,
-                          iconSize: 35.0,
-                          icon: Icon(Icons.arrow_back), 
-                          onPressed: () async {
-                            if(readyToReturn){
-                              await Future.delayed(Duration(milliseconds: 700));
-                              Navigator.pop(context);
-                            }
-                          },
+              child: Theme(
+                data: ThemeData(splashColor: Colors.white),
+                child: Material(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(40.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 60.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 15.0),
+                          child: IconButton(
+                            color: Colors.white,
+                            iconSize: 35.0,
+                            icon: Icon(Icons.arrow_back), 
+                            onPressed: () async {
+                              if(readyToReturn){
+                                await Future.delayed(Duration(milliseconds: 700));
+                                Navigator.pop(context);
+                              }
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

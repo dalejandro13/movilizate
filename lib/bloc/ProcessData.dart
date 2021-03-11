@@ -8,14 +8,17 @@ class ProcessData with ChangeNotifier{
 
   TextEditingController dataTextInput = TextEditingController();
 
+  ListView listV;
+
   TextEditingController autocompleteOrigin = TextEditingController();
   TextEditingController autocompleteDestiny = TextEditingController();
 
-  String time = "";
+  String time = "", transport = "";
   CrossFadeState firstState = CrossFadeState.showFirst;
   bool progressIndicator = false;
   double latitude = 0.0, longitude = 0.0, latitudeOrigin = 0.0, longitudeOrigin = 0.0, latitudeDestiny = 0.0, longitudeDestiny = 0.0;
   double opacityOrigin = 1.0, opacityDestiny = 1.0;
+  bool cableCar = false, subway = false, bus = false, bike = false, walk = false;
   // ignore: avoid_init_to_null
   HereMapController hereMapController = null;
   List<Widget> widgetList = List<Widget>();
@@ -180,6 +183,42 @@ class ProcessData with ChangeNotifier{
     notifyListeners();
   }
 
+  get selectTransport => transport;
+  set selectTransport(String val){
+    transport = val;
+    notifyListeners();
+  }
+
+  get transportCableCar => cableCar;
+  set transportCableCar(bool val){
+    cableCar = val;
+    notifyListeners();
+  }
+
+  get transportSubway => subway;
+  set transportSubway(bool val){
+    subway = val;
+    notifyListeners();
+  }
+
+  get transportBus => bus;
+  set transportBus(bool val){
+    bus = val;
+    notifyListeners();
+  }
+
+  get transportBike => bike;
+  set transportBike(bool val){
+    bike = val;
+    notifyListeners();
+  }
+
+  get transportWalk => walk;
+  set transportWalk(bool val){
+    walk = val;
+    notifyListeners();
+  }
+
 }
 
 class DataOfPlace with ChangeNotifier{
@@ -220,7 +259,13 @@ class InfoRouteServer with ChangeNotifier{
 
   List<IconList> listInfoIcon = [];
 
+  List<IconList> listInfoIcon2 = [];
+
+  List<IconList> infoIcon = null;
+ 
   int index1 = 0, bestT = 0;
+
+  bool filter = false;
 
 
   get infoWalkList => infoWalk;
@@ -250,6 +295,24 @@ class InfoRouteServer with ChangeNotifier{
   get listOfInfo => listInfoIcon;
   set listOfInfo(List<IconList> val){
     listInfoIcon = val;
+    notifyListeners();
+  }
+
+  get listOfInfoAux => listInfoIcon2;
+  set listOfInfoAux(List<IconList> val){
+    listInfoIcon2 = val;
+    notifyListeners();
+  }
+
+  get filterActive => filter;
+  set filterActive(bool val){
+    filter = val;
+    notifyListeners();
+  }
+
+  get iconAux => infoIcon;
+  set iconAux(List<IconList> val){
+    infoIcon = val;
     notifyListeners();
   }
 

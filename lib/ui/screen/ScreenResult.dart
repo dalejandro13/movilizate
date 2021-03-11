@@ -22,16 +22,27 @@ class ScreenResult extends StatefulWidget {
 class _ScreenResultState extends State<ScreenResult> {
 
   Color color1 = Color.fromRGBO(81, 81, 81, 1.0);
-  Color color2 = Color.fromRGBO(105, 190, 50, 1.0);
-  bool passOne = true;
+  Color color2 = Color.fromRGBO(105, 190, 40, 1.0);
 
   @override
   Widget build(BuildContext context){
     var info = Provider.of<ProcessData>(context);
     var info2 = Provider.of<DataOfPlace>(context);
+    var info3 = Provider.of<InfoRouteServer>(context);
     Future<bool> _willPopCallBack() async {
       info2.infoPlace = null;
       info2.infoPlace = [];
+      info.transportCableCar = false;
+      info.transportSubway = false;
+      info.transportBus = false;
+      info.transportBike = false;
+      info.transportWalk = false;
+      info3.iconAux = null;
+      info3.listOfInfoAux = null;
+      info3.listOfInfoAux = [];
+      info3.listOfInfo = null;
+      info3.listOfInfo = [];
+      info3.filterActive = false;
       return true;
     }
 
@@ -119,7 +130,7 @@ class _ScreenResultState extends State<ScreenResult> {
                           Expanded(
                             flex: 8,
                             child: /*Icon(Icons.directions_bus, size: 60.0, color: Colors.white)*/ 
-                              ButtonsModesOfTransport(context, passOne),
+                              ButtonsModesOfTransport(context),
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 30.0),
@@ -135,7 +146,11 @@ class _ScreenResultState extends State<ScreenResult> {
 
                     Expanded(
                       flex: 7,
-                      child: DurationList(context),
+                      child: DurationList(),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.0),
                     ),
 
                   ],

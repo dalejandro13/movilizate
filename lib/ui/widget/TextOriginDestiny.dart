@@ -30,6 +30,7 @@ class TextOriginDestiny extends StatelessWidget {
   Widget build(BuildContext context) {
     var info = Provider.of<ProcessData>(context);
     var info2 = Provider.of<DataOfPlace>(context);
+    var info3 = Provider.of<InfoRouteServer>(context);
     return Container(
       height: 40.0,
       width: MediaQuery.of(context).size.width - 3.0,
@@ -74,6 +75,17 @@ class TextOriginDestiny extends StatelessWidget {
                 info2.infoPlace = [];
                 place = null;
                 place = [];
+                info.transportCableCar = false;
+                info.transportSubway = false;
+                info.transportBus = false;
+                info.transportBike = false;
+                info.transportWalk = false;
+                info3.listOfInfoAux = null;
+                info3.listOfInfoAux = [];
+                info3.listOfInfo = null;
+                info3.listOfInfo = [];
+                info3.iconAux = null;
+                info3.filterActive = false;
                 Navigator.pop(context, text);
               }
             },

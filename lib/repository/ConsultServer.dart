@@ -280,7 +280,8 @@ class ConsultServer{
 
 class GetIconsInfoCard{
 
-  ValueNotifier<List<IconList>> listOfInfo = ValueNotifier([]);
+  //ValueNotifier<List<IconList>> listOfInfo = ValueNotifier([]);
+  //ValueNotifier<List<IconList>> listOfInfoAux = ValueNotifier([]);
   InfoRouteServer info3;
   List<LegsList> legs;
 
@@ -290,7 +291,9 @@ class GetIconsInfoCard{
 
   Future<void> getIconsInfo(BuildContext context) async {
     info3.listOfInfo = null;
+    //info3.listOfInfoAux = null;
     info3.listOfInfo = [];
+    //info3.listOfInfoAux = [];
     legs = null;
     legs = [];
     String timeArrived = null, timeDuration = null, cableCar = null, subway = null, bus = null, bike = null, walk = null;
@@ -358,52 +361,10 @@ class GetIconsInfoCard{
             routeColor = info3.infoWalkList[i].legs[y].routeColor;
             routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
           }
-          
-          // if(info3.infoWalkList[i].legs[y].mode == "SUBWAY"){
-          //   subway = "SUBWAY";
-          //   bus = "";
-          //   bike = "";
-          //   walk = "";
-          //   route = info3.infoWalkList[i].legs[y].route;
-          //   routeColor = info3.infoWalkList[i].legs[y].routeColor;
-          //   routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
-          // }
-          // else{
-          //   if(info3.infoWalkList[i].legs[y].mode == "BUS"){
-          //     subway = "";
-          //     bus = "BUS";
-          //     bike = "";
-          //     walk = "";
-          //     route = info3.infoWalkList[i].legs[y].route;
-          //     routeColor = info3.infoWalkList[i].legs[y].routeColor;
-          //     routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
-          //   }
-          //   else{
-          //     if(info3.infoWalkList[i].legs[y].mode == "BIKE"){
-          //       subway = "";
-          //       bus = "";
-          //       bike = "BIKE";
-          //       walk = "";
-          //       route = info3.infoWalkList[i].legs[y].route;
-          //       routeColor = info3.infoWalkList[i].legs[y].routeColor;
-          //       routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
-          //     }
-          //     else{
-          //       if(info3.infoWalkList[i].legs[y].mode == "WALK"){
-          //         subway = "";
-          //         bus = "";
-          //         bike = "";
-          //         walk = "WALK";
-          //         route = info3.infoWalkList[i].legs[y].route;
-          //         routeColor = info3.infoWalkList[i].legs[y].routeColor;
-          //         routeTextColor = info3.infoWalkList[i].legs[y].routeTextColor;
-          //       }
-          //     }
-          //   }
-          // }
-          
+            
           legs.add(
             LegsList(
+              cableCar: cableCar,
               subway: subway,
               bus: bus,
               bike: bike,
@@ -458,10 +419,9 @@ class InnerIconsInfo extends ChangeNotifier{
       for(int j = 0; j < route.infoWalkList[i].legs.length; j++){
         if(route.infoWalkList[i].legs[j].mode == "CABLE_CAR"){
           element.add(
-            Icon(
-              Icons.directions_train,
-              size: sizeIcon,
-              color: Colors.black,
+            ImageIcon(
+              AssetImage("images/cablewayBlack.png"), //TODO: CHANGE THE IMAGE
+              size: 30.0,
             ),
           );
 
@@ -502,7 +462,6 @@ class InnerIconsInfo extends ChangeNotifier{
                 size: sizeIcon,
                 color: Colors.black,
               ),
-
             );
 
             if(route.infoWalkList[i].legs[j].routeColor != null && route.infoWalkList[i].legs[j].routeTextColor != null){
@@ -641,7 +600,7 @@ class GetDataTrasnport{
 
   Future<void> iconsOfTransport() async {
     info3.listOfTransport = null;
-    info3.listOfTransport = [false, false, false, false, false];
+    info3.listOfTransport = [false, false, false, false, false]; //orden: metro cable, metro, bus, bicicleta, caminando
     for(int i = 0; i < info3.infoWalkList.length; i++){
       for(int j = 0; j < info3.infoWalkList[i].legs.length; j++){
         if(info3.infoWalkList[i].legs[j].mode == "CABLE_CAR"){
@@ -763,7 +722,7 @@ class FillInInformation{
 
       endIcon = Icon( //icono del punto de destino
         Icons.location_on,
-        color: Color.fromRGBO(105, 190, 50, 1.0),
+        color: Color.fromRGBO(105, 190, 40, 1.0),
       );
 
       for(int y = 0; y < info3.infoWalkList[x].legs.length; y++){
@@ -783,18 +742,20 @@ class FillInInformation{
             ),
           );
 
-          currentIcon = Icon(
-            Icons.directions_train, 
-            color: Color.fromRGBO(0, 0, 0, 1.0),
+          currentIcon = ImageIcon(
+            AssetImage("images/cablewayBlack.png"), //TODO: CHANGE THE IMAGE
+            size: 30.0,
+            color: Colors.black,
           );
 
           distance = Row(
             children: [
-              Icon(
-                Icons.directions_train,
-                size: sizeIcon,
+              ImageIcon(
+                AssetImage("images/cablewayBlack.png"), //TODO: CHANGE THE IMAGE
+                size: 30.0,
                 color: Colors.black,
               ),
+
               Container(
                 height: 27.0,
                 width: 27.0,
@@ -817,9 +778,9 @@ class FillInInformation{
             ],
           );
           transportMedium = "Use route";
-          iconTransport = Icon(
-            Icons.directions_train,
-            size: 35.0,
+          iconTransport = ImageIcon(
+            AssetImage("images/cablewayBlack.png"), //TODO: CHANGE THE IMAGE
+            size: 30.0,
             color: Colors.grey,
           );
         }
@@ -1004,6 +965,8 @@ class FillInInformation{
             placeEndsIn: endsIn,
             nameTrasportMedium: transportMedium,
             infoOfDistance: 
+              transport == "cable_car" ?
+                distance:
               transport == "subway" ? 
                 distance:
               transport == "bus" ?

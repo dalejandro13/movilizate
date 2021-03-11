@@ -68,36 +68,39 @@ class _MatchListState extends State<MatchList> {
         itemBuilder: (BuildContext context, int index){
           return ConstrainedBox(
             constraints: BoxConstraints(maxHeight: 200.0, minHeight: 100.0),
-            child: Material(
-              color: Colors.white,
-              child: ListTile(
-                title: Text(
-                  info2.infoPlace[index].title,
-                  style: TextStyle(
-                    fontFamily: "AurulentSans-Bold",
-                    fontSize: 25.0,
-                    color: Color.fromRGBO(105, 190, 50, 1.0),
+            child: Theme(
+              data: ThemeData(splashColor: Colors.grey),
+              child: Material(
+                color: Colors.white,
+                child: ListTile(
+                  title: Text(
+                    info2.infoPlace[index].title,
+                    style: TextStyle(
+                      fontFamily: "AurulentSans-Bold",
+                      fontSize: 25.0,
+                      color: Color.fromRGBO(105, 190, 50, 1.0),
+                    ),
                   ),
-                ),
-                subtitle: Text(
-                  info2.infoPlace[index].title,
-                  style: TextStyle(
-                    fontFamily: "AurulentSans-Bold",
+                  subtitle: Text(
+                    info2.infoPlace[index].title,
+                    style: TextStyle(
+                      fontFamily: "AurulentSans-Bold",
+                    ),
                   ),
+                  leading: Icon(
+                    Icons.location_on,
+                    size: 40.0,
+                    color: widget.focusDestiny.hasFocus ? Color.fromRGBO(105, 190, 50, 1.0) : Color.fromRGBO(0, 0, 0, 1.0),
+                  ),
+                  onTap: () async {                  
+                    try{
+                      await checkFocus(info, info2, index);
+                    }
+                    catch(e){
+                      print("Error $e");
+                    }
+                  },
                 ),
-                leading: Icon(
-                  Icons.location_on,
-                  size: 40.0,
-                  color: widget.focusDestiny.hasFocus ? Color.fromRGBO(105, 190, 50, 1.0) : Color.fromRGBO(0, 0, 0, 1.0),
-                ),
-                onTap: () async {                  
-                  try{
-                    await checkFocus(info, info2, index);
-                  }
-                  catch(e){
-                    print("Error $e");
-                  }
-                },
               ),
             ),
           );

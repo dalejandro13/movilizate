@@ -89,7 +89,7 @@ class ShowTheRoute {
       MapImage imgUint = null;
       if(transport == "CABLE_CAR"){
         try{
-          ByteData fileData = await rootBundle.load("images/iconTrain.png"); //TODO: cambiar icono por metroCable
+          ByteData fileData = await rootBundle.load("images/cablewayWhite.png"); //TODO: CHANGE IMAGE, VERY LARGE IN SCREEN
           var uint = Uint8List.view(fileData.buffer);
           imgUint = MapImage.withPixelDataAndImageFormat(uint, ImageFormat.png);
         }
@@ -328,7 +328,7 @@ class ShowTheRoute {
   }
 
   Future<void> drawLineForBike(int index, int v, LegsInfo array, Tuple4<int, int, int, int> col) async {
-    //TODO: graficar las rutas en bicicleta
+    //TODO: GRAPH ROUTE IN BIKE
     // double widthInPixels = 10.0;
     // List<GeoCoordinates> coord = [];
 
@@ -453,11 +453,7 @@ class ShowTheRoute {
               print("URL DE DATOS BUS2: $urlConsult");
               Tuple4<int, int, bool, dynamic> value = await getThePointOrigin(urlConsult, latOrigin, lonOrigin);
               if(value.item3){
-
-                //await grafica(value.item4);
-
                 Tuple3<List<double>, List<double>, List<int>> value2 = await getThePointDestiny(value.item2, value.item4, latDest, lonDest);
-
                 if(value2.item1 != null && value2.item2 != null){
                   if(value2.item1.length == value2.item2.length){
                     //diagrama de las coordenadas
@@ -788,18 +784,11 @@ class ShowTheRoute {
         double ptoLatRef2 = double.parse(result2["shape_pt_lat"]);
         double ptoLonRef2 = double.parse(result2["shape_pt_lon"]);
 
-        // if(secuence2 >= 1 && secuence2 <= secu){ //SOLO PARA PRUEBAS
-        //   lt.add(ptoLatRef2);
-        //   lg.add(ptoLonRef2);
-        //   secuenceList.add(secuence2);
-        // }
-
-        if(secuence2 >= secu && secuence2 <= secu2){ //LINEA DE CODIGO ORIGINAL
+        if(secuence2 >= secu && secuence2 <= secu2){
           lt.add(ptoLatRef2);
           lg.add(ptoLonRef2);
           secuenceList.add(secuence2);
         }
-        
       }
 
       if((lt.length == lg.length) && (lt.length != 0 && lg.length != 0)){
@@ -816,7 +805,7 @@ class ShowTheRoute {
             secuenceList.add(secuence2);
           }
         }
-        return Tuple3(lt, lg, secuenceList); //Tuple3(null, null, null);
+        return Tuple3(lt, lg, secuenceList);
       }
     }
     else{
@@ -879,7 +868,7 @@ class ShowTheRoute {
 
   Future<void> bikeRoute(List<Waypoint> waypoints) async {
     try{
-      //TODO: generar metodo que dibuje las rutas en bicicleta
+      //TODO: DRAW THE ROUTE IN BIKE
     }
     catch(e){
       print("Error $e");

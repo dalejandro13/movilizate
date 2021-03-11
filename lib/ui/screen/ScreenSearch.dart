@@ -48,7 +48,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
 
   getPermission() async {
     color1 = Color.fromRGBO(81, 81, 81, 1.0);
-    color2 = Color.fromRGBO(105, 190, 50, 1.0);
+    color2 = Color.fromRGBO(105, 190, 40, 1.0);
 
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -73,7 +73,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
   }
 
   Future<void> getLocationGps(BuildContext context) async {
-    //var info2 = Provider.of<DataOfPlace>(context);
+    
     info = Provider.of<ProcessData>(context, listen: false);
     _locationData = await location.getLocation();
     info.getLatitudeOrigin = null;
@@ -189,42 +189,63 @@ class _ScreenSearchState extends State<ScreenSearch> {
 
                       Expanded(
                         flex: 2,
-                        child: Material(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(25.0),
-                          child: FittedBox(
-                            fit: BoxFit.fitHeight,
-                            alignment: Alignment.center,
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.swap_vert
-                              ),
-                              color: Colors.white,
-                              iconSize: 300.0,
-                              onPressed: () {
-                                if(info.dataOrigin != null){
-                                  if(info.dataDestiny != null){
-                                    if(info.dataOrigin.text != ""){
-                                      if(info.dataDestiny.text != ""){
-                                        if(info.dataOrigin != null && info.dataDestiny != null){
-                                          //intercambio valores de TextField de origen con el destino
-                                          var aux1 =  info.dataOrigin.text;
-                                          info.dataOrigin.text = info.dataDestiny.text;
-                                          info.dataDestiny.text = aux1;
-                                          
-                                          //intercambio coordenas de latitud de origen con el destino
-                                          var aux2 = info.getLatitudeOrigin;
-                                          info.getLatitudeOrigin = info.getLatitudeDestiny;
-                                          info.getLatitudeDestiny = aux2;
+                        child: Theme(
+                          data: ThemeData(splashColor: Colors.white),
+                          child: Material(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(25.0),
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              alignment: Alignment.center,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.swap_vert
+                                ),
+                                color: Colors.white,
+                                iconSize: 300.0,
+                                onPressed: () async {
+                                  if(info.dataOrigin != null){
+                                    if(info.dataDestiny != null){
+                                      if(info.dataOrigin.text != ""){
+                                        if(info.dataDestiny.text != ""){
+                                          if(info.dataOrigin != null && info.dataDestiny != null){
+                                            //intercambio valores de TextField de origen con el destino
+                                            var aux1 =  info.dataOrigin.text;
+                                            info.dataOrigin.text = info.dataDestiny.text;
+                                            info.dataDestiny.text = aux1;
+                                            
+                                            //intercambio coordenas de latitud de origen con el destino
+                                            var aux2 = info.getLatitudeOrigin;
+                                            info.getLatitudeOrigin = info.getLatitudeDestiny;
+                                            info.getLatitudeDestiny = aux2;
 
-                                          //intercambio coordenadas de longitud de origen con el destino
-                                          var aux3 = info.getLongitudeOrigin;
-                                          info.getLongitudeOrigin = info.getLongitudeDestiny;
-                                          info.getLongitudeDestiny = aux3;
+                                            //intercambio coordenadas de longitud de origen con el destino
+                                            var aux3 = info.getLongitudeOrigin;
+                                            info.getLongitudeOrigin = info.getLongitudeDestiny;
+                                            info.getLongitudeDestiny = aux3;
+
+                                            //animacion
+                                            info.opacityLevelOrigin = info.opacityLevelOrigin == 1.0 ? 0.5 : 1.0;
+                                            info.opacityLevelDestiny = info.opacityLevelDestiny == 1.0 ? 0.5 : 1.0;
+                                            await Future.delayed(Duration(milliseconds: 200));                                   
+                                            info.opacityLevelOrigin = info.opacityLevelOrigin == 1.0 ? 1.0 : 1.0;
+                                            info.opacityLevelDestiny = info.opacityLevelDestiny == 1.0 ? 1.0 : 1.0;
+                                                                
+                                          }
+                                          else{
+                                            Fluttertoast.showToast(
+                                              msg: "Falta ingresar datos de origen ó el destino",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              backgroundColor: Colors.grey,
+                                              textColor: Colors.white,
+                                              fontSize: 20.0,
+                                            );
+                                          }
                                         }
                                         else{
                                           Fluttertoast.showToast(
-                                            msg: "Falta ingresar datos de origen ó el destino",
+                                            msg: "Falta ingresar el destino",
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.BOTTOM,
                                             backgroundColor: Colors.grey,
@@ -235,7 +256,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                       }
                                       else{
                                         Fluttertoast.showToast(
-                                          msg: "Falta ingresar el destino",
+                                          msg: "Falta ingresar el origen",
                                           toastLength: Toast.LENGTH_SHORT,
                                           gravity: ToastGravity.BOTTOM,
                                           backgroundColor: Colors.grey,
@@ -246,7 +267,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                     }
                                     else{
                                       Fluttertoast.showToast(
-                                        msg: "Falta ingresar el origen",
+                                        msg: "Falta ingresar el destino",
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
                                         backgroundColor: Colors.grey,
@@ -257,7 +278,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                   }
                                   else{
                                     Fluttertoast.showToast(
-                                      msg: "Falta ingresar el destino",
+                                      msg: "Falta ingresar el origen",
                                       toastLength: Toast.LENGTH_SHORT,
                                       gravity: ToastGravity.BOTTOM,
                                       backgroundColor: Colors.grey,
@@ -265,19 +286,9 @@ class _ScreenSearchState extends State<ScreenSearch> {
                                       fontSize: 20.0,
                                     );
                                   }
-                                }
-                                else{
-                                  Fluttertoast.showToast(
-                                    msg: "Falta ingresar el origen",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    backgroundColor: Colors.grey,
-                                    textColor: Colors.white,
-                                    fontSize: 20.0,
-                                  );
-                                }
-                              },
-                              
+                                },
+                                
+                              ),
                             ),
                           ),
                         ),
@@ -326,14 +337,9 @@ class _ScreenSearchState extends State<ScreenSearch> {
             ),
           ),
 
-
-        // AutocompleteWidget(),
-        // UseTheMap(),
-        // AutoCompleteVisual(),
           ]
         ),
       ),
     );
   }
-  
 }
