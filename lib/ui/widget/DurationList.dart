@@ -9,7 +9,7 @@ class DurationList extends StatefulWidget {
 }
 
 class _DurationListState extends State<DurationList> {
-  
+
   double sizeIcon = 35.0;
 
   @override
@@ -34,3 +34,4 @@ class _DurationListState extends State<DurationList> {
     );
   }
 }
+

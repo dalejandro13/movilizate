@@ -48,6 +48,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
   DateFormat dfd = null;
   DateFormat dft = null;
   bool processingData = false;
+  List<InternetAddress> result = null;
 
   ProcessData info;
   DataOfPlace  info2;
@@ -154,7 +155,9 @@ class _ButtonSearchState extends State<ButtonSearch> {
           if(!processingData){
             processingData = true;
             try{
-              var result = await InternetAddress.lookup('google.com'); //verifica la conexion a internet
+              result = null;
+              result = [];
+              result = await InternetAddress.lookup('google.com'); //verifica la conexion a internet
               if(result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
                 if(info.dataOrigin.text != ""){
                   if(info.dataDestiny.text != ""){

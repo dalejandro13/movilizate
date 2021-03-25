@@ -17,8 +17,11 @@ class _UseTheMapState extends State<UseTheMap> {
       decoration: BoxDecoration(
         color: Colors.white,
       ),
-      child: RaisedButton(
-        color: Colors.white,
+      child: ElevatedButton( //RaisedButton(
+        //color: Colors.white,
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+        ),
         onPressed: () async {
           try {
             var result = await InternetAddress.lookup('google.com');

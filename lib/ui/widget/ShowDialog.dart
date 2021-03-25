@@ -5,7 +5,7 @@ showAlertDialog(BuildContext context, String msg) {
       title: Text("Advertencia"),
       content: Text(msg),
       actions: [
-        FlatButton(
+        TextButton(
           child: Text("Aceptar"),
           onPressed: () {
             Navigator.pop(context);

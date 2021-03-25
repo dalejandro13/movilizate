@@ -4,6 +4,7 @@ import 'package:movilizate/bloc/ProcessData.dart';
 import 'package:movilizate/repository/ConsultServer.dart';
 import 'package:movilizate/ui/screen/ScreenSearch.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() {
   //
@@ -18,17 +19,17 @@ void main() {
         ChangeNotifierProvider(create: (_) => DataOfPlace()),
         ChangeNotifierProvider(create: (_) => InfoRouteServer()),
         ChangeNotifierProvider(create: (BuildContext context) => InnerIconsInfo(context)),
-        //ChangeNotifierProvider(create: (BuildContext context) => GetIconInList(context)),
       ],
       child: MaterialApp(
         title: "Movilizate",
         initialRoute: "home",
         debugShowCheckedModeBanner: false,
         routes: {
-          "home": (context) => ScreenSearch(context), //ScreenMap(), //ScreenResult(), //ScreenSearch(), //MyApp(),
+          "home": (context) => ScreenSearch(),
         },
       ),
-    )
+
+    ),
   );
 }
 

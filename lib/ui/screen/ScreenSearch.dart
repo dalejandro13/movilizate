@@ -13,12 +13,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class ScreenSearch extends StatefulWidget {
 
-  BuildContext context;
-
-  ScreenSearch(BuildContext context){
-    this.context = context;
-  }
-
   @override
   _ScreenSearchState createState() => _ScreenSearchState();
 }

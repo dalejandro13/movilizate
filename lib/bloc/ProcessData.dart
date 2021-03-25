@@ -21,8 +21,8 @@ class ProcessData with ChangeNotifier{
   bool cableCar = false, subway = false, bus = false, bike = false, walk = false;
   // ignore: avoid_init_to_null
   HereMapController hereMapController = null;
-  List<Widget> widgetList = List<Widget>();
-  List<List<CardInfoRoutes>> infoRoutes = List<List<CardInfoRoutes>>();
+  List<Widget> widgetList = [];
+  List<List<CardInfoRoutes>> infoRoutes = [];
 
   FocusNode focusOri = FocusNode();
   FocusNode focusDes = FocusNode();
