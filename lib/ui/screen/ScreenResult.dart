@@ -11,7 +11,7 @@ class ScreenResult extends StatefulWidget {
   
   ConsultServer consult;
 
-  ScreenResult(ConsultServer consult, BuildContext context){
+  ScreenResult(ConsultServer consult){
     this.consult = consult;
   }
 

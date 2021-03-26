@@ -13,7 +13,7 @@ import 'package:intl/intl.dart';
 class ButtonSearch extends StatefulWidget {
   ConsultServer consult; 
   BuildContext context;
-  GetDataTrasnport gdt;
+  GetDataTransport gdt;
   GetIconsInfoCard infoCard;
   InnerIconsInfo iii;
   FocusNode focusOrigin, focusDestiny;
@@ -23,7 +23,7 @@ class ButtonSearch extends StatefulWidget {
     this.context = context;
     this.focusOrigin = focusOrigin;
     this.focusDestiny = focusDestiny;
-    gdt = GetDataTrasnport(context);
+    gdt = GetDataTransport(context);
     infoCard = GetIconsInfoCard(context);
     iii = InnerIconsInfo(context);
   }
@@ -176,7 +176,7 @@ class _ButtonSearchState extends State<ButtonSearch> {
                             // }
                             if(info3.infoWalkList.length > 0 && info3.listOfTransport.length > 0 && info3.listOfInfo.length > 0 && info3.tileList.length > 0){
                               await getOptimalTime();
-                              var result1 = await Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenResult(widget.consult, context)));
+                              var result1 = await Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenResult(widget.consult)));
                               //FocusScope.of(this.context).requestFocus(widget.focusOrigin);
                               //FocusScope.of(this.context).requestFocus(widget.focusDestiny);
 
@@ -241,41 +241,6 @@ class _ButtonSearchState extends State<ButtonSearch> {
                           processingData = false;
                         }
                       }
-                      // else{ //cuando no se dan los permisos de geolocalizacion
-                      //   if(info2.initialPlace.length != 0){
-                      //     //for(var jj in info2.initialPlace){
-                      //       //print(jj.title);
-                      //       //print(jj.lon);
-                      //       //print(jj.lat);
-                      //       //info.focusDestiny.unfocus();
-                      //       //info.focusOrigin.unfocus();
-                      //       try {
-                      //         var result = await InternetAddress.lookup('google.com');
-                      //         if(result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-                      //           await getInfoOfRoutes().then((value){
-                      //             Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenResult(widget.consult)));
-                      //           });
-                      //         }
-                      //       } 
-                      //       catch(e) {
-                      //         Fluttertoast.showToast(
-                      //           msg: "Sin conexion a internet",
-                      //           toastLength: Toast.LENGTH_LONG,
-                      //           gravity: ToastGravity.BOTTOM,
-                      //           fontSize: 30.0,
-                      //         );
-                      //       }
-                      //     //}
-                      //   }
-                      //   else{
-                      //     Fluttertoast.showToast(
-                      //       msg: "Falta Ingresar el origen",
-                      //       toastLength: Toast.LENGTH_LONG,
-                      //       gravity: ToastGravity.BOTTOM,
-                      //       fontSize: 30.0,
-                      //     );
-                      //   }
-                      // }
                     }
                     else{
                       FocusScope.of(context).unfocus();

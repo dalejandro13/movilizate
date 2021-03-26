@@ -187,10 +187,10 @@ class _ScreenSearchState extends State<ScreenSearch> {
                           data: ThemeData(splashColor: Colors.white),
                           child: Material(
                             color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(25.0),
+                            //borderRadius: BorderRadius.circular(25.0),
                             child: FittedBox(
                               fit: BoxFit.fitHeight,
-                              alignment: Alignment.center,
+                              //alignment: Alignment.center,
                               child: IconButton(
                                 icon: Icon(
                                   Icons.swap_vert

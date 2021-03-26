@@ -587,13 +587,13 @@ class InnerIconsInfo extends ChangeNotifier{
   }
 }
 
-class GetDataTrasnport{
+class GetDataTransport{
 
   BuildContext context;
   InfoRouteServer info3;
   bool subway = false, bus = false, bike = false, walk = false;
 
-  GetDataTrasnport(BuildContext context){
+  GetDataTransport(BuildContext context){
     this.context = context;
     info3 = Provider.of<InfoRouteServer>(context);
   }
