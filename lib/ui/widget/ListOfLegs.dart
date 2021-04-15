@@ -30,14 +30,14 @@ class CardInfoRoute extends StatelessWidget {
     //routes = GetDataOfRoutes(context);
   }
 
-  Color hexColor(String hexString){
-    var buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7){
-      buffer.write('ff');
-    } 
-    buffer.write(hexString.replaceFirst('#', ''));
-    return Color(int.parse(buffer.toString(), radix: 16));
-  }
+  // Color hexColor(String hexString){
+  //   var buffer = StringBuffer();
+  //   if (hexString.length == 6 || hexString.length == 7){
+  //     buffer.write('ff');
+  //   } 
+  //   buffer.write(hexString.replaceFirst('#', ''));
+  //   return Color(int.parse(buffer.toString(), radix: 16));
+  // }
 
   @override
   Widget build(BuildContext context) {
