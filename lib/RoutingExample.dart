@@ -17,10 +17,12 @@
  * License-Filename: LICENSE
  */
 
+import 'dart:io';
 import 'dart:math';
 //import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart';
@@ -46,7 +48,7 @@ class RoutingExample {
   bool waitData = true;
   ProcessData info;
   
-  RoutingExample(BuildContext context, HereMapController hereMapController) {
+  RoutingExample(BuildContext context, HereMapController hereMapController){
     _context = context;
     _hereMapController = hereMapController;
     _mapPolylines = [];
@@ -81,31 +83,36 @@ class RoutingExample {
     }
   }
 
-  void _setTapGestureHandler() {
-    _hereMapController.gestures.tapListener = TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
+  Future<void> _setTapGestureHandler() async {
+    _hereMapController.gestures.tapListener = TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) async {
       _toList(_hereMapController.viewToGeoCoordinates(touchPoint));
       try{
         if(waitData){
           waitData = false;
           if(coorList.length >= 2){ //condicion si se tiene dos elementos en la lista
-            putMarker(coorList[0], coorList[1], true);
+            var lt = double.parse(coorList[0].toStringAsFixed(6));
+            var lg = double.parse(coorList[1].toStringAsFixed(6));
+            await clearMarkerOfMap();
+            await putMarker(lt, lg, true);
           }
-          showModalBottomSheet(
+          Future<void> future = showModalBottomSheet(
+            isDismissible: true,
             context: _context,
             builder: (ctx) => _buildInfoBottom(ctx),
           );
+          future.then((void value) => _closeModal(value));
           waitData = true;
         }
       }
       catch(e){
         print("Error $e");
+        waitData = true;
       }
-
     });
   }
 
-  void _setLongPressGestureHandler() {
-    _hereMapController.gestures.longPressListener = LongPressListener.fromLambdas(lambda_onLongPress: (GestureState gestureState, Point2D touchPoint) {
+  Future<void> _setLongPressGestureHandler() async {
+    _hereMapController.gestures.longPressListener = LongPressListener.fromLambdas(lambda_onLongPress: (GestureState gestureState, Point2D touchPoint) async {
       _toList(_hereMapController.viewToGeoCoordinates(touchPoint));
       if (gestureState == GestureState.begin) {
         waitData = true;
@@ -118,12 +125,13 @@ class RoutingExample {
           if(waitData){
             waitData = false;
             if(coorList.length >= 2){ //condicion si se tiene dos elementos en la lista
-              putMarker(coorList[0], coorList[1], true);
+              await putMarker(coorList[0], coorList[1], true);
             }
-            showModalBottomSheet(
+            Future<void> future = showModalBottomSheet(
               context: _context,
-              builder: (ctx) => _buildInfoBottom(ctx)
+              builder: (context) => _buildInfoBottom(context)
             );
+            future.then((void value) => _closeModal(value));
           }
           Future.delayed(Duration(seconds: 1));
         }
@@ -139,6 +147,10 @@ class RoutingExample {
     });
   }
 
+  Future<void> _closeModal(void value) async { //borra el marcador del mapa
+    await clearMarkerOfMap();
+  }
+
   _buildInfoBottom(BuildContext context){
     return Container(
       height: 200,
@@ -152,7 +164,7 @@ class RoutingExample {
           ListTile(
             title: Center(
               child: Text(
-                "${coorList[0]} , ${coorList[1]}", //"aqui van las coordenadas",
+                "${coorList[0].toStringAsFixed(6)}, ${coorList[1].toStringAsFixed(6)}", //"aqui van las coordenadas",
                 style: TextStyle(
                   fontFamily: "AurulentSans-Bold",
                   color: Colors.white,
@@ -166,7 +178,7 @@ class RoutingExample {
 
               Expanded(
                 flex: 1,
-                child: Container(),
+                child: SizedBox(),
               ),
 
               Expanded(
@@ -179,12 +191,27 @@ class RoutingExample {
                     color: material.Color.fromRGBO(87, 114, 26, 1.0),
                   ),
                   child: InkWell(
-                    onTap: () {
-                      info.getLatitudeOrigin = coorList[0];
-                      info.getLongitudeOrigin = coorList[1];
-                      info.dataOrigin.text = "${coorList[0]} , ${coorList[1]}";
-                      Navigator.of(_context).pop();
-                      Navigator.of(_context).pop();
+                    onTap: () async {
+                      try{
+                        final result = await InternetAddress.lookup("google.com");
+                        if(result.isNotEmpty && result[0].rawAddress.isNotEmpty){
+                          info.getLatitudeOrigin = double.parse(coorList[0].toStringAsFixed(6));
+                          info.getLongitudeOrigin = double.parse(coorList[1].toStringAsFixed(6));
+                          info.dataOrigin.text = "${info.getLatitudeOrigin}, ${info.getLongitudeOrigin}";
+                          Navigator.of(_context).pop();
+                          Navigator.of(_context).pop();
+                        }
+                      }
+                      catch(e){
+                        Fluttertoast.showToast(
+                          msg: "Sin conexion a internet, conectate a internet e intentalo nuevamente",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
+                          fontSize: 20.0,
+                        );
+                      }
                     },
                     child: Center(
                       child: Text(
@@ -215,12 +242,27 @@ class RoutingExample {
                     color: material.Color.fromRGBO(87, 114, 26, 1.0),
                   ),
                   child: InkWell(
-                    onTap: () {
-                      info.getLatitudeDestiny = coorList[0];
-                      info.getLongitudeDestiny = coorList[1];
-                      info.dataDestiny.text = "${coorList[0]} , ${coorList[1]}";
-                      Navigator.of(_context).pop();
-                      Navigator.of(_context).pop();
+                    onTap: () async {
+                      try{
+                        final result = await InternetAddress.lookup("google.com");
+                        if(result.isNotEmpty && result[0].rawAddress.isNotEmpty){
+                          info.getLatitudeDestiny = double.parse(coorList[0].toStringAsFixed(6));
+                          info.getLongitudeDestiny = double.parse(coorList[1].toStringAsFixed(6));
+                          info.dataDestiny.text = "${info.getLatitudeDestiny}, ${info.getLongitudeDestiny}";
+                          Navigator.of(_context).pop();
+                          Navigator.of(_context).pop();
+                        }
+                      }
+                      catch(e){
+                        Fluttertoast.showToast(
+                          msg: "Sin conexion a internet, conectate a internet e intentalo nuevamente",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
+                          fontSize: 20.0,
+                        );
+                      }
                     },
                     child: Center(
                       child: Text(
@@ -273,14 +315,20 @@ class RoutingExample {
         (RoutingError routingError, List<here.Route> routeList) async {
       if (routingError == null) {
         here.Route route = routeList.first;
-        _showRouteDetails(route);
-        _showRouteOnMap(route);
+        await _showRouteDetails(route);
+        await _showRouteOnMap(route);
       } 
       else {
         var error = routingError.toString();
         _showDialog('Error', 'Error while calculating a route: $error');
       }
     });
+  }
+
+  Future<void> clearMarkerOfMap() async {
+    if(_marker != null){
+      _hereMapController.mapScene.removeMapMarker(_marker);
+    }
   }
 
   void clearMap() {
@@ -290,7 +338,7 @@ class RoutingExample {
     _mapPolylines.clear();
   }
 
-  void _showRouteDetails(here.Route route) {
+  Future<void> _showRouteDetails(here.Route route) async {
     int estimatedTravelTimeInSeconds = route.durationInSeconds;
     int lengthInMeters = route.lengthInMeters;
 
@@ -316,7 +364,7 @@ class RoutingExample {
     return '$kilometers.$remainingMeters km';
   }
 
-  _showRouteOnMap(here.Route route) {
+  Future<void> _showRouteOnMap(here.Route route) async {
     // Show route as polyline.
     GeoPolyline routeGeoPolyline = GeoPolyline(route.polyline);
 

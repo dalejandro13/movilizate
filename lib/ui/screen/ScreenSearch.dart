@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:movilizate/repository/ConsultServer.dart';
-//import 'package:movilizate/ui/widget/AutoComplete.dart';
-import 'package:movilizate/ui/widget/AutoCompleteDestiny.dart';
-import 'package:movilizate/ui/widget/AutoCompleteOrigin.dart';
 import 'package:movilizate/ui/widget/ButtonSearch.dart';
 import 'package:movilizate/ui/widget/ButtonUseTheMap.dart';
 import 'package:movilizate/ui/widget/MatchList.dart';
 import 'package:movilizate/bloc/ProcessData.dart';
+import 'package:movilizate/ui/widget/TextOriginDestiny.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:async/async.dart';
+//import 'package:async/async.dart';
 
 class ScreenSearch extends StatefulWidget {
+
   @override
   _ScreenSearchState createState() => _ScreenSearchState();
 }
@@ -26,8 +25,13 @@ class _ScreenSearchState extends State<ScreenSearch> {
   bool _serviceEnabled = true;
   PermissionStatus _permissionGranted = null;
   LocationData _locationData = null;
-  AsyncMemoizer _memoizer = AsyncMemoizer();
+  //AsyncMemoizer _memoizer = AsyncMemoizer();
   bool permission = true;
+  dynamic color1 = null, color2 = null;
+  ProcessData info;
+  FocusNode focusOrigin = FocusNode();
+  FocusNode focusDestiny = FocusNode();
+  double opacityLevel = 1.0;
 
   @override
   void initState() {
@@ -37,10 +41,14 @@ class _ScreenSearchState extends State<ScreenSearch> {
   }
 
   getPermission() async {
+    color1 = Color.fromRGBO(81, 81, 81, 1.0);
+    color2 = Color.fromRGBO(105, 190, 40, 1.0);
+
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
+        await consult.getUbication(context); //await getLocationGps(context); ///----
         return null;
       }
     }
@@ -59,17 +67,21 @@ class _ScreenSearchState extends State<ScreenSearch> {
   }
 
   Future<void> getLocationGps(BuildContext context) async {
-    //var info2 = Provider.of<DataOfPlace>(context);
-    var info = Provider.of<ProcessData>(context, listen: false);
+    
+    info = Provider.of<ProcessData>(context, listen: false);
     _locationData = await location.getLocation();
-    info.getLatitudeOrigin = _locationData.latitude;
-    info.getLongitudeOrigin = _locationData.longitude;
+    info.getLatitudeOrigin = null;
+    info.getLongitudeOrigin = null;
+    info.dataOrigin.text = null;
+    
+    info.getLatitudeOrigin = double.parse(_locationData.latitude.toStringAsFixed(6));
+    info.getLongitudeOrigin = double.parse(_locationData.longitude.toStringAsFixed(6));
     info.dataOrigin.text = "${info.getLatitudeOrigin}, ${info.getLongitudeOrigin}";
   }
 
   @override
   Widget build(BuildContext context) {
-    var info = Provider.of<ProcessData>(context);
+    info = Provider.of<ProcessData>(context);
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -110,7 +122,11 @@ class _ScreenSearchState extends State<ScreenSearch> {
                       ),
                       Expanded(
                         flex: 8,
-                        child: AutoCompleteOrigin(context),
+                        child: AnimatedOpacity(
+                          duration: Duration(seconds: 3),
+                          curve: Curves.elasticOut,
+                          opacity: info.opacityLevelOrigin,
+                          child: TextOriginDestiny("Origen", consult, color1, info.dataOrigin, focusOrigin/*info.focusOrigin*/, true, false)), //AutoCompleteOrigin(context),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 30.0),
@@ -120,7 +136,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top:5.0),
+                  padding: EdgeInsets.only(top:15.0),
                 ),
 
                 Expanded(
@@ -133,7 +149,11 @@ class _ScreenSearchState extends State<ScreenSearch> {
                       ),
                       Expanded(
                         flex: 8,
-                        child: AutoCompleteDestiny(context),
+                        child: AnimatedOpacity(
+                          duration: Duration(seconds: 3),
+                          curve: Curves.elasticOut,
+                          opacity: info.opacityLevelDestiny, //opacityLevel,
+                          child: TextOriginDestiny("Destino", consult, color2, info.dataDestiny, focusDestiny/*info.focusDestiny*/, true, false)), //AutoCompleteDestiny(context),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 30.0),
@@ -157,85 +177,113 @@ class _ScreenSearchState extends State<ScreenSearch> {
                       ),
 
                       Expanded(
-                        flex: 1,
-                        child: ButtonSearch(consult),
+                        flex: 2,
+                        child: ButtonSearch(consult, context, focusOrigin, focusDestiny),
                       ),
 
                       Expanded(
                         flex: 2,
-                        child: IconButton(
-                          color: Colors.white,
-                          iconSize: 40.0,
-                          onPressed: () {
-                            if(info.dataOrigin != null){
-                              if(info.dataDestiny != null){
-                                if(info.dataOrigin.text != ""){
-                                  if(info.dataDestiny.text != ""){
-                                    if(info.dataOrigin != null && info.dataDestiny != null){
-                                      //setState(() {
-                                        //intercambio valores de TextField de origen con el destino
-                                        var aux1 =  info.dataOrigin.text;
-                                        info.dataOrigin.text = info.dataDestiny.text;
-                                        info.dataDestiny.text = aux1;
-                                        
-                                        //intercambio coordenas de latitud de origen con el destino
-                                        var aux2 = info.getLatitudeOrigin;
-                                        info.getLatitudeOrigin = info.getLatitudeDestiny;
-                                        info.getLatitudeDestiny = aux2;
+                        child: Theme(
+                          data: ThemeData(splashColor: Colors.white),
+                          child: Material(
+                            color: Colors.transparent,
+                            //borderRadius: BorderRadius.circular(25.0),
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              //alignment: Alignment.center,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.swap_vert
+                                ),
+                                color: Colors.white,
+                                iconSize: 300.0,
+                                onPressed: () async {
+                                  if(info.dataOrigin != null){
+                                    if(info.dataDestiny != null){
+                                      if(info.dataOrigin.text != ""){
+                                        if(info.dataDestiny.text != ""){
+                                          if(info.dataOrigin != null && info.dataDestiny != null){
+                                            //intercambio valores de TextField de origen con el destino
+                                            var aux1 =  info.dataOrigin.text;
+                                            info.dataOrigin.text = info.dataDestiny.text;
+                                            info.dataDestiny.text = aux1;
+                                            
+                                            //intercambio coordenas de latitud de origen con el destino
+                                            var aux2 = info.getLatitudeOrigin;
+                                            info.getLatitudeOrigin = info.getLatitudeDestiny;
+                                            info.getLatitudeDestiny = aux2;
 
-                                        //intercambio coordenadas de longitud de origen con el destino
-                                        var aux3 = info.getLongitudeOrigin;
-                                        info.getLongitudeOrigin = info.getLongitudeDestiny;
-                                        info.getLongitudeDestiny = aux3;
-                                      //});
+                                            //intercambio coordenadas de longitud de origen con el destino
+                                            var aux3 = info.getLongitudeOrigin;
+                                            info.getLongitudeOrigin = info.getLongitudeDestiny;
+                                            info.getLongitudeDestiny = aux3;
+
+                                            //animacion
+                                            info.opacityLevelOrigin = info.opacityLevelOrigin == 1.0 ? 0.5 : 1.0;
+                                            info.opacityLevelDestiny = info.opacityLevelDestiny == 1.0 ? 0.5 : 1.0;
+                                            await Future.delayed(Duration(milliseconds: 200));                                   
+                                            info.opacityLevelOrigin = info.opacityLevelOrigin == 1.0 ? 1.0 : 1.0;
+                                            info.opacityLevelDestiny = info.opacityLevelDestiny == 1.0 ? 1.0 : 1.0;
+                                                                
+                                          }
+                                          else{
+                                            Fluttertoast.showToast(
+                                              msg: "Falta ingresar datos de origen ó el destino",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              backgroundColor: Colors.grey,
+                                              textColor: Colors.white,
+                                              fontSize: 20.0,
+                                            );
+                                          }
+                                        }
+                                        else{
+                                          Fluttertoast.showToast(
+                                            msg: "Falta ingresar el destino",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            backgroundColor: Colors.grey,
+                                            textColor: Colors.white,
+                                            fontSize: 20.0,
+                                          );
+                                        }
+                                      }
+                                      else{
+                                        Fluttertoast.showToast(
+                                          msg: "Falta ingresar el origen",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey,
+                                          textColor: Colors.white,
+                                          fontSize: 20.0,
+                                        );
+                                      }
                                     }
                                     else{
-                                        Fluttertoast.showToast(
-                                        msg: "Falta ingresar datos de origen ó el destino",
-                                        toastLength: Toast.LENGTH_LONG,
+                                      Fluttertoast.showToast(
+                                        msg: "Falta ingresar el destino",
+                                        toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
-                                        fontSize: 30.0,
+                                        backgroundColor: Colors.grey,
+                                        textColor: Colors.white,
+                                        fontSize: 20.0,
                                       );
                                     }
                                   }
                                   else{
                                     Fluttertoast.showToast(
-                                      msg: "Falta ingresar el destino",
-                                      toastLength: Toast.LENGTH_LONG,
+                                      msg: "Falta ingresar el origen",
+                                      toastLength: Toast.LENGTH_SHORT,
                                       gravity: ToastGravity.BOTTOM,
-                                      fontSize: 30.0,
+                                      backgroundColor: Colors.grey,
+                                      textColor: Colors.white,
+                                      fontSize: 20.0,
                                     );
                                   }
-                                }
-                                else{
-                                  Fluttertoast.showToast(
-                                    msg: "Falta ingresar el origen",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.BOTTOM,
-                                    fontSize: 30.0,
-                                  );
-                                }
-                              }
-                              else{
-                                Fluttertoast.showToast(
-                                  msg: "Falta ingresar el destino",
-                                  toastLength: Toast.LENGTH_LONG,
-                                  gravity: ToastGravity.BOTTOM,
-                                  fontSize: 30.0,
-                                );
-                              }
-                            }
-                            else{
-                              Fluttertoast.showToast(
-                                msg: "Falta ingresar el origen",
-                                toastLength: Toast.LENGTH_LONG,
-                                gravity: ToastGravity.BOTTOM,
-                                fontSize: 30.0,
-                              );
-                            }
-                          },
-                          icon: Icon(
-                            Icons.swap_vert
+                                },
+                                
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -248,7 +296,7 @@ class _ScreenSearchState extends State<ScreenSearch> {
                 ),
 
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: UseTheMap(),
                 ),
 
@@ -257,21 +305,35 @@ class _ScreenSearchState extends State<ScreenSearch> {
                 ),
 
                 Expanded(
-                  flex: 7,
-                  child: MatchList(),
+                  flex: 6,
+                  child: AnimatedCrossFade(
+                    duration: Duration(milliseconds: 100),
+                    crossFadeState: info.animationStart,
+                    firstChild: info.progressIndicatorShow ? 
+                      Container(
+                        height: 100.0,
+                        width: 100.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(height: 20.0),
+                            CircularProgressIndicator(),
+                          ],
+                        )
+                      ) : 
+                      Container(
+                        color: Colors.transparent
+                      ),
+                    secondChild: MatchList(focusOrigin, focusDestiny),
+                  ),
                 ),
               ],
             ),
           ),
 
-
-        // AutocompleteWidget(),
-        // UseTheMap(),
-        // AutoCompleteVisual(),
           ]
         ),
       ),
     );
   }
-  
 }

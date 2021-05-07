@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+//import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:movilizate/model/iconList.dart';
+//import 'package:movilizate/repository/ConsultServer.dart';
 
 class ProcessData with ChangeNotifier{
 
   TextEditingController dataTextInput = TextEditingController();
 
+  ListView listV;
+
   TextEditingController autocompleteOrigin = TextEditingController();
   TextEditingController autocompleteDestiny = TextEditingController();
 
-  // TextEditingController autocompleteOrigin2 = TextEditingController();
-  // TextEditingController autocompleteDestiny2 = TextEditingController();
-
-  String time = "";
-
+  String time = "", transport = "";
+  CrossFadeState firstState = CrossFadeState.showFirst;
+  bool progressIndicator = false;
   double latitude = 0.0, longitude = 0.0, latitudeOrigin = 0.0, longitudeOrigin = 0.0, latitudeDestiny = 0.0, longitudeDestiny = 0.0;
+  double opacityOrigin = 1.0, opacityDestiny = 1.0;
+  bool cableCar = false, subway = false, bus = false, bike = false, walk = false;
+  // ignore: avoid_init_to_null
   HereMapController hereMapController = null;
-  List<Widget> widgetList = List<Widget>();
-  List<CardInfoRoutes> infoRoutes = List<CardInfoRoutes>();
+  List<Widget> widgetList = [];
+  List<List<CardInfoRoutes>> infoRoutes = [];
 
   FocusNode focusOri = FocusNode();
   FocusNode focusDes = FocusNode();
@@ -54,24 +60,6 @@ class ProcessData with ChangeNotifier{
     notifyListeners();
   }
 
-  // get dataOrigin2{
-  //   return autocompleteOrigin2;
-  // }
-  // set dataOrigin2(TextEditingController data){
-  //   autocompleteOrigin2 = data;
-  //   notifyListeners();
-  // }
-
-  // get dataDestiny2{
-  //   return autocompleteDestiny2;
-  // }
-  // set dataDestiny2(TextEditingController data){
-  //   autocompleteDestiny2 = data;
-  //   notifyListeners();
-  // }
-
-
-
   get latitudeData{
     return latitude;
   }
@@ -107,18 +95,10 @@ class ProcessData with ChangeNotifier{
   get infoRoutList{
     return infoRoutes;
   }
-  set infoRoutList(List<CardInfoRoutes> list){
+  set infoRoutList(List<List<CardInfoRoutes>> list){
     infoRoutes = list;
     notifyListeners();
   }
-
-  // get focusActive{
-  //   return focus;
-  // }
-  // set focusActive(bool val){
-  //   focus = val;
-  //   notifyListeners();
-  // }
 
   get focusOrigin{
     return focusOri;
@@ -134,23 +114,6 @@ class ProcessData with ChangeNotifier{
     focusDes = val;
     notifyListeners();
   }
-
-
-  get focusOrigin2{
-    return focusOri2;
-  }
-  set focusOrigin2(FocusNode val){
-    focusOri2 = val;
-    notifyListeners();
-  }
-  get focusDestiny2{
-    return focusDes2;
-  }
-  set focusDestiny2(FocusNode val){
-    focusDes2 = val;
-    notifyListeners();
-  }
-
 
   get getLatitudeOrigin{
     return latitudeOrigin;
@@ -190,25 +153,71 @@ class ProcessData with ChangeNotifier{
     notifyListeners();
   }
 
-  // get changeOfTransport => change;
-  // set changeOfTransport(int val){
-  //   change = val;
-  //   notifyListeners();
-  // }
-
-  get listOfTransport => listTransport;
-  set listOfTransport(List<ListTile> val){
+  get listCard => listTransport;
+  set listCard(List<ListTile> val){
     listTransport = val;
     notifyListeners();
   }
 
-  get listOfTransport2 => listTransport2;
-  set listOfTransport2(List<ListTile> val){
-    listTransport2 = val;
+  get opacityLevelOrigin => opacityOrigin;
+  set opacityLevelOrigin(double val){
+    opacityOrigin = val;
     notifyListeners();
   }
 
+  get opacityLevelDestiny => opacityDestiny;
+  set opacityLevelDestiny(double val){
+    opacityDestiny = val;
+    notifyListeners();
+  }
 
+  get animationStart => firstState;
+  set animationStart(CrossFadeState val){
+    firstState = val;
+    notifyListeners();
+  }
+
+  get progressIndicatorShow => progressIndicator;
+  set progressIndicatorShow(bool val){
+    progressIndicator = val;
+    notifyListeners();
+  }
+
+  get selectTransport => transport;
+  set selectTransport(String val){
+    transport = val;
+    notifyListeners();
+  }
+
+  get transportCableCar => cableCar;
+  set transportCableCar(bool val){
+    cableCar = val;
+    notifyListeners();
+  }
+
+  get transportSubway => subway;
+  set transportSubway(bool val){
+    subway = val;
+    notifyListeners();
+  }
+
+  get transportBus => bus;
+  set transportBus(bool val){
+    bus = val;
+    notifyListeners();
+  }
+
+  get transportBike => bike;
+  set transportBike(bool val){
+    bike = val;
+    notifyListeners();
+  }
+
+  get transportWalk => walk;
+  set transportWalk(bool val){
+    walk = val;
+    notifyListeners();
+  }
 
 }
 
@@ -240,80 +249,76 @@ class DataOfPlace with ChangeNotifier{
 
 class InfoRouteServer with ChangeNotifier{
 
-  List<InfoRouteServer> infoWalk = [];
-  List<Widget> listCanceled = [];
+  List<InfoRouteServ> infoWalk = [];
+  //List<Widget> listCanceled = [];
 
-  int duration;
-  int startTime;
-  int endTime;
-  int walkTime;
-  int waitingTime;
-  double walkDistance;
-  List<LegsInfo> legs;
-  // List<double> latOrigin;
-  // List<double> lonOrigin;
-  // List<double> latDestiny;
-  // List<double> lonDestiny;
+  List<List<Widget>> iconList = [];
 
-  InfoRouteServer({
-    this.duration,
-    this.startTime,
-    this.endTime,
-    this.walkTime,
-    this.waitingTime,
-    this.walkDistance,
-    this.legs,
-  });
+  List<List<Widget>> tile = [];
+  List<bool> listTrans = [];
+
+  List<IconList> listInfoIcon = [];
+
+  List<IconList> listInfoIcon2 = [];
+
+  List<IconList> infoIcon = null;
+ 
+  int index1 = 0, bestT = 0;
+
+  bool filter = false;
+
 
   get infoWalkList => infoWalk;
-  set infoWalkList(List<InfoRouteServer> val){
+  set infoWalkList(List<InfoRouteServ> val){
     infoWalk = val;
     notifyListeners();
   }
 
-  get onTapCanceledList => listCanceled;
-  set onTapCanceledList(List<Widget> val){
-    listCanceled = val;
+  get iconListInner => iconList;
+  set iconListInner( List<List<Widget>> val){
+    iconList = val;
+    notifyListeners();
   }
 
-}
+  get tileList => tile;
+  set tileList(List<List<Widget>> val){
+    tile = val;
+    notifyListeners();
+  }
 
-class LegsInfo{
-  String mode;
-  String route;
-  String routeColor;
-  String routeTextColor;
-  double lonOrig, latOrig, lonDest, latDest; //List<double> lonOrig, latOrig, lonDest, latDest;
+  get listOfTransport => listTrans;
+  set listOfTransport(List<bool> val){
+    listTrans = val;
+    notifyListeners();
+  }
 
-  LegsInfo({
-    this.mode,
-    this.lonOrig, 
-    this.latOrig, 
-    this.lonDest, 
-    this.latDest,
-    this.route,
-    this.routeColor,
-    this.routeTextColor,
-  });
-}
+  get listOfInfo => listInfoIcon;
+  set listOfInfo(List<IconList> val){
+    listInfoIcon = val;
+    notifyListeners();
+  }
 
-class CardInfoRoutes {
-  String hourStart;
-  Widget iconTransportMedium;
-  String hourEnds;
-  String nameTrasportMedium;
-  String placeStartIn;
-  String placeEndsIn;
-  Widget infoOfDistance;
-  String time;
-  CardInfoRoutes({
-    this.hourStart,
-    this.iconTransportMedium,
-    this.hourEnds,
-    this.nameTrasportMedium,
-    this.placeStartIn,
-    this.placeEndsIn,
-    this.infoOfDistance,
-    this.time,
-  });
+  get listOfInfoAux => listInfoIcon2;
+  set listOfInfoAux(List<IconList> val){
+    listInfoIcon2 = val;
+    notifyListeners();
+  }
+
+  get filterActive => filter;
+  set filterActive(bool val){
+    filter = val;
+    notifyListeners();
+  }
+
+  get iconAux => infoIcon;
+  set iconAux(List<IconList> val){
+    infoIcon = val;
+    notifyListeners();
+  }
+
+  get bestTime => bestT;
+  set bestTime(int val){
+    bestT = val;
+    notifyListeners();
+  }
 }

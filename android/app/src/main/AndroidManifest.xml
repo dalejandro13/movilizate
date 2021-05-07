@@ -8,6 +8,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="movilizate"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
 
         <meta-data android:name="com.here.sdk.access_key_id" android:value="Uv9CrB8T-R5ZSA39YDwsrw"/>
